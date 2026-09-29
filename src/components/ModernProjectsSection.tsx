@@ -466,7 +466,7 @@ export const ModernProjectsSection: React.FC = () => {
           position: relative;
           background: #ffffff;
           border: 1px solid #e2e8f0;
-          border-radius: 20px;
+          border-radius: 22px;
           padding: 28px;
           height: 100%;
           display: flex;
@@ -477,9 +477,11 @@ export const ModernProjectsSection: React.FC = () => {
         }
 
         .dark .modern_project_card {
-          background: #131c31;
-          border-color: #1e293b;
-          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+          background: rgba(15, 23, 42, 0.78);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
         }
 
         .card_glow_layer {
@@ -489,18 +491,26 @@ export const ModernProjectsSection: React.FC = () => {
           right: 0;
           bottom: 0;
           opacity: 0;
-          transition: opacity 0.4s ease;
+          transform: scale(0.9);
+          transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           pointer-events: none;
         }
 
         .modern_project_card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 45px rgba(68, 88, 220, 0.16);
-          border-color: rgba(99, 102, 241, 0.45);
+          transform: translateY(-10px) scale(1.015);
+          box-shadow: 0 24px 48px -10px rgba(68, 88, 220, 0.25), 0 0 20px rgba(133, 79, 238, 0.12);
+          border-color: rgba(68, 88, 220, 0.45);
+        }
+
+        .dark .modern_project_card:hover {
+          transform: translateY(-10px) scale(1.015);
+          box-shadow: 0 24px 50px -10px rgba(56, 189, 248, 0.35), 0 0 25px rgba(168, 85, 247, 0.22) !important;
+          border-color: rgba(56, 189, 248, 0.5) !important;
         }
 
         .modern_project_card:hover .card_glow_layer {
           opacity: 1;
+          transform: scale(1.05);
         }
 
         /* Card Header */
@@ -626,14 +636,25 @@ export const ModernProjectsSection: React.FC = () => {
           color: #475569;
           background: #f8fafc;
           border: 1px solid #e2e8f0;
-          padding: 3px 9px;
-          border-radius: 6px;
+          padding: 4px 10px;
+          border-radius: 8px;
+          transition: all 0.25s ease;
+        }
+
+        .modern_project_card:hover .tech_pill {
+          border-color: rgba(68, 88, 220, 0.3);
+          transform: translateY(-1px);
         }
 
         .dark .tech_pill {
-          background: #0f172a;
-          border-color: #1e293b;
-          color: #94a3b8;
+          background: rgba(15, 23, 42, 0.85);
+          border-color: rgba(255, 255, 255, 0.08);
+          color: #cbd5e1;
+        }
+
+        .dark .modern_project_card:hover .tech_pill {
+          border-color: rgba(56, 189, 248, 0.35);
+          color: #38bdf8;
         }
 
         /* Card Actions */
@@ -649,72 +670,89 @@ export const ModernProjectsSection: React.FC = () => {
         .btn_visit_live {
           display: inline-flex;
           align-items: center;
-          padding: 8px 16px;
+          padding: 9px 18px;
           background: linear-gradient(135deg, #10b981 0%, #059669 100%);
           color: #ffffff !important;
-          font-size: 0.82rem;
+          font-size: 0.84rem;
           font-weight: 700;
-          border-radius: 8px;
+          border-radius: 10px;
           text-decoration: none !important;
-          transition: all 0.25s ease;
-          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
         }
 
         .btn_visit_live:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(16, 185, 129, 0.45);
+          transform: translateY(-3px) scale(1.04);
+          box-shadow: 0 8px 24px rgba(16, 185, 129, 0.55);
         }
 
         .btn_github_repo {
           display: inline-flex;
           align-items: center;
-          padding: 8px 16px;
+          padding: 9px 18px;
           background: #f1f5f9;
           border: 1px solid #cbd5e1;
           color: #334155 !important;
-          font-size: 0.82rem;
+          font-size: 0.84rem;
           font-weight: 700;
-          border-radius: 8px;
+          border-radius: 10px;
           text-decoration: none !important;
-          transition: all 0.25s ease;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .btn_github_repo {
-          background: #0f172a;
-          border-color: #334155;
-          color: #cbd5e1 !important;
+          background: rgba(15, 23, 42, 0.85);
+          border-color: rgba(56, 189, 248, 0.3);
+          color: #e2e8f0 !important;
         }
 
         .btn_github_repo:hover {
-          background: #4458dc;
+          background: linear-gradient(135deg, #4458dc 0%, #854fee 100%);
           color: #ffffff !important;
-          border-color: #4458dc;
-          transform: translateY(-2px);
+          border-color: transparent;
+          transform: translateY(-3px) scale(1.04);
+          box-shadow: 0 8px 22px rgba(68, 88, 220, 0.4);
+        }
+
+        .dark .btn_github_repo:hover {
+          background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+          color: #06080e !important;
+          border-color: transparent;
+          box-shadow: 0 8px 24px rgba(56, 189, 248, 0.5);
         }
 
         .btn_quick_view {
           margin-left: auto;
-          background: transparent;
-          border: 1px solid #e2e8f0;
-          width: 34px;
-          height: 34px;
-          border-radius: 8px;
+          background: #f1f5f9;
+          border: 1px solid #cbd5e1;
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
           color: #64748b;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .btn_quick_view {
-          border-color: #334155;
+          background: rgba(15, 23, 42, 0.85);
+          border-color: rgba(255, 255, 255, 0.12);
           color: #94a3b8;
         }
 
         .btn_quick_view:hover {
-          color: #4458dc;
-          border-color: #4458dc;
+          background: #4458dc;
+          color: #ffffff !important;
+          transform: translateY(-3px) rotate(15deg);
+          box-shadow: 0 6px 18px rgba(68, 88, 220, 0.35);
+        }
+
+        .dark .btn_quick_view:hover {
+          background: #38bdf8;
+          color: #06080e !important;
+          box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45);
         }
 
         /* GitHub Banner */

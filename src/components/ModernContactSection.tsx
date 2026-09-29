@@ -283,7 +283,7 @@ export const ModernContactSection: React.FC = () => {
         }
 
         .dark .modern_contact_section {
-          background: #0d1322 !important;
+          background: transparent !important;
         }
 
         .contact_section_badge {
@@ -327,9 +327,11 @@ export const ModernContactSection: React.FC = () => {
         }
 
         .dark .contact_info_card_wrapper {
-          background: linear-gradient(145deg, #131c31 0%, #0f172a 100%) !important;
-          border-color: #1e293b !important;
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+          background: rgba(15, 23, 42, 0.78) !important;
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-color: rgba(255, 255, 255, 0.08) !important;
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
         }
 
         .karan_avatar_row {
@@ -534,9 +536,11 @@ export const ModernContactSection: React.FC = () => {
         }
 
         .dark .contact_form_interactive_card {
-          background: #131c31;
-          border-color: #1e293b;
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.4);
+          background: rgba(15, 23, 42, 0.78);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
         }
 
         .form_heading {
@@ -612,21 +616,33 @@ export const ModernContactSection: React.FC = () => {
         }
 
         .direct_submit_btn {
+          display: inline-flex;
+          align-items: center;
           background: linear-gradient(135deg, #4458dc 0%, #854fee 100%);
           color: #ffffff;
           border: none;
-          padding: 12px 28px;
+          padding: 13px 30px;
           border-radius: 50px;
           font-size: 0.94rem;
           font-weight: 700;
           cursor: pointer;
-          box-shadow: 0 6px 20px rgba(68, 88, 220, 0.35);
-          transition: all 0.25s ease;
+          box-shadow: 0 8px 24px rgba(68, 88, 220, 0.4);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark .direct_submit_btn {
+          background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+          color: #06080e !important;
+          box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45);
         }
 
         .direct_submit_btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 28px rgba(68, 88, 220, 0.45);
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 14px 32px rgba(68, 88, 220, 0.55);
+        }
+
+        .dark .direct_submit_btn:hover:not(:disabled) {
+          box-shadow: 0 14px 34px rgba(56, 189, 248, 0.65);
         }
 
         .direct_submit_btn:disabled {

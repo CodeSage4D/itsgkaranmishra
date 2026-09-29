@@ -44,11 +44,27 @@ export const Header: React.FC = () => {
   }, [navOpen]);
 
   const navLinks = [
-    { href: "/", label: "Home" },
-    { href: "/about", label: "About" },
-    { href: "/services", label: "Services" },
-    { href: "/portfolio", label: "Portfolio" },
+    { href: "/", label: "Home", sectionId: "home" },
+    { href: "/about", label: "About", sectionId: "about-section" },
+    { href: "/services", label: "Services", sectionId: "services-section" },
+    { href: "/portfolio", label: "Portfolio", sectionId: "portfolio" },
+    { href: "/contact", label: "Contact", sectionId: "direct-contact-section" },
   ];
+
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    item: { href: string; label: string; sectionId: string }
+  ) => {
+    setNavOpen(false);
+    if (pathname === "/") {
+      const el = document.getElementById(item.sectionId);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.pushState(null, "", `#${item.sectionId}`);
+      }
+    }
+  };
 
   return (
     <>
@@ -61,7 +77,12 @@ export const Header: React.FC = () => {
           <nav className="navbar navbar-expand-lg">
             <div className="container header_container">
               {/* Brand: Logo + Highly Readable Name & Heartbeat Fluctuate Dot */}
-              <Link className="navbar-brand header_brand" href="/">
+              <Link className="navbar-brand header_brand" href="/" onClick={(e) => {
+                if (pathname === "/") {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}>
                 <div className="brand_wrapper">
                   <div className="brand_logo_circle">
                     <img
@@ -116,7 +137,12 @@ export const Header: React.FC = () => {
                       key={item.href}
                       className={`nav-item ${pathname === item.href ? "active" : ""}`}
                     >
-                      <Link className="nav-link nav_link_animated" href={item.href}>
+                      <Link
+                        className="nav-link nav_link_animated"
+                        href={item.href}
+                        onClick={(e) => handleNavClick(e, item)}
+                        prefetch={true}
+                      >
                         {item.label}
                       </Link>
                     </li>
@@ -188,13 +214,6 @@ export const Header: React.FC = () => {
                     </ul>
                   </li>
 
-                  {/* Contact Nav Link */}
-                  <li className={`nav-item ${pathname === "/contact" ? "active" : ""}`}>
-                    <Link className="nav-link nav_link_animated" href="/contact">
-                      Contact
-                    </Link>
-                  </li>
-
                   {/* Dark/Light Mode Switcher */}
                   <li className="nav-item ml-lg-2">
                     <button
@@ -208,15 +227,28 @@ export const Header: React.FC = () => {
                     </button>
                   </li>
 
-                  {/* Direct Contact Button CTA */}
-                  <li className="nav-item ml-lg-3">
-                    <Link
-                      href="/contact"
-                      className="header_cta_btn"
+                  {/* Social Profile Quick Links (Replaced bulky Let's Connect button from nav) */}
+                  <li className="nav-item ml-lg-3 d-flex align-items-center gap-2">
+                    <a
+                      href="https://github.com/CodeSage4D"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nav_social_pill"
+                      title="GitHub @CodeSage4D"
+                      aria-label="GitHub Profile"
                     >
-                      <span>Let&apos;s Connect</span>
-                      <i className="fa fa-arrow-right ml-2"></i>
-                    </Link>
+                      <i className="fa fa-github"></i>
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/itsgkaranmishra4"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nav_social_pill"
+                      title="LinkedIn Profile"
+                      aria-label="LinkedIn Profile"
+                    >
+                      <i className="fa fa-linkedin"></i>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -275,7 +307,7 @@ export const Header: React.FC = () => {
                   <Link
                     href={item.href}
                     className={`mobile_nav_link ${pathname === item.href ? "active" : ""}`}
-                    onClick={() => setNavOpen(false)}
+                    onClick={(e) => handleNavClick(e, item)}
                   >
                     <span>{item.label}</span>
                     <i className="fa fa-chevron-right mobile_link_arrow"></i>
@@ -357,17 +389,6 @@ export const Header: React.FC = () => {
                     </li>
                   </ul>
                 )}
-              </li>
-
-              <li className="mobile_menu_item">
-                <Link
-                  href="/contact"
-                  className={`mobile_nav_link ${pathname === "/contact" ? "active" : ""}`}
-                  onClick={() => setNavOpen(false)}
-                >
-                  <span>Contact</span>
-                  <i className="fa fa-chevron-right mobile_link_arrow"></i>
-                </Link>
               </li>
             </ul>
 
@@ -712,25 +733,39 @@ export const Header: React.FC = () => {
           color: #818cf8;
         }
 
-        /* Header CTA Button */
-        .header_cta_btn {
-          display: inline-flex;
+        /* Nav Social Quick Pills */
+        .nav_social_pill {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
           align-items: center;
-          padding: 9px 20px;
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: #ffffff !important;
-          background: linear-gradient(135deg, #4458dc 0%, #854fee 100%);
-          border-radius: 50px;
+          justify-content: center;
+          background: rgba(241, 245, 249, 0.9);
+          color: #334155 !important;
+          border: 1px solid rgba(226, 232, 240, 0.8);
+          font-size: 0.95rem;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
           text-decoration: none !important;
-          box-shadow: 0 4px 14px rgba(68, 88, 220, 0.35);
-          transition: all 0.3s ease;
         }
 
-        .header_cta_btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 22px rgba(68, 88, 220, 0.45);
+        .dark .nav_social_pill {
+          background: rgba(30, 41, 59, 0.7);
+          color: #cbd5e1 !important;
+          border-color: rgba(56, 189, 248, 0.25);
+        }
+
+        .nav_social_pill:hover {
+          background: linear-gradient(135deg, #4458dc 0%, #854fee 100%);
           color: #ffffff !important;
+          transform: translateY(-2px) scale(1.08);
+          box-shadow: 0 6px 16px rgba(68, 88, 220, 0.35);
+        }
+
+        .dark .nav_social_pill:hover {
+          background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+          color: #06080e !important;
+          box-shadow: 0 6px 18px rgba(56, 189, 248, 0.45);
         }
 
         /* Mobile Hamburger Icon */

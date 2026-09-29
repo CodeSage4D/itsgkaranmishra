@@ -22,10 +22,7 @@ export default function Home() {
         />
       )}
 
-      <section className="home_banner_area" style={{ position: "relative", overflow: "hidden" }}>
-		{/* Interactive Neural AI Constellation Background */}
-		<NeuralBackground particleCount={55} />
-
+      <section className="home_banner_area" id="home" style={{ position: "relative", overflow: "hidden" }}>
 		<div className="banner_inner" style={{ position: "relative", zIndex: 2 }}>
 			<div className="container">
 				<div className="row align-items-center">
@@ -40,8 +37,18 @@ export default function Home() {
 								Building transformative enterprise AI platforms, neural architectures, and scalable full-stack software. Open-source contributor with 47+ GitHub repositories and 3+ years of professional engineering experience.
 							</p>
 							<div className="d-flex flex-wrap align-items-center gap-3">
-								<Link className="primary_btn mr-3 mb-2" href="/contact">
-									<span>Direct Message / Hire Me</span>
+								<a
+									className="primary_btn mr-2 mb-2 heartbeat_soft"
+									href="#direct-contact-section"
+									onClick={(e) => {
+										e.preventDefault();
+										document.getElementById("direct-contact-section")?.scrollIntoView({ behavior: "smooth" });
+									}}
+								>
+									<span><i className="fa fa-comments mr-2"></i>Let&apos;s Connect</span>
+								</a>
+								<Link className="primary_btn tr-bg mr-2 mb-2" href="/contact">
+									<span>Direct Message</span>
 								</Link>
 								<a className="primary_btn tr-bg mb-2" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
 									<span>Get CV</span>
@@ -289,7 +296,7 @@ export default function Home() {
 
 	{/* ================ Start Features Area ================= */}
 	{/*  Add Font Awesome CSS to the head of your HTML file  */}
-	<section className="features_area">
+	<section className="features_area" id="services-section">
 		<div className="container">
 			<div className="row justify-content-center">
 				<div className="col-lg-8 text-center">

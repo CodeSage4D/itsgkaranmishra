@@ -181,7 +181,7 @@ export const RoadTimelineExperience: React.FC = () => {
         }
 
         .dark .road_timeline_area {
-          background: #090d16 !important;
+          background: transparent !important;
         }
 
         .road_section_badge {
@@ -306,15 +306,23 @@ export const RoadTimelineExperience: React.FC = () => {
         }
 
         .dark .milestone_story_card {
-          background: #131c31;
-          border-color: #1e293b;
-          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+          background: rgba(15, 23, 42, 0.78);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-color: rgba(255, 255, 255, 0.08);
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
         }
 
         .milestone_story_card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 18px 40px rgba(68, 88, 220, 0.15);
-          border-color: rgba(99, 102, 241, 0.4);
+          transform: translateY(-8px) scale(1.015);
+          box-shadow: 0 20px 45px rgba(68, 88, 220, 0.2);
+          border-color: rgba(99, 102, 241, 0.45);
+        }
+
+        .dark .milestone_story_card:hover {
+          transform: translateY(-8px) scale(1.015);
+          box-shadow: 0 22px 50px -10px rgba(56, 189, 248, 0.35), 0 0 20px rgba(168, 85, 247, 0.2) !important;
+          border-color: rgba(56, 189, 248, 0.5) !important;
         }
 
         .milestone_story_card.card_current_highlight {
