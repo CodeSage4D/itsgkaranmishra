@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "./ThemeProvider";
 
 export const Header: React.FC = () => {
   const [navOpen, setNavOpen] = useState(false);
@@ -10,11 +11,12 @@ export const Header: React.FC = () => {
   const [blogOpen, setBlogOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   // Scroll listener for sticky backdrop animation
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 30) {
         setScrolled(true);
       } else {
         setScrolled(false);
@@ -58,7 +60,7 @@ export const Header: React.FC = () => {
         <div className="main_menu">
           <nav className="navbar navbar-expand-lg">
             <div className="container header_container">
-              {/* Brand: Logo + Highly Readable Name & Venture */}
+              {/* Brand: Logo + Highly Readable Name & Heartbeat Fluctuate Dot */}
               <Link className="navbar-brand header_brand" href="/">
                 <div className="brand_wrapper">
                   <div className="brand_logo_circle">
@@ -73,26 +75,38 @@ export const Header: React.FC = () => {
                       Karan <span className="brand_surname">Mishra</span>
                     </span>
                     <span className="brand_sub_tag">
-                      <span className="brand_pulse_dot"></span>
-                      Aurxon &bull; ML & AI Specialist
+                      <span className="brand_pulse_dot heartbeat_fluctuate"></span>
+                      Aurxon &bull; ML &amp; AI
                     </span>
                   </div>
                 </div>
               </Link>
 
-              {/* Mobile Animated Hamburger Button */}
-              <button
-                className={`navbar-toggler modern_toggler ${navOpen ? "is_active" : ""}`}
-                type="button"
-                onClick={() => setNavOpen(!navOpen)}
-                aria-controls="navbarSupportedContent"
-                aria-expanded={navOpen}
-                aria-label="Toggle navigation"
-              >
-                <span className="hamburger_line line_top"></span>
-                <span className="hamburger_line line_mid"></span>
-                <span className="hamburger_line line_bot"></span>
-              </button>
+              {/* Header Right Actions (Mobile Toggle & Theme) */}
+              <div className="d-flex align-items-center d-lg-none gap-2">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="theme_toggle_btn"
+                  aria-label="Toggle Dark/Light Mode"
+                  title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                >
+                  <i className={`fa ${theme === "dark" ? "fa-sun-o" : "fa-moon-o"}`}></i>
+                </button>
+
+                <button
+                  className={`navbar-toggler modern_toggler ${navOpen ? "is_active" : ""}`}
+                  type="button"
+                  onClick={() => setNavOpen(!navOpen)}
+                  aria-controls="navbarSupportedContent"
+                  aria-expanded={navOpen}
+                  aria-label="Toggle navigation"
+                >
+                  <span className="hamburger_line line_top"></span>
+                  <span className="hamburger_line line_mid"></span>
+                  <span className="hamburger_line line_bot"></span>
+                </button>
+              </div>
 
               {/* Desktop Navigation Links */}
               <div className="collapse navbar-collapse d-none d-lg-flex justify-content-end align-items-center">
@@ -163,7 +177,7 @@ export const Header: React.FC = () => {
                     <ul className={`dropdown-menu modern_dropdown ${blogOpen ? "show" : ""}`}>
                       <li className="nav-item">
                         <Link className="dropdown-item" href="/blog">
-                          Articles & Insights
+                          Articles &amp; Insights
                         </Link>
                       </li>
                       <li className="nav-item">
@@ -179,6 +193,19 @@ export const Header: React.FC = () => {
                     <Link className="nav-link nav_link_animated" href="/contact">
                       Contact
                     </Link>
+                  </li>
+
+                  {/* Dark/Light Mode Switcher */}
+                  <li className="nav-item ml-lg-2">
+                    <button
+                      type="button"
+                      onClick={toggleTheme}
+                      className="theme_toggle_btn"
+                      aria-label="Toggle Dark/Light Mode"
+                      title={theme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+                    >
+                      <i className={`fa ${theme === "dark" ? "fa-sun-o" : "fa-moon-o"}`}></i>
+                    </button>
                   </li>
 
                   {/* Direct Contact Button CTA */}
@@ -216,16 +243,29 @@ export const Header: React.FC = () => {
                 <span className="brand_main_name">
                   Karan <span className="brand_surname">Mishra</span>
                 </span>
-                <span className="brand_sub_tag">Aurxon &bull; ML Engineer</span>
+                <span className="brand_sub_tag">
+                  <span className="brand_pulse_dot heartbeat_fluctuate"></span>
+                  Aurxon &bull; ML Engineer
+                </span>
               </div>
             </div>
-            <button
-              className="drawer_close_btn"
-              onClick={() => setNavOpen(false)}
-              aria-label="Close Navigation"
-            >
-              <i className="fa fa-times"></i>
-            </button>
+            <div className="d-flex align-items-center gap-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="theme_toggle_btn"
+                aria-label="Toggle Theme"
+              >
+                <i className={`fa ${theme === "dark" ? "fa-sun-o" : "fa-moon-o"}`}></i>
+              </button>
+              <button
+                className="drawer_close_btn"
+                onClick={() => setNavOpen(false)}
+                aria-label="Close Navigation"
+              >
+                <i className="fa fa-times"></i>
+              </button>
+            </div>
           </div>
 
           <div className="mobile_drawer_body">
@@ -376,8 +416,19 @@ export const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* Embedded High-Specificity Header Styles */}
+      {/* Scoped CSS for Header, Theme Toggle, and Animations */}
       <style dangerouslySetInnerHTML={{ __html: `
+        /* Top Scroll Progress Bar */
+        .top_scroll_progress_bar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #4458dc 0%, #854fee 50%, #10b981 100%);
+          z-index: 9999;
+          transition: width 0.1s linear;
+        }
+
         /* Modern Header System */
         .modern_header {
           position: fixed;
@@ -389,14 +440,24 @@ export const Header: React.FC = () => {
           background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
-          border-bottom: 1px solid rgba(226, 232, 240, 0.7);
-          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+          transition: all 0.3s ease;
+          min-height: 74px;
+        }
+
+        .dark .modern_header {
+          background: rgba(11, 15, 25, 0.92) !important;
+          border-bottom: 1px solid rgba(30, 41, 59, 0.8) !important;
         }
 
         .modern_header.header_scrolled {
           background: rgba(255, 255, 255, 0.98);
-          box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
-          border-bottom: 1px solid rgba(203, 213, 225, 0.9);
+          box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+        }
+
+        .dark .modern_header.header_scrolled {
+          background: rgba(11, 15, 25, 0.98) !important;
+          box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5) !important;
         }
 
         .header_container {
@@ -436,6 +497,11 @@ export const Header: React.FC = () => {
           transition: transform 0.3s ease;
         }
 
+        .dark .brand_logo_circle {
+          background: #1e293b !important;
+          border-color: rgba(99, 102, 241, 0.4) !important;
+        }
+
         .brand_wrapper:hover .brand_logo_circle {
           transform: scale(1.06) rotate(3deg);
         }
@@ -452,13 +518,18 @@ export const Header: React.FC = () => {
         }
 
         .brand_main_name {
-          font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: 'Rubik', sans-serif;
           font-size: 1.28rem;
           font-weight: 800;
           letter-spacing: -0.02em;
           color: #0f172a;
           line-height: 1.2;
           display: inline-block;
+          transition: color 0.3s ease;
+        }
+
+        .dark .brand_main_name {
+          color: #ffffff !important;
         }
 
         .brand_surname {
@@ -479,31 +550,80 @@ export const Header: React.FC = () => {
           margin-top: 2px;
         }
 
+        .dark .brand_sub_tag {
+          color: #94a3b8;
+        }
+
+        /* Heartbeat Fluctuating Animation */
         .brand_pulse_dot {
-          width: 6px;
-          height: 6px;
+          width: 7px;
+          height: 7px;
           border-radius: 50%;
           background: #10b981;
           display: inline-block;
-          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-          animation: brandPulse 2s infinite;
         }
 
-        @keyframes brandPulse {
+        .heartbeat_fluctuate {
+          animation: heartbeatPulse 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+
+        @keyframes heartbeatPulse {
           0% {
+            transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
           }
+          14% {
+            transform: scale(1.35);
+            box-shadow: 0 0 10px 4px rgba(16, 185, 129, 0.5);
+          }
+          28% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+          }
+          42% {
+            transform: scale(1.25);
+            box-shadow: 0 0 8px 3px rgba(16, 185, 129, 0.3);
+          }
           70% {
-            box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+            transform: scale(0.95);
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
           }
           100% {
+            transform: scale(0.95);
             box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
           }
         }
 
+        /* Theme Toggle Button */
+        .theme_toggle_btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          background: #f8fafc;
+          color: #334155;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.1rem;
+          cursor: pointer;
+          transition: all 0.25s ease;
+        }
+
+        .dark .theme_toggle_btn {
+          background: #1e293b;
+          border-color: rgba(51, 65, 85, 0.8);
+          color: #fbbf24;
+        }
+
+        .theme_toggle_btn:hover {
+          transform: rotate(15deg) scale(1.08);
+          border-color: #818cf8;
+        }
+
         /* Nav Links */
         .modern_header .nav .nav-item {
-          margin-right: 28px;
+          margin-right: 24px;
         }
 
         .modern_header .nav .nav-item .nav-link {
@@ -519,9 +639,18 @@ export const Header: React.FC = () => {
           transition: color 0.25s ease;
         }
 
+        .dark .modern_header .nav .nav-item .nav-link {
+          color: #cbd5e1 !important;
+        }
+
         .modern_header .nav .nav-item:hover .nav-link,
         .modern_header .nav .nav-item.active .nav-link {
           color: #4458dc !important;
+        }
+
+        .dark .modern_header .nav .nav-item:hover .nav-link,
+        .dark .modern_header .nav .nav-item.active .nav-link {
+          color: #818cf8 !important;
         }
 
         .nav_link_animated::after {
@@ -530,7 +659,7 @@ export const Header: React.FC = () => {
           bottom: 12px;
           left: 0;
           width: 0%;
-          height: 2px;
+          height: 2.5px;
           background: linear-gradient(90deg, #4458dc, #854fee);
           border-radius: 2px;
           transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -553,15 +682,10 @@ export const Header: React.FC = () => {
           animation: dropdownFade 0.25s ease-out;
         }
 
-        @keyframes dropdownFade {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .dark .modern_dropdown {
+          background: #1e293b !important;
+          border-color: #334155 !important;
+          box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.5) !important;
         }
 
         .modern_dropdown .dropdown-item {
@@ -573,10 +697,19 @@ export const Header: React.FC = () => {
           transition: all 0.2s ease;
         }
 
+        .dark .modern_dropdown .dropdown-item {
+          color: #cbd5e1;
+        }
+
         .modern_dropdown .dropdown-item:hover {
           background: #f1f5f9;
           color: #4458dc;
           transform: translateX(4px);
+        }
+
+        .dark .modern_dropdown .dropdown-item:hover {
+          background: #0f172a;
+          color: #818cf8;
         }
 
         /* Header CTA Button */
@@ -622,9 +755,6 @@ export const Header: React.FC = () => {
           .modern_toggler {
             display: flex;
           }
-          .modern_header {
-            background: rgba(255, 255, 255, 0.98) !important;
-          }
         }
 
         .hamburger_line {
@@ -633,6 +763,10 @@ export const Header: React.FC = () => {
           background-color: #0f172a;
           border-radius: 3px;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark .hamburger_line {
+          background-color: #ffffff;
         }
 
         .modern_toggler.is_active .line_top {
@@ -685,6 +819,11 @@ export const Header: React.FC = () => {
           overflow-y: auto;
         }
 
+        .dark .mobile_nav_drawer {
+          background: #0f172a !important;
+          box-shadow: -10px 0 35px rgba(0, 0, 0, 0.6);
+        }
+
         .mobile_nav_drawer.is_open {
           transform: translateX(0);
         }
@@ -695,6 +834,10 @@ export const Header: React.FC = () => {
           justify-content: space-between;
           padding: 18px 20px;
           border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dark .mobile_drawer_header {
+          border-bottom-color: #1e293b;
         }
 
         .drawer_close_btn {
@@ -712,9 +855,19 @@ export const Header: React.FC = () => {
           transition: all 0.2s ease;
         }
 
+        .dark .drawer_close_btn {
+          background: #1e293b;
+          color: #cbd5e1;
+        }
+
         .drawer_close_btn:hover {
           background: #e2e8f0;
           color: #0f172a;
+        }
+
+        .dark .drawer_close_btn:hover {
+          background: #334155;
+          color: #ffffff;
         }
 
         .mobile_drawer_body {
@@ -750,10 +903,20 @@ export const Header: React.FC = () => {
           text-align: left;
         }
 
+        .dark .mobile_nav_link {
+          color: #f1f5f9;
+        }
+
         .mobile_nav_link:hover,
         .mobile_nav_link.active {
           background: #f1f5f9;
           color: #4458dc;
+        }
+
+        .dark .mobile_nav_link:hover,
+        .dark .mobile_nav_link.active {
+          background: #1e293b;
+          color: #818cf8;
         }
 
         .mobile_link_arrow {
@@ -780,9 +943,18 @@ export const Header: React.FC = () => {
           border-radius: 8px;
         }
 
+        .dark .mobile_sub_link {
+          color: #94a3b8;
+        }
+
         .mobile_sub_link:hover {
           color: #4458dc;
           background: #f8fafc;
+        }
+
+        .dark .mobile_sub_link:hover {
+          color: #818cf8;
+          background: #1e293b;
         }
 
         .mobile_contact_card {
@@ -791,6 +963,11 @@ export const Header: React.FC = () => {
           background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
           border-radius: 14px;
           border: 1px solid #e2e8f0;
+        }
+
+        .dark .mobile_contact_card {
+          background: #1e293b;
+          border-color: #334155;
         }
 
         .mobile_contact_title {
@@ -802,6 +979,10 @@ export const Header: React.FC = () => {
           margin-bottom: 12px;
         }
 
+        .dark .mobile_contact_title {
+          color: #94a3b8;
+        }
+
         .mobile_contact_row {
           display: flex;
           align-items: center;
@@ -811,6 +992,10 @@ export const Header: React.FC = () => {
           text-decoration: none !important;
           margin-bottom: 8px;
           word-break: break-all;
+        }
+
+        .dark .mobile_contact_row {
+          color: #cbd5e1;
         }
 
         .mobile_contact_row i {
@@ -827,6 +1012,10 @@ export const Header: React.FC = () => {
           border-top: 1px solid #e2e8f0;
         }
 
+        .dark .mobile_social_row {
+          border-top-color: #334155;
+        }
+
         .mobile_social_icon {
           width: 36px;
           height: 36px;
@@ -840,6 +1029,12 @@ export const Header: React.FC = () => {
           text-decoration: none !important;
           border: 1px solid #e2e8f0;
           transition: all 0.2s ease;
+        }
+
+        .dark .mobile_social_icon {
+          background: #0f172a;
+          color: #cbd5e1;
+          border-color: #334155;
         }
 
         .mobile_social_icon:hover {
