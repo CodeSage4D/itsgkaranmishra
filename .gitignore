@@ -50,23 +50,7 @@ dist/
 *.old
 *.swp
 
-# Static assets
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
-*.ico
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-*.ipynb
-
-# Web development build outputs
-*.css
-*.js
-*.map
-*.html
 
 # Environment files
 .env
