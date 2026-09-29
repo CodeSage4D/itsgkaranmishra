@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
@@ -37,9 +38,11 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <ThemeProvider>
+          <Header />
+          <main id="main_content">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
