@@ -1,205 +1,215 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import {
-  Brain,
-  Laptop,
-  LineChart,
-  Bot,
-  FlaskConical,
-  Palette,
-  ShieldCheck,
-  Cloud,
-  CheckCircle2,
-  Mail,
-  Send,
-  ArrowUpRight,
-} from "lucide-react";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { servicesData } from "@/data/services";
 
 export default function ServicesPage() {
-  const [newsletterEmail, setNewsletterEmail] = useState("");
-  const [newsletterStatus, setNewsletterStatus] = useState<string | null>(null);
-
-  const getServiceIcon = (id: string) => {
-    const props = { className: "w-8 h-8" };
-    switch (id) {
-      case "machine-learning":
-        return <Brain {...props} style={{ color: "#007FFF" }} />;
-      case "web-development":
-        return <Laptop {...props} style={{ color: "#FF5733" }} />;
-      case "data-analytics":
-        return <LineChart {...props} style={{ color: "#28A745" }} />;
-      case "ai-automation":
-        return <Bot {...props} style={{ color: "#FFC107" }} />;
-      case "research-development":
-        return <FlaskConical {...props} style={{ color: "#FF6347" }} />;
-      case "ui-ux-design":
-        return <Palette {...props} style={{ color: "#8B5CF6" }} />;
-      case "cybersecurity-consulting":
-        return <ShieldCheck {...props} style={{ color: "#10B981" }} />;
-      case "cloud-integration":
-      default:
-        return <Cloud {...props} style={{ color: "#00B4D8" }} />;
-    }
-  };
-
-  const handleNewsletter = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newsletterEmail || !newsletterEmail.includes("@")) return;
-    setNewsletterStatus("Thank you for subscribing! You will receive future tech and engineering insights.");
-    setNewsletterEmail("");
-  };
-
   return (
-    <div className="relative">
-      <PageHeader
-        badge="Tailored Offerings"
-        title="Services & Engineering Capabilities"
-        subtitle="End-to-end technical consulting, bespoke machine learning development, data analytics, and modern full-stack web architectures."
-        breadcrumb={[{ label: "Services" }]}
-      />
+    <>
+      {/* ================ End Header Area ================= */}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-24">
-        {/* Services Grid */}
-        <section>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {servicesData.map((service) => (
-              <div
-                key={service.id}
-                className="group p-6 rounded-3xl bg-surface/50 border border-white/5 hover:border-primary/40 hover:bg-surface/80 transition-all duration-300 flex flex-col justify-between shadow-xl shadow-black/20 hover:-translate-y-1"
-              >
-                <div>
-                  <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    {getServiceIcon(service.id)}
-                  </div>
-                  <div className="text-xs font-mono font-semibold uppercase tracking-wider text-accent-cyan mb-1">
-                    {service.category}
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-6">
-                    {service.description}
-                  </p>
-
-                  {/* Feature bullet points */}
-                  {service.features && (
-                    <ul className="space-y-2 mb-6 text-xs text-slate-300">
-                      {service.features.map((feature, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-2">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-accent-emerald shrink-0 mt-0.5" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+    {/* ================ Start Banner Area ================= */}
+    <section className="banner_area">
+        <div className="banner_inner d-flex align-items-center">
+            <div className="container">
+                <div className="banner_content text-center">
+                    <h2>Services</h2>
+                    <div className="page_link">
+                        <a href="/">Home</a>
+                        <a href="/services">Services</a>
+                    </div>
                 </div>
-
-                <div className="pt-4 border-t border-white/5">
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-accent-cyan transition-colors"
-                  >
-                    <span>Request Consultation</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Consulting Methodology Workflow */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-surface/40 border border-white/10">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-mono uppercase tracking-widest text-primary font-semibold">
-              The Engineering Process
-            </span>
-            <h2 className="text-3xl font-extrabold text-white tracking-tight mt-2">
-              How We Work at i AIM LABS
-            </h2>
-            <p className="text-slate-400 text-sm mt-2">
-              A structured, transparent engineering lifecycle ensuring high-velocity delivery without technical debt.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                step: "01",
-                title: "Discovery & Analysis",
-                desc: "Thorough requirements intake, data availability audit, and feasibility validation.",
-              },
-              {
-                step: "02",
-                title: "Architecture & Modeling",
-                desc: "Designing scalable schemas, training baseline models, and prototyping interfaces.",
-              },
-              {
-                step: "03",
-                title: "Rigorous Implementation",
-                desc: "Clean modular coding in Next.js & Python with automated test coverage and cross-validation.",
-              },
-              {
-                step: "04",
-                title: "Deployment & Scaling",
-                desc: "Cloud launch on Firebase/Vercel with CI/CD automation, monitoring, and ongoing support.",
-              },
-            ].map((phase, idx) => (
-              <div
-                key={idx}
-                className="p-6 rounded-2xl bg-black/40 border border-white/5 relative"
-              >
-                <div className="text-3xl font-black text-primary/40 font-mono mb-3">
-                  {phase.step}
-                </div>
-                <h3 className="text-base font-bold text-white mb-2">{phase.title}</h3>
-                <p className="text-xs text-slate-400 leading-relaxed">{phase.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Newsletter Section - Preserved & Upgraded from services.html */}
-        <section className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-primary/30 via-surface to-[#0c1322] border border-primary/30 text-center relative overflow-hidden">
-          <div className="max-w-2xl mx-auto space-y-4">
-            <div className="w-12 h-12 rounded-2xl bg-primary/20 text-primary flex items-center justify-center mx-auto mb-2">
-              <Mail className="w-6 h-6" />
             </div>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Get Updates & Technical Insights
-            </h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Stay informed with the latest updates on machine learning breakthroughs, product launches, and consultancy insights directly from Karan Mishra.
-            </p>
+        </div>
+    </section>
+    {/* ================ End Banner Area ================= */}
 
-            <form onSubmit={handleNewsletter} className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <input
-                type="email"
-                required
-                value={newsletterEmail}
-                onChange={(e) => setNewsletterEmail(e.target.value)}
-                placeholder="Enter your email address..."
-                className="w-full sm:w-80 px-4 py-3 rounded-xl bg-black/50 border border-white/15 text-white placeholder-slate-500 text-sm focus:outline-none focus:border-primary"
-              />
-              <button
-                type="submit"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-accent-coral to-primary text-white font-semibold text-sm shadow-glow-sm hover:shadow-glow-md transition-all shrink-0"
-              >
-                <Send className="w-4 h-4" />
-                <span>Get Started</span>
-              </button>
-            </form>
+    {/* ================ Start Features Area ================= */}
+    <section className="features_area section_gap_top">
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="col-lg-8 text-center">
+                    <div className="main_title">
+                        <h2>Our Services</h2>
+                        <p>We offer a wide range of professional services tailored to your needs. Explore our offerings below.</p>
+                    </div>
+                </div>
+            </div>
+            <div className="row feature_inner">
+                {/*  <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <i className="fas fa-code icon"></i>
+                        <h4>Web Development</h4>
+                        <p>Creating modern and responsive websites to boost your online presence.</p>
+                    </div>
+                </div>  */}
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <i className="fas fa-paint-brush icon" style={{"fontSize": "3rem", "color": "#FF6347"}}></i> {/*  UI/UX Design Icon (Tomato)  */}
+                        <h4>UI/UX Design</h4>
+                        <p>Designing intuitive user interfaces and experiences to enhance user satisfaction.</p>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <i className="fas fa-search icon" style={{"fontSize": "3rem", "color": "#1E90FF"}}></i> {/*  SEO Optimization Icon (Dodger Blue)  */}
+                        <h4>SEO Optimization</h4>
+                        <p>Optimizing your website to rank higher on search engines and attract more visitors.</p>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <i className="fas fa-lock icon" style={{"fontSize": "3rem", "color": "#28A745"}}></i> {/*  Cybersecurity Icon (Green)  */}
+                        <h4>Cybersecurity</h4>
+                        <p>Protecting your digital assets with advanced cybersecurity solutions.</p>
+                    </div>
+                </div>                
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <div className="icon" style={{"fontSize": "3rem", "color": "#FF6347"}}>
+                            <i className="fas fa-flask"></i> {/*  Research & Development Icon  */}
+                        </div>
+                        <h4>Research & Development</h4>
+                        <p>
+                            Innovating solutions and exploring new technologies to drive progress in the fields of machine learning,
+                            AI, and data science, pushing the boundaries of what's possible.
+                        </p>
+                    </div>
+                </div>                
+            </div>
+            <div className="row feature_inner">
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <div className="icon" style={{"fontSize": "3rem", "color": "#007FFF"}}>
+                            <i className="fas fa-brain"></i> {/*  Machine Learning Icon  */}
+                        </div>
+                        <h4>Machine Learning Development</h4>
+                        <p>
+                            Building intelligent systems with advanced machine learning algorithms, tailored to solve
+                            complex problems and enhance decision-making processes.
+                        </p>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <div className="icon" style={{"fontSize": "3rem", "color": "#FF5733"}}>
+                            <i className="fas fa-laptop-code"></i> {/*  Web Development Icon  */}
+                        </div>
+                        <h4>Web Application Development</h4>
+                        <p>
+                            Crafting responsive, user-friendly web applications that are both aesthetically pleasing
+                            and functionally robust, using the latest web technologies.
+                        </p>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <div className="icon" style={{"fontSize": "3rem", "color": "#28A745"}}>
+                            <i className="fas fa-chart-line"></i> {/*  Data Analytics Icon  */}
+                        </div>
+                        <h4>Data Analytics & Visualization</h4>
+                        <p>
+                            Transforming raw data into meaningful insights with comprehensive data analysis and
+                            visualization techniques to drive informed business decisions.
+                        </p>
+                    </div>
+                </div>
+                <div className="col-lg-3 col-md-6">
+                    <div className="feature_item">
+                        <div className="icon" style={{"fontSize": "3rem", "color": "#FFC107"}}>
+                            <i className="fas fa-cloud"></i> {/*  Cloud Computing Icon  */}
+                        </div>
+                        <h4>Cloud Solutions & Integration</h4>
+                        <p>
+                            Delivering scalable cloud solutions that seamlessly integrate with your existing systems,
+                            enhancing flexibility, collaboration, and business continuity.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {/* ================ End Features Area ================= */}
 
-            {newsletterStatus && (
-              <p className="text-xs text-accent-emerald pt-2">{newsletterStatus}</p>
-            )}
-          </div>
-        </section>
-      </div>
-    </div>
+
+	{/* ================ Start Newsletter Area ================= */}
+    <section className="newsletter_area" style={{"backgroundColor": "#007FFF", "padding": "60px 0"}}>
+        <div className="container">
+            <div className="row justify-content-center align-items-center">
+                <div className="col-lg-12 text-center">
+                    <div className="subscription_box text-center">
+                        <h2 className="text-uppercase text-white" style={{"fontSize": "36px", "fontWeight": "bold"}}>Get Updates from Anywhere</h2>
+                        <p className="text-white" style={{"fontSize": "18px", "marginTop": "10px"}}>
+                            Stay informed with the latest updates and exclusive offers. Subscribe now to receive notifications directly to your inbox.
+                        </p>
+                        <div className="subcribe-form" id="mc_embed_signup" style={{"marginTop": "20px"}}>
+                            <form target="_blank" noValidate action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" className="subscription relative" style={{"display": "flex", "justifyContent": "center", "alignItems": "center"}}>
+                                <input name="EMAIL" placeholder="Email address"   required type="email" style={{"padding": "10px", "borderRadius": "5px", "border": "none", "marginRight": "10px", "width": "250px"}} />
+                                <button className="primary-btn hover d-inline" style={{"backgroundColor": "#FF6F61", "color": "#fff", "padding": "10px 20px", "border": "none", "borderRadius": "5px", "cursor": "pointer", "transition": "background-color 0.3s"}}>
+                                    <i className="fa fa-paper-plane" aria-hidden="true"></i> Get Started
+                                </button>
+                                <div className="info"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {/* ================ End Newsletter Area ================= */}
+    
+    <style dangerouslySetInnerHTML={{ __html: `
+        .newsletter_area {
+            background-color: #007FFF;
+            padding: 60px 0;
+            color: #fff;
+        }
+    
+        .subscription_box h2 {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    
+        .subscription_box p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    
+        .subcribe-form form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+        .subcribe-form input[type="email"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-right: 10px;
+            width: 250px;
+        }
+    
+        .primary-btn {
+            background-color: #FF6F61;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    
+        .primary-btn:hover {
+            background-color: #FF4C4C;
+        }
+    
+        .primary-btn i {
+            margin-right: 8px;
+        }
+    ` }} />
+    {/*  News letter css style end  */}
+    
+    
+        {/* ================ Footer Area ================= */}
+    </>
   );
 }

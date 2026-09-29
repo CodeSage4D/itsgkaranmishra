@@ -1,144 +1,94 @@
 import React from "react";
-import { MapPin, Phone, Mail, Clock, Building2, ExternalLink } from "lucide-react";
-import { PageHeader } from "@/components/layout/PageHeader";
-import { ContactForm } from "@/components/contact/ContactForm";
-import { siteConfig } from "@/data/siteConfig";
-
-export const metadata = {
-  title: "Contact Karan Mishra",
-  description:
-    "Get in touch with Karan Mishra for software development, AI consulting, machine learning modeling, and IT services at i AIM LABS.",
-};
+import Link from "next/link";
 
 export default function ContactPage() {
   return (
-    <div className="relative">
-      <PageHeader
-        badge="Direct Communication"
-        title="Get in Touch"
-        subtitle="Let’s discuss your upcoming software project, AI integration, machine learning requirements, or consultancy needs."
-        breadcrumb={[{ label: "Contact" }]}
-      />
+    <>
+      {/* ================ End Header Area ================= */}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Contact Details Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="p-8 rounded-3xl bg-surface/50 border border-white/10 space-y-6">
-              <h3 className="text-xl font-bold text-white tracking-tight">
-                Contact Information
-              </h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Whether you have a concrete project specification or want to explore potential AI automation avenues for your business, feel free to reach out directly.
-              </p>
-
-              <div className="space-y-5 pt-2">
-                {/* Office Location */}
-                <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
-                    <MapPin className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-mono uppercase text-slate-400 font-semibold">
-                      Location / Office
-                    </h4>
-                    <p className="text-sm font-medium text-white mt-0.5 leading-snug">
-                      {siteConfig.address}
-                    </p>
-                  </div>
+    {/* ================ Start Banner Area ================= */}
+    <section className="banner_area">
+        <div className="banner_inner d-flex align-items-center">
+            <div className="container">
+                <div className="banner_content text-center">
+                    <h2>Contact Us</h2>
+                    <div className="page_link">
+                        <a href="/">Home</a>
+                        <a href="/contact">Contact</a>
+                    </div>
                 </div>
-
-                {/* Direct Phone */}
-                <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 text-accent-emerald flex items-center justify-center shrink-0 mt-0.5">
-                    <Phone className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-mono uppercase text-slate-400 font-semibold">
-                      Phone & WhatsApp
-                    </h4>
-                    <a
-                      href={`tel:${siteConfig.phone}`}
-                      className="text-sm font-semibold text-white hover:text-accent-cyan transition-colors mt-0.5 block"
-                    >
-                      {siteConfig.phone}
-                    </a>
-                    <span className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                      <Clock className="w-3 h-3 text-slate-500" />
-                      <span>Mon to Fri • 9:00 AM to 6:00 PM IST</span>
-                    </span>
-                  </div>
-                </div>
-
-                {/* Email Address */}
-                <div className="flex items-start gap-3.5">
-                  <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 text-accent-cyan flex items-center justify-center shrink-0 mt-0.5">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-mono uppercase text-slate-400 font-semibold">
-                      Primary Email
-                    </h4>
-                    <a
-                      href={`mailto:${siteConfig.email}`}
-                      className="text-sm font-semibold text-white hover:text-primary transition-colors mt-0.5 block"
-                    >
-                      {siteConfig.email}
-                    </a>
-                    <a
-                      href={`mailto:${siteConfig.secondaryEmail}`}
-                      className="text-xs text-slate-400 hover:text-white transition-colors block mt-0.5"
-                    >
-                      {siteConfig.secondaryEmail}
-                    </a>
-                  </div>
-                </div>
-
-                {/* Company Link */}
-                <div className="flex items-start gap-3.5 pt-2 border-t border-white/5">
-                  <div className="w-10 h-10 rounded-xl bg-accent-violet/10 text-accent-violet flex items-center justify-center shrink-0 mt-0.5">
-                    <Building2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-mono uppercase text-slate-400 font-semibold">
-                      Company Profile
-                    </h4>
-                    <a
-                      href={siteConfig.company.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm font-semibold text-white hover:text-accent-cyan transition-colors flex items-center gap-1.5 mt-0.5"
-                    >
-                      <span>i AIM LABS on LinkedIn</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
             </div>
-
-            {/* Interactive Map Visual Card (Indore Coordinates) */}
-            <div className="p-6 rounded-3xl bg-surface/30 border border-white/10 relative overflow-hidden">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-mono text-slate-400 uppercase tracking-wider">
-                  Coordinates: 22.7196° N, 75.8577° E
-                </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/20 text-accent-cyan border border-primary/30">
-                  Indore, India
-                </span>
-              </div>
-              <p className="text-xs text-slate-300 leading-relaxed">
-                Headquartered in Indore, Madhya Pradesh, operating worldwide across remote and cloud-native technical engagements.
-              </p>
-            </div>
-          </div>
-
-          {/* Contact Form Column */}
-          <div className="lg:col-span-7">
-            <ContactForm />
-          </div>
         </div>
-      </div>
-    </div>
+    </section>
+    {/* ================ End Banner Area ================= */}
+    
+    {/* ================Contact Area ================= */}
+    <section className="contact_area section_gap">
+        <div className="container">
+            <div className="row">
+                <div className="col-lg-3">
+                    <div className="contact_info">
+                        <div className="info_item">
+                            <i className="lnr lnr-home"></i>
+                            <h6>Sikandar Bag Colony, Killa Maidan</h6>
+                            <p>VIP Road, Indore, MP, India - 452006</p>
+                        </div>
+                        <div className="info_item">
+                            <i className="lnr lnr-phone-handset"></i>
+                            <h6><a href="tel:+917804895074">+91 7804895074</a></h6>
+                            <p>Mon to Fri 9am to 6 pm</p>
+                        </div>
+                        <div className="info_item">
+                            <i className="lnr lnr-envelope"></i>
+                            <h6><a href="mailto:karansmishra.84@gmail.com">karansmishra.84@gmail.com</a></h6>
+                            <p>Send us your query anytime!</p>
+                        </div>
+                        <div className="info_item">
+                            <i className="lnr lnr-home"></i>
+                            <h6>Company</h6>
+                            <p><a href="https://www.linkedin.com/company/iaimlabs" target="_blank">i aim labs</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-lg-9">
+                    <form className="row contact_form" action="contact_process.php" method="post" id="contactForm" noValidate>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <input type="text" className="form-control" id="name" name="name" placeholder="Enter your name" />
+                            </div>
+                            <div className="form-group">
+                                <input type="email" className="form-control" id="email" name="email" placeholder="Enter email address" />
+                            </div>
+                            <div className="form-group">
+                                <input type="text" className="form-control" id="subject" name="subject" placeholder="Enter Subject" />
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="form-group">
+                                <textarea className="form-control" name="message" id="message" rows={1} placeholder="Enter Message"></textarea>
+                            </div>
+                        </div>
+                        <div className="col-md-12 text-right">
+                            <button type="submit" value="submit" className="primary_btn">
+                                <span>Send Message</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="mapBox" className="mapBox" 
+                data-lat="22.7196" 
+                data-lon="75.8577" 
+                data-zoom="13" 
+                data-info="Sikandar Bag Colony, Killa Maidan, VIP Road, Indore, MP, India - 452006"
+                data-mlat="22.7196"
+                data-mlon="75.8577">
+            </div>
+        </div>
+    </section>
+    {/* ================Contact Area ================= */}
+        
+    {/* ================ Footer Area ================= */}
+    </>
   );
 }
