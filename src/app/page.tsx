@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { NeuralBackground } from "@/components/NeuralBackground";
 
 export default function Home() {
   const [filter, setFilter] = useState("*");
@@ -18,24 +19,70 @@ export default function Home() {
         />
       )}
 
-      <section className="home_banner_area">
-		<div className="banner_inner">
+      <section className="home_banner_area" style={{ position: "relative", overflow: "hidden" }}>
+		{/* Interactive Neural AI Constellation Background */}
+		<NeuralBackground particleCount={55} />
+
+		<div className="banner_inner" style={{ position: "relative", zIndex: 2 }}>
 			<div className="container">
-				<div className="row">
+				<div className="row align-items-center">
 					<div className="col-lg-7">
 						<div className="banner_content">
-							<h3 className="text-uppercase">Hell0</h3>
-							<h1 className="text-uppercase">I am Karan Mishra</h1>
-							<h5 className="text-uppercase">Machine Learning & Python developer</h5>
-							<div className="d-flex align-items-center">
-								<a className="primary_btn" href="#"><span>Hire Me</span></a>
-								<a className="primary_btn tr-bg" href="/pdf/Karan_Mishra_ResumeDetailed.pdf"><span>Get CV</span></a>
+							<h3 className="text-uppercase" style={{ letterSpacing: "2px", color: "#4458dc", fontWeight: 700 }}>Hello</h3>
+							<h1 className="text-uppercase" style={{ fontWeight: 800 }}>I am Karan Mishra</h1>
+							<h5 className="text-uppercase" style={{ color: "#334155", fontWeight: 600 }}>
+								Founder &bull; Aurxon &bull; Machine Learning &amp; Python Engineer
+							</h5>
+							<p className="mt-3 mb-4 text-muted" style={{ maxWidth: "560px", lineHeight: "1.7", fontSize: "1.05rem" }}>
+								Building transformative enterprise AI platforms, neural architectures, and scalable full-stack software. Open-source contributor with 47+ GitHub repositories and 3+ years of professional engineering experience.
+							</p>
+							<div className="d-flex flex-wrap align-items-center gap-3">
+								<Link className="primary_btn mr-3 mb-2" href="/contact">
+									<span>Direct Message / Hire Me</span>
+								</Link>
+								<a className="primary_btn tr-bg mb-2" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
+									<span>Get CV</span>
+								</a>
 							</div>
 						</div>
 					</div>
 					<div className="col-lg-5">
-						<div className="home_right_img">
-							<img className="" src="/img/banner/home-right.png" alt="" />
+						<div className="home_right_img text-center">
+							<img className="img-fluid" src="/img/banner/home-right.png" alt="Karan Mishra" style={{ maxHeight: "500px", objectFit: "contain" }} />
+						</div>
+					</div>
+				</div>
+
+				{/* Professional Live Analytics Stats Bar */}
+				<div className="hero_analytics_container mt-5 pt-3">
+					<div className="row justify-content-center text-center">
+						<div className="col-6 col-md-3 mb-3">
+							<div className="hero_stat_card">
+								<div className="stat_number">3+</div>
+								<div className="stat_label">Years Experience</div>
+							</div>
+						</div>
+						<div className="col-6 col-md-3 mb-3">
+							<div className="hero_stat_card">
+								<a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+									<div className="stat_number">47+</div>
+									<div className="stat_label">GitHub Repositories</div>
+								</a>
+							</div>
+						</div>
+						<div className="col-6 col-md-3 mb-3">
+							<div className="hero_stat_card">
+								<div className="stat_number">15+</div>
+								<div className="stat_label">ML/AI Architectures</div>
+							</div>
+						</div>
+						<div className="col-6 col-md-3 mb-3">
+							<div className="hero_stat_card">
+								<div className="stat_number" style={{ background: "linear-gradient(135deg, #4458dc, #854fee)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+									AURXON
+								</div>
+								<div className="stat_label">Venture Platform</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -60,16 +107,16 @@ export default function Home() {
 							Introduce about <br />
 							myself</h2>
 						<p>
-							Hey there! I'm Karan Mishra, a tech enthusiast with a passion for turning complex ideas into practical, innovative solutions. My journey in the world of technology began with a fascination for coding, and it’s led me to dive deep into machine learning, AI, and web technologies.
+							Hey there! I'm <strong>Karan Mishra</strong>, a technology enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative solutions. With over <strong>3+ years of professional experience</strong>, my journey spans deep machine learning, Python systems architecture, and intelligent web applications.
 						</p>
 						<p>
-							I’m now the proud founder of I Aim Labs, where I get to bring my vision to life, creating cutting-edge tech solutions that make a difference. Whether it's developing advanced machine learning models or crafting sleek web applications, I'm all about pushing boundaries and exploring new possibilities.
+							I’m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like Aurxon ERP), and AI intelligence engines that empower modern organizations.
 						</p>
 						<p>
-							When I'm not immersed in the world of tech, you’ll likely find me planning my next travel adventure or unwinding with some cartoons and movies—because hey, even founders need a bit of fun, right?
+							When I'm not immersed in the world of code and models, you’ll likely find me planning my next travel adventure or unwinding with movies and cartoons—because every founder values a bit of creative spark!
 						</p>
 						<p>
-							I’m always excited about the future and ready to tackle new challenges. If you’re looking to collaborate or just chat about the latest in tech, feel free to reach out!
+							I’m always eager to collaborate on groundbreaking AI initiatives, full-stack architectures, or research projects. Feel free to connect directly!
 						</p>
 						<a className="primary_btn" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
 							<span>Download CV</span>
@@ -154,9 +201,9 @@ export default function Home() {
 				</div>
 				<div className="offset-lg-2 col-lg-4 col-md-6">
 					<div className="client-info">
-						<div className="d-flex mb-50">
-							<span className="lage">1</span>
-							<span className="smll">Year Experience work</span>
+						<div className="d-flex mb-50 align-items-center">
+							<span className="lage">3+</span>
+							<span className="smll">Years Experience &bull; AI, ML &amp; Python</span>
 						</div>
 						<div className="call-now d-flex">
 							<div>
@@ -781,9 +828,9 @@ export default function Home() {
 							</div>
 							<div className="col-lg-8">
 								<div className="testi_text">
-									<h4>I Aim Labs - Founder</h4>
+									<h4>Aurxon &bull; Founder &amp; Chief AI Architect</h4>
 									<span className="date">August 2024 - Present</span>
-									<p>As the founder of `I Aim Labs`, I lead a team focused on developing cutting-edge solutions in machine learning and data analytics. Our work involves creating innovative tools and enhancing existing technologies to drive advancements in the field.</p>
+									<p>As the founder of <strong>Aurxon</strong> (formerly i AIM LABS), I lead technical architecture and development of scalable AI/ML platforms, enterprise software systems (such as Aurxon ERP Lite), and career intelligence engines (Cognivex). Driving innovative research, client solutions, and high-performance production engineering.</p>
 								</div>
 							</div>
 						</div>
@@ -838,8 +885,8 @@ export default function Home() {
 	{/*  style use:  */}
 	<style dangerouslySetInnerHTML={{ __html: `
 		.experience_area {
-			background-color: #f9f9f9;
-			padding: 60px 0;
+			background-color: #f8fafc;
+			padding: 70px 0;
 		}
 	
 		.testi_slider {
@@ -847,33 +894,49 @@ export default function Home() {
 		}
 	
 		.testi_item {
-			padding: 20px;
-			background-color: #fff;
-			border-radius: 8px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-			margin-bottom: 20px;
+			padding: 28px;
+			background-color: #ffffff;
+			border-radius: 14px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+			border: 1px solid rgba(226, 232, 240, 0.8);
+			margin-bottom: 24px;
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+
+		.testi_item:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 16px 36px rgba(68, 88, 220, 0.12);
 		}
 	
 		.testi_icon {
-			font-size: 60px;
-			color: #007FFF;
-			margin: 20px auto;
+			font-size: 54px;
+			color: #4458dc;
+			margin: 10px auto;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	
 		.testi_text {
-			margin-left: 80px;
+			margin-left: 20px;
 		}
 	
 		.testi_text h4 {
-			color: #007FFF;
+			color: #0f172a;
+			font-weight: 700;
 			margin-top: 0;
+			margin-bottom: 6px;
 		}
 	
 		.testi_text .date {
-			display: block;
-			font-size: 14px;
-			color: #555;
-			margin-bottom: 10px;
+			display: inline-block;
+			font-size: 13px;
+			font-weight: 600;
+			color: #4458dc;
+			background: #eef2ff;
+			padding: 2px 10px;
+			border-radius: 20px;
+			margin-bottom: 12px;
 		}
 	
 		.testi_text ul {
@@ -882,12 +945,68 @@ export default function Home() {
 		}
 	
 		.testi_text ul li {
-			margin: 10px 0;
-			font-size: 16px;
+			margin: 8px 0;
+			font-size: 15px;
+			color: #334155;
 		}
 	
 		.testi_text ul li i {
 			margin-right: 10px;
+		}
+
+		/* Hero Analytics Cards */
+		.hero_analytics_container {
+			border-top: 1px solid rgba(226, 232, 240, 0.8);
+		}
+
+		.hero_stat_card {
+			background: rgba(255, 255, 255, 0.85);
+			backdrop-filter: blur(12px);
+			border: 1px solid rgba(226, 232, 240, 0.9);
+			border-radius: 14px;
+			padding: 18px 12px;
+			box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+			transition: all 0.3s ease;
+		}
+
+		.hero_stat_card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 14px 32px rgba(68, 88, 220, 0.15);
+			border-color: rgba(99, 102, 241, 0.4);
+		}
+
+		.stat_number {
+			font-size: 1.8rem;
+			font-weight: 800;
+			color: #0f172a;
+			line-height: 1.1;
+			margin-bottom: 4px;
+			font-family: 'Rubik', sans-serif;
+		}
+
+		.stat_label {
+			font-size: 0.78rem;
+			font-weight: 600;
+			color: #64748b;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+		}
+
+		@media (max-width: 767px) {
+			.testi_text {
+				margin-left: 0;
+				margin-top: 16px;
+				text-align: center;
+			}
+			.testi_icon {
+				margin-bottom: 0;
+			}
+			.stat_number {
+				font-size: 1.4rem;
+			}
+			.stat_label {
+				font-size: 0.7rem;
+			}
 		}
 	` }} />
 	{/*  styke end  */}

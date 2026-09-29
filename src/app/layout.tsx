@@ -4,8 +4,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Karan Portfolio",
-  description: "Karan Mishra Portfolio - Machine Learning & Python Developer",
+  title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
+  description: "Official portfolio of Karan Mishra - Founder at Aurxon, Machine Learning & Python Engineer. Explore AI/ML architectures, Aurxon ERP, Cognivex, HemoAI, and scalable systems.",
   icons: {
     icon: "/img/logo/favicon-16x16.png",
   },
