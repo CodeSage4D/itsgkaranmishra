@@ -5,6 +5,7 @@ import Link from "next/link";
 import { NeuralBackground } from "@/components/NeuralBackground";
 import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
 import { ModernContactSection } from "@/components/ModernContactSection";
+import { ModernProjectsSection } from "@/components/ModernProjectsSection";
 
 export default function Home() {
   const [filter, setFilter] = useState("*");
@@ -93,94 +94,98 @@ export default function Home() {
 	</section>
 	{/* ================ End Home Banner Area ================= */}
 
-	{/* ================ Start About Us Area (Cut-Off Concise Design) ================= */}
-	<section className="about_area section_gap concise_cutoff_about">
+	{/* ================ Start About Us Area (Classic Open Editorial Layout) ================= */}
+	<section className="about_area section_gap" id="about-section">
 		<div className="container">
-			<div className="cutoff_card_container">
-				{/* Top-Right Decorative Cut-Off Tag */}
-				<div className="cutoff_accent_corner">
-					<span className="cutoff_tag_text heartbeat_fluctuate">
-						<i className="fa fa-heart mr-1 text-danger"></i> AI Innovator
-					</span>
-				</div>
-
-				<div className="row align-items-center">
-					<div className="col-lg-5 mb-4 mb-lg-0 text-center">
-						<div className="about_avatar_frame">
-							<img className="img-fluid about_profile_img" src="/img/about-us.png" alt="Karan Mishra" />
-							<div className="about_floating_badge heartbeat_soft">
-								<span className="badge_pulse_dot heartbeat_fluctuate"></span>
-								<span>Founder &bull; Aurxon</span>
-							</div>
+			<div className="row justify-content-start align-items-center">
+				<div className="col-lg-5 text-center mb-4 mb-lg-0">
+					<div className="about_img_wrapper" style={{ position: "relative", display: "inline-block" }}>
+						<img
+							className="img-fluid"
+							src="/img/about-us.png"
+							alt="Karan Mishra"
+							style={{ borderRadius: "16px", maxWidth: "100%", height: "auto" }}
+						/>
+						{/* Floating Heartbeat Live Status Badge */}
+						<div
+							className="about_floating_pill heartbeat_soft"
+							style={{
+								position: "absolute",
+								bottom: "16px",
+								right: "16px",
+								background: "rgba(15, 23, 42, 0.88)",
+								backdropFilter: "blur(10px)",
+								border: "1px solid rgba(255, 255, 255, 0.2)",
+								borderRadius: "50px",
+								padding: "8px 16px",
+								color: "#ffffff",
+								fontSize: "0.82rem",
+								fontWeight: 700,
+								display: "inline-flex",
+								alignItems: "center",
+								gap: "8px",
+								boxShadow: "0 8px 24px rgba(0, 0, 0, 0.3)",
+							}}
+						>
+							<span
+								className="pulse_dot heartbeat_fluctuate"
+								style={{
+									width: "8px",
+									height: "8px",
+									borderRadius: "50%",
+									background: "#10b981",
+									display: "inline-block",
+								}}
+							></span>
+							<span>Founder &bull; Aurxon</span>
 						</div>
 					</div>
+				</div>
 
-					<div className="col-lg-7">
-						<div className="about_concise_content">
-							<div className="d-flex align-items-center gap-2 mb-2">
-								<span className="about_kicker">Executive Bio</span>
-								<span className="kicker_divider">/</span>
-								<span className="about_subkicker">Smart City Indore, India</span>
-							</div>
+				<div className="offset-lg-1 col-lg-6">
+					<div className="main_title text-left">
+						<span
+							className="badge badge-light px-3 py-2 text-primary font-weight-bold mb-3"
+							style={{ fontSize: "0.82rem", letterSpacing: "0.06em", textTransform: "uppercase" }}
+						>
+							About Karan Mishra
+						</span>
+						<h2>
+							Let’s <br />
+							Introduce about <br />
+							myself
+						</h2>
+						<p>
+							Hey there! I'm <strong>Karan Mishra</strong>, a tech enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative software solutions. With over <strong>3+ years of professional engineering experience</strong>, my journey spans deep machine learning, Python systems architecture, and scalable full-stack development.
+						</p>
+						<p>
+							I’m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like <strong>Aurxon ERP Lite</strong>), and AI intelligence engines (such as <strong>Cognivex</strong> and <strong>HemoAI</strong>) that empower modern organizations.
+						</p>
+						<p>
+							When I'm not immersed in the world of code and models, you’ll likely find me planning my next travel adventure, exploring new tech, or contributing to over 47+ open-source repositories on GitHub.
+						</p>
+						<p>
+							I’m always eager to collaborate on groundbreaking AI initiatives, enterprise architectures, or research projects. Let's connect!
+						</p>
 
-							<h2 className="about_main_heading">
-								Engineering Intelligent Systems That <span className="text_gradient_purple">Scale</span>
-							</h2>
-
-							<p className="about_lead_summary">
-								I&apos;m <strong>Karan Mishra</strong>, an AI &amp; Machine Learning Engineer with <strong>3+ years of professional engineering experience</strong>. I specialize in translating complex neural algorithms and Python architectures into reliable, production-grade applications that solve tangible problems.
-							</p>
-
-							{/* Key Concise Value Highlights */}
-							<div className="about_points_grid row g-3 my-4">
-								<div className="col-sm-6 mb-3">
-									<div className="concise_point_box">
-										<div className="point_icon"><i className="fa fa-cubes"></i></div>
-										<div>
-											<h5 className="point_title">Enterprise AI &amp; SaaS</h5>
-											<p className="point_desc">Architect of Aurxon ERP Lite and AI intelligence suites for institutions.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-sm-6 mb-3">
-									<div className="concise_point_box">
-										<div className="point_icon"><i className="fa fa-cogs"></i></div>
-										<div>
-											<h5 className="point_title">NLP &amp; Semantic Search</h5>
-											<p className="point_desc">Cognivex resume embeddings, SentiVoice speech-to-text sentiment handling.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-sm-6 mb-3">
-									<div className="concise_point_box">
-										<div className="point_icon"><i className="fa fa-heartbeat"></i></div>
-										<div>
-											<h5 className="point_title">Predictive Healthcare</h5>
-											<p className="point_desc">HemoAI predictive blood bank demand and patient prioritization algorithms.</p>
-										</div>
-									</div>
-								</div>
-								<div className="col-sm-6 mb-3">
-									<div className="concise_point_box">
-										<div className="point_icon"><i className="fa fa-github"></i></div>
-										<div>
-											<h5 className="point_title">Open Source Contributions</h5>
-											<p className="point_desc">47+ public codebases on GitHub, Cordova plugins, and Python toolkits.</p>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div className="d-flex flex-wrap align-items-center gap-3">
-								<a className="primary_btn mr-3 mb-2" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
-									<i className="fa fa-download mr-2"></i>
-									<span>Download Resume</span>
-								</a>
-								<a className="primary_btn tr-bg mb-2" href="#direct-contact-section">
-									<i className="fa fa-paper-plane mr-2"></i>
-									<span>Collaborate With Me</span>
-								</a>
-							</div>
+						{/* Side-by-side action buttons: Download CV & Let's Connect */}
+						<div className="d-flex flex-wrap align-items-center gap-3 mt-4">
+							<a
+								className="primary_btn mr-3 mb-2"
+								href="/pdf/Karan_Mishra_ResumeDetailed.pdf"
+								download="Karan_Mishra_CV.pdf"
+							>
+								<i className="fa fa-download mr-2"></i>
+								<span>Download CV</span>
+							</a>
+							<a
+								className="primary_btn tr-bg mb-2 heartbeat_soft"
+								href="#direct-contact-section"
+							>
+								<i className="fa fa-comments-o mr-2"></i>
+								<span>Let&apos;s Connect</span>
+								<i className="fa fa-arrow-right ml-2"></i>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -351,520 +356,9 @@ export default function Home() {
 	</section>
 	{/* ================ End Features Area ================= */}
 
-	{/* ================Start Portfolio Area ================= */}
-	{/*  Add Font Awesome CSS to the head of your HTML file  */}
-{/*  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  */}
-
-<section className="portfolio_area" id="portfolio">
-    <div className="container">
-        <div className="row">
-            <div className="col-lg-12">
-                <div className="main_title text-left">
-                    <h2>Quality Work <br /> Recently Done Projects</h2>
-                </div>
-            </div>
-        </div>
-        <div className="filters portfolio-filter">
-            <ul>
-                <li style={{ cursor: "pointer" }} onClick={() => setFilter("*")} className={filter === "*" ? "active" : ""}>All</li>
-                <li style={{ cursor: "pointer" }} onClick={() => setFilter("popular")} className={filter === "popular" ? "active" : ""}>Popular</li>
-                <li style={{ cursor: "pointer" }} onClick={() => setFilter("latest")} className={filter === "latest" ? "active" : ""}>Latest</li>
-                <li style={{ cursor: "pointer" }} onClick={() => setFilter("following")} className={filter === "following" ? "active" : ""}>Following</li>
-                <li style={{ cursor: "pointer" }} onClick={() => setFilter("upcoming")} className={filter === "upcoming" ? "active" : ""}>Upcoming</li>
-            </ul>
-        </div>
-
-        <div className="filters-content">
-            <div className="row portfolio-grid justify-content-center">
-                {/*  KM-DataScience-Portfolio  */}
-                <div className="col-lg-4 col-md-6 all latest" style={{ display: (filter === "*" || ['latest'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-database" style={{"fontSize": "4rem", "color": "#007FFF"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#kmDataScienceDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("kmDataScienceDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#kmDataScienceDetails" onClick={(e) => { e.preventDefault(); setActiveModal("kmDataScienceDetails"); }}>KM Data Science Portfolio</a></h4>
-                            <p>Showcase of data science projects and skills.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  SentiModel_Analysis  */}
-                <div className="col-lg-4 col-md-6 all popular" style={{ display: (filter === "*" || ['popular'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-chart-line" style={{"fontSize": "4rem", "color": "#FF5733"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#sentiModelDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("sentiModelDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#sentiModelDetails" onClick={(e) => { e.preventDefault(); setActiveModal("sentiModelDetails"); }}>SentiModel Analysis</a></h4>
-                            <p>Sentiment analysis model development and tuning.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  TicTacToe-Game  */}
-                <div className="col-lg-4 col-md-6 all latest" style={{ display: (filter === "*" || ['latest'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-gamepad" style={{"fontSize": "4rem", "color": "#28A745"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#ticTacToeDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("ticTacToeDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#ticTacToeDetails" onClick={(e) => { e.preventDefault(); setActiveModal("ticTacToeDetails"); }}>Tic Tac Toe Game</a></h4>
-                            <p>A classic game implemented with modern technologies.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Feedback Analyzer  */}
-                <div className="col-lg-4 col-md-6 all popular" style={{ display: (filter === "*" || ['popular'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-comment-dots" style={{"fontSize": "4rem", "color": "#FFC107"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#feedbackAnalyzerDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("feedbackAnalyzerDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#feedbackAnalyzerDetails" onClick={(e) => { e.preventDefault(); setActiveModal("feedbackAnalyzerDetails"); }}>Feedback Analyzer</a></h4>
-                            <p>Analyze and visualize feedback data effectively.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  SentiVoice_access  */}
-                <div className="col-lg-4 col-md-6 all following" style={{ display: (filter === "*" || ['following'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-microphone" style={{"fontSize": "4rem", "color": "#17A2B8"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#sentiVoiceDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("sentiVoiceDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#sentiVoiceDetails" onClick={(e) => { e.preventDefault(); setActiveModal("sentiVoiceDetails"); }}>SentiVoice Access</a></h4>
-                            <p>Voice-enabled sentiment analysis application.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Sentiment-Negation-Analytics  */}
-                <div className="col-lg-4 col-md-6 all upcoming" style={{ display: (filter === "*" || ['upcoming'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-exclamation-triangle" style={{"fontSize": "4rem", "color": "#DC3545"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#sentimentNegationDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("sentimentNegationDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#sentimentNegationDetails" onClick={(e) => { e.preventDefault(); setActiveModal("sentimentNegationDetails"); }}>Sentiment Negation Analytics</a></h4>
-                            <p>Analyzing sentiment with focus on negation aspects.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  BlackCoffe-DataAnalytic  */}
-                <div className="col-lg-4 col-md-6 all upcoming following" style={{ display: (filter === "*" || ['upcoming', 'following'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-coffee" style={{"fontSize": "4rem", "color": "#6F42C1"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#blackCoffeeDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("blackCoffeeDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#blackCoffeeDetails" onClick={(e) => { e.preventDefault(); setActiveModal("blackCoffeeDetails"); }}>Black Coffee Data Analytic</a></h4>
-                            <p>Advanced analytics for coffee industry data.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Cordova Bluetooth Plugin  */}
-                <div className="col-lg-4 col-md-6 all following" style={{ display: (filter === "*" || ['following'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-bluetooth" style={{"fontSize": "4rem", "color": "#007BFF"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#cordovaBluetoothDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("cordovaBluetoothDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#cordovaBluetoothDetails" onClick={(e) => { e.preventDefault(); setActiveModal("cordovaBluetoothDetails"); }}>Cordova Bluetooth Plugin</a></h4>
-                            <p>Plugin for integrating Bluetooth functionality in Cordova apps.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Cordova Location Services  */}
-                <div className="col-lg-4 col-md-6 all upcoming" style={{ display: (filter === "*" || ['upcoming'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-map-marker-alt" style={{"fontSize": "4rem", "color": "#28A745"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#cordovaLocationDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("cordovaLocationDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#cordovaLocationDetails" onClick={(e) => { e.preventDefault(); setActiveModal("cordovaLocationDetails"); }}>Cordova Location Services</a></h4>
-                            <p>Plugin for accessing location services in Cordova apps.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Advanced Sentiment Analysis  */}
-                <div className="col-lg-4 col-md-6 all following" style={{ display: (filter === "*" || ['following'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-chart-pie" style={{"fontSize": "4rem", "color": "#FF5733"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#advancedSentimentDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("advancedSentimentDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#advancedSentimentDetails" onClick={(e) => { e.preventDefault(); setActiveModal("advancedSentimentDetails"); }}>Advanced Sentiment Analysis</a></h4>
-                            <p>In-depth sentiment analysis with advanced techniques.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Data Science Model Development  */}
-                <div className="col-lg-4 col-md-6 all popular upcoming" style={{ display: (filter === "*" || ['popular', 'upcoming'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-cogs" style={{"fontSize": "4rem", "color": "#007BFF"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#dataScienceDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("dataScienceDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#dataScienceDetails" onClick={(e) => { e.preventDefault(); setActiveModal("dataScienceDetails"); }}>Data Science Model Development</a></h4>
-                            <p>Model development for data science applications.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Interactive Visualization Tool  */}
-                <div className="col-lg-4 col-md-6 all popular" style={{ display: (filter === "*" || ['popular'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-chart-bar" style={{"fontSize": "4rem", "color": "#FFC107"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#interactiveVisualizationDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("interactiveVisualizationDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#interactiveVisualizationDetails" onClick={(e) => { e.preventDefault(); setActiveModal("interactiveVisualizationDetails"); }}>Interactive Visualization Tool</a></h4>
-                            <p>Tool for creating interactive data visualizations.</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/*  Machine Learning Enhancements  */}
-                <div className="col-lg-4 col-md-6 all upcoming following" style={{ display: (filter === "*" || ['upcoming', 'following'].includes(filter)) ? "block" : "none" }}>
-                    <div className="portfolio_box">
-                        <div className="single_portfolio">
-                            <div className="icon_box">
-                                <span className="fas fa-brain" style={{"fontSize": "4rem", "color": "#17A2B8"}}></span>
-                            </div>
-                            <div className="overlay"></div>
-                            <a href="#machineLearningDetails" className="img-gal" onClick={(e) => { e.preventDefault(); setActiveModal("machineLearningDetails"); }}>
-                                <div className="icon">
-                                    <span className="fas fa-link" style={{"fontSize": "2rem", "color": "#333"}}></span>
-                                </div>
-                            </a>
-                        </div>
-                        <div className="short_info">
-                            <h4><a href="#machineLearningDetails" onClick={(e) => { e.preventDefault(); setActiveModal("machineLearningDetails"); }}>Machine Learning Enhancements</a></h4>
-                            <p>Improvements and optimizations in machine learning models.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{/*  Modal Structure  */}
-{/*  KM Data Science Portfolio Modal  */}
-<div className={`modal fade ${activeModal === "kmDataScienceDetails" ? "show d-block" : ""}`} id="kmDataScienceDetails" tabIndex={-1} role="dialog" aria-labelledby="kmDataScienceDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="kmDataScienceDetailsLabel">KM Data Science Portfolio</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>Detailed showcase of data science projects including data analysis, model building, and visualization techniques used.</p>
-                <p>Explore projects that involve complex data manipulations, feature engineering, and predictive modeling.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  SentiModel Analysis Modal  */}
-<div className={`modal fade ${activeModal === "sentiModelDetails" ? "show d-block" : ""}`} id="sentiModelDetails" tabIndex={-1} role="dialog" aria-labelledby="sentiModelDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="sentiModelDetailsLabel">SentiModel Analysis</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>This project involves developing and fine-tuning a sentiment analysis model using advanced techniques like deep learning and natural language processing.</p>
-                <p>Key features include sentiment classification, feature extraction, and model evaluation metrics.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Tic Tac Toe Game Modal  */}
-<div className={`modal fade ${activeModal === "ticTacToeDetails" ? "show d-block" : ""}`} id="ticTacToeDetails" tabIndex={-1} role="dialog" aria-labelledby="ticTacToeDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="ticTacToeDetailsLabel">Tic Tac Toe Game</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>A modern implementation of the classic Tic Tac Toe game. Features include a user-friendly interface, real-time game updates, and an AI opponent.</p>
-                <p>Technology stack includes HTML, CSS, JavaScript, and some game theory algorithms for the AI opponent.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Feedback Analyzer Modal  */}
-<div className={`modal fade ${activeModal === "feedbackAnalyzerDetails" ? "show d-block" : ""}`} id="feedbackAnalyzerDetails" tabIndex={-1} role="dialog" aria-labelledby="feedbackAnalyzerDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="feedbackAnalyzerDetailsLabel">Feedback Analyzer</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>A tool for analyzing feedback data to extract insights and trends. Includes sentiment analysis, keyword extraction, and feedback categorization.</p>
-                <p>Built with Python and uses libraries such as Pandas, NLTK, and Matplotlib for data processing and visualization.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  SentiVoice Access Modal  */}
-<div className={`modal fade ${activeModal === "sentiVoiceDetails" ? "show d-block" : ""}`} id="sentiVoiceDetails" tabIndex={-1} role="dialog" aria-labelledby="sentiVoiceDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="sentiVoiceDetailsLabel">SentiVoice Access</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>An interactive tool for accessing and managing feedback through voice commands. Supports features such as searching, filtering, and retrieving feedback entries.</p>
-                <p>Implemented with speech recognition and natural language processing technologies.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Cordova Location Services Modal  */}
-<div className={`modal fade ${activeModal === "cordovaLocationDetails" ? "show d-block" : ""}`} id="cordovaLocationDetails" tabIndex={-1} role="dialog" aria-labelledby="cordovaLocationDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="cordovaLocationDetailsLabel">Cordova Location Services</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>A plugin designed for accessing location services in Cordova applications. Provides functionality for retrieving geolocation data and handling location-related events.</p>
-                <p>Developed using JavaScript and Cordova APIs for seamless integration into mobile apps.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Advanced Sentiment Analysis Modal  */}
-<div className={`modal fade ${activeModal === "advancedSentimentDetails" ? "show d-block" : ""}`} id="advancedSentimentDetails" tabIndex={-1} role="dialog" aria-labelledby="advancedSentimentDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="advancedSentimentDetailsLabel">Advanced Sentiment Analysis</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>This project focuses on applying advanced sentiment analysis techniques to analyze and interpret emotions in textual data. Utilizes machine learning algorithms and NLP methods for precise sentiment classification.</p>
-                <p>Features include deep learning models, feature extraction, and real-time sentiment tracking.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Data Science Model Development Modal  */}
-<div className={`modal fade ${activeModal === "dataScienceDetails" ? "show d-block" : ""}`} id="dataScienceDetails" tabIndex={-1} role="dialog" aria-labelledby="dataScienceDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="dataScienceDetailsLabel">Data Science Model Development</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>Developing data science models for various applications, including predictive analytics and machine learning. Emphasizes model training, evaluation, and deployment strategies.</p>
-                <p>Involves using tools like Python, R, and various ML libraries to build robust and accurate models.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Interactive Visualization Tool Modal  */}
-<div className={`modal fade ${activeModal === "interactiveVisualizationDetails" ? "show d-block" : ""}`} id="interactiveVisualizationDetails" tabIndex={-1} role="dialog" aria-labelledby="interactiveVisualizationDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="interactiveVisualizationDetailsLabel">Interactive Visualization Tool</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>A tool designed for creating interactive and engaging visualizations. Allows users to explore data through dynamic charts and graphs.</p>
-                <p>Utilizes libraries like D3.js and Plotly to provide an immersive data exploration experience.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{/*  Machine Learning Enhancements Modal  */}
-<div className={`modal fade ${activeModal === "machineLearningDetails" ? "show d-block" : ""}`} id="machineLearningDetails" tabIndex={-1} role="dialog" aria-labelledby="machineLearningDetailsLabel" aria-hidden="true">
-    <div className="modal-dialog" role="document">
-        <div className="modal-content">
-            <div className="modal-header">
-                <h5 className="modal-title" id="machineLearningDetailsLabel">Machine Learning Enhancements</h5>
-                <button type="button" className="close" onClick={() => setActiveModal(null)} aria-label="Close">
-                    <span aria-hidden="true" onClick={() => setActiveModal(null)} style={{ cursor: "pointer" }}>&times;</span>
-                </button>
-            </div>
-            <div className="modal-body">
-                <p>This project focuses on enhancing existing machine learning models through optimization and fine-tuning techniques. Aims to improve model accuracy and efficiency.</p>
-                <p>Includes algorithm tuning, hyperparameter optimization, and performance evaluation.</p>
-            </div>
-            <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setActiveModal(null)}>Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-	{/* ================End Portfolio Area ================= */}
+	{/* ================ Start Modern Projects Section (Quality Work & GitHub Deployments) ================= */}
+	<ModernProjectsSection />
+	{/* ================ End Modern Projects Section ================= */}
 
 	{/* ================ Start Storytelling Road Timeline Experience Area ================= */}
 	<RoadTimelineExperience />
