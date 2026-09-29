@@ -661,7 +661,9 @@ export const ModernProjectsSection: React.FC = () => {
         .project_actions_row {
           display: flex;
           align-items: center;
+          flex-wrap: wrap;
           gap: 10px;
+          row-gap: 8px;
           position: relative;
           z-index: 2;
           margin-top: auto;

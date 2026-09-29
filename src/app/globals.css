@@ -1,6 +1,7 @@
 /* =========================================================
    PORTFOLIO DESIGN SYSTEM & GLOBAL AUTO-ADJUST ENGINE
    Light & Dark Mode • Gravity Cosmos • World-Class Hover Effects
+   Harmonious Spacing & Calibrated Margins
    ========================================================= */
 
 :root {
@@ -33,6 +34,7 @@ html.dark {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 html, body {
@@ -48,7 +50,7 @@ html, body {
 
 /* Fix navbar overlapping content on all screens */
 #main_content {
-  padding-top: 86px;
+  padding-top: 82px;
   min-height: 80vh;
   position: relative;
   z-index: 1;
@@ -56,7 +58,7 @@ html, body {
 
 @media (max-width: 991px) {
   #main_content {
-    padding-top: 80px;
+    padding-top: 76px;
   }
 }
 
@@ -76,6 +78,124 @@ img, video, canvas, svg {
   display: block !important;
   background-color: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
+}
+
+/* =========================================================
+   HARMONIOUS SPACING & SECTION GAP NORMALIZATION
+   Replaces legacy 200px and 170px empty voids with modern proportions
+   ========================================================= */
+
+.section_gap {
+  padding: 75px 0 !important;
+}
+
+.section_gap_top {
+  padding-top: 75px !important;
+}
+
+.section_gap_bottom {
+  padding-bottom: 75px !important;
+}
+
+.home_banner_area {
+  min-height: auto !important;
+  padding: 50px 0 35px !important;
+}
+
+.home_banner_area .banner_inner {
+  min-height: auto !important;
+  padding-top: 20px !important;
+  padding-bottom: 25px !important;
+}
+
+.features_area {
+  padding-top: 30px !important;
+  padding-bottom: 75px !important;
+}
+
+@media (max-width: 991px) {
+  .section_gap {
+    padding: 50px 0 !important;
+  }
+  .section_gap_top {
+    padding-top: 50px !important;
+  }
+  .section_gap_bottom {
+    padding-bottom: 50px !important;
+  }
+  .home_banner_area {
+    padding: 30px 0 20px !important;
+  }
+  .home_banner_area .banner_inner {
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+  }
+}
+
+/* =========================================================
+   UNIVERSAL BUTTON NORMALIZATION & RESPONSIVENESS
+   Overriding legacy display:none on mobile and bulky 42px padding
+   ========================================================= */
+
+.primary_btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px 24px !important;
+  height: auto !important;
+  min-height: 48px !important;
+  line-height: 1.4 !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.02em !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  margin: 0 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 8px 20px -6px rgba(68, 88, 220, 0.45) !important;
+}
+
+/* Ensure buttons never hide on mobile screens */
+.home_banner_area .banner_inner .banner_content .primary_btn {
+  display: inline-flex !important;
+  margin-right: 0 !important;
+}
+
+.primary_btn span {
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.primary_btn:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 15px 30px -6px rgba(68, 88, 220, 0.6) !important;
+}
+
+.primary_btn.tr-bg {
+  border: 2px solid #4458dc !important;
+  background: transparent !important;
+  color: #4458dc !important;
+  box-shadow: none !important;
+}
+
+.primary_btn.tr-bg:hover {
+  background: #4458dc !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(68, 88, 220, 0.45) !important;
+}
+
+/* Button flex groups */
+.hero_cta_group,
+.about_cta_group {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
 }
 
 /* =========================================================
@@ -151,17 +271,60 @@ img, video, canvas, svg {
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
 }
 
+.dark .primary_btn {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%) !important;
+  color: #06080e !important;
+  font-weight: 700 !important;
+  box-shadow: 0 8px 25px -5px rgba(56, 189, 248, 0.45) !important;
+}
+
+.dark .primary_btn:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  box-shadow: 0 15px 34px -5px rgba(56, 189, 248, 0.65) !important;
+}
+
+.dark .primary_btn.tr-bg {
+  border: 2px solid #38bdf8 !important;
+  color: #38bdf8 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.dark .primary_btn.tr-bg:hover {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4) !important;
+}
+
 /* =========================================================
-   WORLD-CLASS MODERN HOVER EFFECTS SYSTEM
+   SERVICES / FEATURES CARDS EQUAL HEIGHT & ALIGNMENT
    ========================================================= */
 
-/* Feature / Service Item Hover */
+.feature_inner {
+  display: flex !important;
+  flex-wrap: wrap !important;
+}
+
+.feature_inner > [class*="col-"] {
+  display: flex !important;
+  margin-bottom: 24px;
+}
+
 .feature_item {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 36px 24px !important;
+  border-radius: 20px !important;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
   position: relative;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
   overflow: hidden;
-  border-radius: 20px !important;
-  border: 1px solid #e2e8f0;
+  margin-bottom: 0 !important;
 }
 
 .feature_item::before {
@@ -197,13 +360,42 @@ img, video, canvas, svg {
   background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.2), transparent 70%);
 }
 
-.feature_item:hover i,
-.feature_item:hover span {
-  transform: scale(1.08);
+.feature_item .icon {
+  margin-bottom: 18px;
   transition: transform 0.3s ease;
 }
 
-/* Hero Analytics Stat Cards Hover */
+.feature_item:hover .icon {
+  transform: scale(1.12);
+}
+
+.feature_item h4 {
+  font-size: 1.18rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 12px !important;
+  color: #0f172a;
+}
+
+.dark .feature_item h4 {
+  color: #ffffff !important;
+}
+
+.feature_item p {
+  color: #64748b !important;
+  font-size: 0.92rem !important;
+  line-height: 1.6 !important;
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+}
+
+.dark .feature_item p {
+  color: #94a3b8 !important;
+}
+
+/* =========================================================
+   HERO STAT CARDS HOVER & ALIGNMENT
+   ========================================================= */
+
 .hero_stat_card {
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: 20px;
@@ -263,64 +455,63 @@ img, video, canvas, svg {
   color: #94a3b8;
 }
 
-/* Primary Button Dynamic Hover System */
-.primary_btn {
-  position: relative;
-  overflow: hidden;
-  border-radius: 50px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  box-shadow: 0 8px 22px -6px rgba(68, 88, 220, 0.45) !important;
-}
+/* =========================================================
+   BRAND LOGOS GRID & CLIENT INFO SPACING
+   ========================================================= */
 
-.primary_btn:hover {
-  transform: translateY(-3px) scale(1.03) !important;
-  box-shadow: 0 15px 30px -6px rgba(68, 88, 220, 0.6) !important;
-}
-
-.dark .primary_btn {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%) !important;
-  color: #06080e !important;
-  font-weight: 700 !important;
-  box-shadow: 0 8px 25px -5px rgba(56, 189, 248, 0.45) !important;
-}
-
-.dark .primary_btn:hover {
-  transform: translateY(-3px) scale(1.03) !important;
-  box-shadow: 0 15px 34px -5px rgba(56, 189, 248, 0.65) !important;
-}
-
-.primary_btn.tr-bg {
-  border: 2px solid #4458dc !important;
-  color: #4458dc !important;
-}
-
-.dark .primary_btn.tr-bg {
-  border: 2px solid #38bdf8 !important;
-  color: #38bdf8 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.dark .primary_btn.tr-bg:hover {
-  background: rgba(56, 189, 248, 0.15) !important;
-  color: #ffffff !important;
-  box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4) !important;
-}
-
-/* Brand Area Item Hover */
-.single-brand-item {
+.brand_area .single-brand-item {
+  width: 100% !important;
+  max-width: 155px;
+  height: 85px !important;
+  margin: 0 auto 18px !important;
+  border-radius: 14px !important;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   transition: all 0.3s ease;
-  border-radius: 14px;
 }
 
-.single-brand-item:hover {
+.brand_area .single-brand-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
-.dark .single-brand-item:hover {
+.dark .brand_area .single-brand-item {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .brand_area .single-brand-item img {
+  filter: brightness(0.9) contrast(1.1) invert(0.85);
+  transition: filter 0.3s ease;
+}
+
+.dark .brand_area .single-brand-item:hover img {
+  filter: brightness(1) invert(0.95);
   box-shadow: 0 12px 30px rgba(56, 189, 248, 0.25) !important;
+}
+
+.client-info .lage {
+  font-size: 3.4rem !important;
+  font-weight: 800 !important;
+  color: #4458dc;
+  margin-right: 18px;
+}
+
+.dark .client-info .lage {
+  color: #38bdf8 !important;
+}
+
+.client-info .smll {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #334155;
+}
+
+.dark .client-info .smll {
+  color: #cbd5e1 !important;
 }
 
 /* =========================================================

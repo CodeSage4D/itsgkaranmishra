@@ -36,9 +36,9 @@ export default function Home() {
 							<p className="mt-3 mb-4 text-muted" style={{ maxWidth: "560px", lineHeight: "1.7", fontSize: "1.05rem" }}>
 								Building transformative enterprise AI platforms, neural architectures, and scalable full-stack software. Open-source contributor with 47+ GitHub repositories and 3+ years of professional engineering experience.
 							</p>
-							<div className="d-flex flex-wrap align-items-center gap-3">
+							<div className="hero_cta_group">
 								<a
-									className="primary_btn mr-2 mb-2 heartbeat_soft"
+									className="primary_btn heartbeat_soft"
 									href="#direct-contact-section"
 									onClick={(e) => {
 										e.preventDefault();
@@ -47,11 +47,11 @@ export default function Home() {
 								>
 									<span><i className="fa fa-comments mr-2"></i>Let&apos;s Connect</span>
 								</a>
-								<Link className="primary_btn tr-bg mr-2 mb-2" href="/contact">
-									<span>Direct Message</span>
+								<Link className="primary_btn tr-bg" href="/contact">
+									<span><i className="fa fa-envelope-o mr-2"></i>Direct Message</span>
 								</Link>
-								<a className="primary_btn tr-bg mb-2" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
-									<span>Get CV</span>
+								<a className="primary_btn tr-bg" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
+									<span><i className="fa fa-download mr-2"></i>Get CV</span>
 								</a>
 							</div>
 						</div>
@@ -157,41 +157,40 @@ export default function Home() {
 						>
 							About Karan Mishra
 						</span>
-						<h2>
-							Let’s <br />
-							Introduce about <br />
-							myself
+						<h2 className="mb-4">
+							Let&apos;s Introduce About Myself
 						</h2>
 						<p>
-							Hey there! I'm <strong>Karan Mishra</strong>, a tech enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative software solutions. With over <strong>3+ years of professional engineering experience</strong>, my journey spans deep machine learning, Python systems architecture, and scalable full-stack development.
+							Hey there! I&apos;m <strong>Karan Mishra</strong>, a tech enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative software solutions. With over <strong>3+ years of professional engineering experience</strong>, my journey spans deep machine learning, Python systems architecture, and scalable full-stack development.
 						</p>
 						<p>
-							I’m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like <strong>Aurxon ERP Lite</strong>), and AI intelligence engines (such as <strong>Cognivex</strong> and <strong>HemoAI</strong>) that empower modern organizations.
+							I&apos;m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like <strong>Aurxon ERP Lite</strong>), and AI intelligence engines (such as <strong>Cognivex</strong> and <strong>HemoAI</strong>) that empower modern organizations.
 						</p>
 						<p>
-							When I'm not immersed in the world of code and models, you’ll likely find me planning my next travel adventure, exploring new tech, or contributing to over 47+ open-source repositories on GitHub.
+							When I&apos;m not immersed in the world of code and models, you&apos;ll likely find me planning my next travel adventure, exploring new tech, or contributing to over 47+ open-source repositories on GitHub.
 						</p>
 						<p>
-							I’m always eager to collaborate on groundbreaking AI initiatives, enterprise architectures, or research projects. Let's connect!
+							I&apos;m always eager to collaborate on groundbreaking AI initiatives, enterprise architectures, or research projects. Let&apos;s connect!
 						</p>
 
 						{/* Side-by-side action buttons: Download CV & Let's Connect */}
-						<div className="d-flex flex-wrap align-items-center gap-3 mt-4">
+						<div className="about_cta_group">
 							<a
-								className="primary_btn mr-3 mb-2"
+								className="primary_btn"
 								href="/pdf/Karan_Mishra_ResumeDetailed.pdf"
 								download="Karan_Mishra_CV.pdf"
 							>
-								<i className="fa fa-download mr-2"></i>
-								<span>Download CV</span>
+								<span><i className="fa fa-download mr-2"></i>Download CV</span>
 							</a>
 							<a
-								className="primary_btn tr-bg mb-2 heartbeat_soft"
+								className="primary_btn tr-bg heartbeat_soft"
 								href="#direct-contact-section"
+								onClick={(e) => {
+									e.preventDefault();
+									document.getElementById("direct-contact-section")?.scrollIntoView({ behavior: "smooth" });
+								}}
 							>
-								<i className="fa fa-comments-o mr-2"></i>
-								<span>Let&apos;s Connect</span>
-								<i className="fa fa-arrow-right ml-2"></i>
+								<span><i className="fa fa-comments mr-2"></i>Let&apos;s Connect<i className="fa fa-arrow-right ml-2"></i></span>
 							</a>
 						</div>
 					</div>
@@ -278,15 +277,19 @@ export default function Home() {
 							<span className="lage">3+</span>
 							<span className="smll">Years Experience &bull; AI, ML &amp; Python</span>
 						</div>
-						<div className="call-now d-flex">
+						<a
+							href="tel:+917804895074"
+							className="call-now d-flex align-items-center"
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
 							<div>
 								<span className="fa fa-phone"></span>
 							</div>
-							<div className="ml-15">
-								<p>call us now</p>
-								<h3>(+91) 780 489 5074</h3>
+							<div className="ml-3">
+								<p className="mb-0 text-muted" style={{ textTransform: "uppercase", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.04em" }}>Direct Phone &bull; WhatsApp</p>
+								<h3 style={{ margin: 0, fontWeight: 700 }}>(+91) 780 489 5074</h3>
 							</div>
-						</div>
+						</a>
 					</div>
 				</div>
 			</div>
