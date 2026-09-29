@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { NeuralBackground } from "@/components/NeuralBackground";
+import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
+import { ModernContactSection } from "@/components/ModernContactSection";
 
 export default function Home() {
   const [filter, setFilter] = useState("*");
@@ -91,36 +93,95 @@ export default function Home() {
 	</section>
 	{/* ================ End Home Banner Area ================= */}
 
-	{/* ================ Start About Us Area ================= */}
-	<section className="about_area section_gap">
+	{/* ================ Start About Us Area (Cut-Off Concise Design) ================= */}
+	<section className="about_area section_gap concise_cutoff_about">
 		<div className="container">
-			<div className="row justify-content-start align-items-center">
-				<div className="col-lg-5">
-					<div className="about_img">
-						<img className="" src="/img/about-us.png" alt="" />
-					</div>
+			<div className="cutoff_card_container">
+				{/* Top-Right Decorative Cut-Off Tag */}
+				<div className="cutoff_accent_corner">
+					<span className="cutoff_tag_text heartbeat_fluctuate">
+						<i className="fa fa-heart mr-1 text-danger"></i> AI Innovator
+					</span>
 				</div>
 
-				<div className="offset-lg-1 col-lg-5">
-					<div className="main_title text-left">
-						<h2>let’s <br />
-							Introduce about <br />
-							myself</h2>
-						<p>
-							Hey there! I'm <strong>Karan Mishra</strong>, a technology enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative solutions. With over <strong>3+ years of professional experience</strong>, my journey spans deep machine learning, Python systems architecture, and intelligent web applications.
-						</p>
-						<p>
-							I’m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like Aurxon ERP), and AI intelligence engines that empower modern organizations.
-						</p>
-						<p>
-							When I'm not immersed in the world of code and models, you’ll likely find me planning my next travel adventure or unwinding with movies and cartoons—because every founder values a bit of creative spark!
-						</p>
-						<p>
-							I’m always eager to collaborate on groundbreaking AI initiatives, full-stack architectures, or research projects. Feel free to connect directly!
-						</p>
-						<a className="primary_btn" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
-							<span>Download CV</span>
-						</a>
+				<div className="row align-items-center">
+					<div className="col-lg-5 mb-4 mb-lg-0 text-center">
+						<div className="about_avatar_frame">
+							<img className="img-fluid about_profile_img" src="/img/about-us.png" alt="Karan Mishra" />
+							<div className="about_floating_badge heartbeat_soft">
+								<span className="badge_pulse_dot heartbeat_fluctuate"></span>
+								<span>Founder &bull; Aurxon</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="col-lg-7">
+						<div className="about_concise_content">
+							<div className="d-flex align-items-center gap-2 mb-2">
+								<span className="about_kicker">Executive Bio</span>
+								<span className="kicker_divider">/</span>
+								<span className="about_subkicker">Smart City Indore, India</span>
+							</div>
+
+							<h2 className="about_main_heading">
+								Engineering Intelligent Systems That <span className="text_gradient_purple">Scale</span>
+							</h2>
+
+							<p className="about_lead_summary">
+								I&apos;m <strong>Karan Mishra</strong>, an AI &amp; Machine Learning Engineer with <strong>3+ years of professional engineering experience</strong>. I specialize in translating complex neural algorithms and Python architectures into reliable, production-grade applications that solve tangible problems.
+							</p>
+
+							{/* Key Concise Value Highlights */}
+							<div className="about_points_grid row g-3 my-4">
+								<div className="col-sm-6 mb-3">
+									<div className="concise_point_box">
+										<div className="point_icon"><i className="fa fa-cubes"></i></div>
+										<div>
+											<h5 className="point_title">Enterprise AI &amp; SaaS</h5>
+											<p className="point_desc">Architect of Aurxon ERP Lite and AI intelligence suites for institutions.</p>
+										</div>
+									</div>
+								</div>
+								<div className="col-sm-6 mb-3">
+									<div className="concise_point_box">
+										<div className="point_icon"><i className="fa fa-cogs"></i></div>
+										<div>
+											<h5 className="point_title">NLP &amp; Semantic Search</h5>
+											<p className="point_desc">Cognivex resume embeddings, SentiVoice speech-to-text sentiment handling.</p>
+										</div>
+									</div>
+								</div>
+								<div className="col-sm-6 mb-3">
+									<div className="concise_point_box">
+										<div className="point_icon"><i className="fa fa-heartbeat"></i></div>
+										<div>
+											<h5 className="point_title">Predictive Healthcare</h5>
+											<p className="point_desc">HemoAI predictive blood bank demand and patient prioritization algorithms.</p>
+										</div>
+									</div>
+								</div>
+								<div className="col-sm-6 mb-3">
+									<div className="concise_point_box">
+										<div className="point_icon"><i className="fa fa-github"></i></div>
+										<div>
+											<h5 className="point_title">Open Source Contributions</h5>
+											<p className="point_desc">47+ public codebases on GitHub, Cordova plugins, and Python toolkits.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div className="d-flex flex-wrap align-items-center gap-3">
+								<a className="primary_btn mr-3 mb-2" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
+									<i className="fa fa-download mr-2"></i>
+									<span>Download Resume</span>
+								</a>
+								<a className="primary_btn tr-bg mb-2" href="#direct-contact-section">
+									<i className="fa fa-paper-plane mr-2"></i>
+									<span>Collaborate With Me</span>
+								</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -805,289 +866,223 @@ export default function Home() {
 
 	{/* ================End Portfolio Area ================= */}
 
-	{/* ================ Start Experience Area ================= */}
-	<div className="experience_area section_gap_bottom">
-		<div className="container">
-			<div className="row justify-content-center">
-				<div className="col-lg-8 text-center">
-					<div className="main_title">
-						<h2>Experience</h2>
-						<p>Explore my journey through various roles and projects, highlighting my growth and achievements in the field of technology and research.</p>
-					</div>
-				</div>
-			</div>
-			<div className="row">
-				<div className="testi_slider owl-carousel">
-					{/*  Experience Item 1  */}
-					<div className="testi_item">
-						<div className="row">
-							<div className="col-lg-4">
-								<div className="testi_icon" style={{"fontSize": "60px", "color": "#007FFF"}}>
-									<i className="fa fa-rocket" aria-hidden="true"></i>
-								</div>
-							</div>
-							<div className="col-lg-8">
-								<div className="testi_text">
-									<h4>Aurxon &bull; Founder &amp; Chief AI Architect</h4>
-									<span className="date">August 2024 - Present</span>
-									<p>As the founder of <strong>Aurxon</strong> (formerly i AIM LABS), I lead technical architecture and development of scalable AI/ML platforms, enterprise software systems (such as Aurxon ERP Lite), and career intelligence engines (Cognivex). Driving innovative research, client solutions, and high-performance production engineering.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					{/*  Experience Item 2  */}
-					<div className="testi_item">
-						<div className="row">
-							<div className="col-lg-4">
-								<div className="testi_icon" style={{"fontSize": "60px", "color": "#007FFF"}}>
-									<i className="fa fa-cogs" aria-hidden="true"></i>
-								</div>
-							</div>
-							<div className="col-lg-8">
-								<div className="testi_text">
-									<h4>Geek Theory Pvt. Ltd. - R&D Intern</h4>
-									<span className="date">March 2024 - July 2024</span>
-									<p>During my internship at Geek Theory, I contributed to the development of Cordova plugins, improved machine learning models, and collaborated with cross-functional teams to achieve project goals. This role provided valuable experience in both technical and collaborative aspects of research and development.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					{/*  Experience Item 3  */}
-					<div className="testi_item">
-						<div className="row">
-							<div className="col-lg-4">
-								<div className="testi_icon" style={{"fontSize": "60px", "color": "#007FFF"}}>
-									<i className="fa fa-code" aria-hidden="true"></i>
-								</div>
-							</div>
-							<div className="col-lg-8">
-								<div className="testi_text">
-									<h4>Freelancer - Web Design & Development</h4>
-									<span className="date">January 2022 - December 2023</span>
-									<p>Freelancing experience includes working with various technologies:</p>
-									<ul>
-										<li><i className="fa fa-python" style={{"fontSize": "24px", "color": "#306998"}}></i> Python Development</li>
-										<li><i className="fa fa-java" style={{"fontSize": "24px", "color": "#007396"}}></i> Core Java</li>
-										<li><i className="fa fa-html5" style={{"fontSize": "24px", "color": "#E34F26"}}></i> Web Design (HTML/CSS)</li>
-										<li><i className="fa fa-cogs" style={{"fontSize": "24px", "color": "#007FFF"}}></i> Machine Learning Models</li>
-									</ul>
-									<p>Worked on various projects involving web design, Python scripting, Core Java development, and machine learning model implementation.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					{/*  Add more experience items as needed  */}
-				</div>
-			</div>
-		</div>
-	</div>
+	{/* ================ Start Storytelling Road Timeline Experience Area ================= */}
+	<RoadTimelineExperience />
+	{/* ================ End Storytelling Road Timeline Experience Area ================= */}
 
-	{/*  style use:  */}
+	{/* ================ Start Modern Direct Contact & Consultation Area ================= */}
+	<ModernContactSection />
+	{/* ================ End Modern Direct Contact & Consultation Area ================= */}
+
+	{/* Scoped Page Component Styling */}
 	<style dangerouslySetInnerHTML={{ __html: `
-		.experience_area {
-			background-color: #f8fafc;
-			padding: 70px 0;
-		}
-	
-		.testi_slider {
+		/* Cut-off Concise About Section Styles */
+		.concise_cutoff_about {
 			position: relative;
-		}
-	
-		.testi_item {
-			padding: 28px;
-			background-color: #ffffff;
-			border-radius: 14px;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-			border: 1px solid rgba(226, 232, 240, 0.8);
-			margin-bottom: 24px;
-			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			background: #f8fafc;
+			transition: background-color 0.3s ease;
 		}
 
-		.testi_item:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 16px 36px rgba(68, 88, 220, 0.12);
+		.dark .concise_cutoff_about {
+			background: #090d16 !important;
 		}
-	
-		.testi_icon {
-			font-size: 54px;
+
+		.cutoff_card_container {
+			background: #ffffff;
+			border: 1px solid rgba(226, 232, 240, 0.9);
+			border-radius: 24px;
+			padding: 48px;
+			position: relative;
+			box-shadow: 0 14px 40px rgba(15, 23, 42, 0.05);
+			overflow: hidden;
+		}
+
+		.dark .cutoff_card_container {
+			background: #131c31;
+			border-color: #1e293b;
+			box-shadow: 0 16px 45px rgba(0, 0, 0, 0.4);
+		}
+
+		.cutoff_accent_corner {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 10px 24px;
+			background: linear-gradient(135deg, rgba(68, 88, 220, 0.1) 0%, rgba(133, 79, 238, 0.15) 100%);
+			border-bottom-left-radius: 20px;
+			border-left: 1px solid rgba(68, 88, 220, 0.2);
+			border-bottom: 1px solid rgba(68, 88, 220, 0.2);
+		}
+
+		.cutoff_tag_text {
+			font-size: 0.8rem;
+			font-weight: 800;
 			color: #4458dc;
-			margin: 10px auto;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+		}
+
+		.dark .cutoff_tag_text {
+			color: #818cf8;
+		}
+
+		.about_avatar_frame {
+			position: relative;
+			display: inline-block;
+			max-width: 380px;
+		}
+
+		.about_profile_img {
+			border-radius: 20px;
+			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+		}
+
+		.about_floating_badge {
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+			background: rgba(15, 23, 42, 0.85);
+			backdrop-filter: blur(8px);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			color: #ffffff;
+			padding: 8px 16px;
+			border-radius: 50px;
+			font-size: 0.82rem;
+			font-weight: 700;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+		}
+
+		.badge_pulse_dot {
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background: #10b981;
+		}
+
+		.about_kicker {
+			font-size: 0.8rem;
+			font-weight: 800;
+			color: #4458dc;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+		}
+
+		.kicker_divider {
+			color: #94a3b8;
+			font-weight: 700;
+		}
+
+		.about_subkicker {
+			font-size: 0.82rem;
+			color: #64748b;
+			font-weight: 600;
+		}
+
+		.about_main_heading {
+			font-size: 2.2rem;
+			font-weight: 800;
+			color: #0f172a;
+			line-height: 1.25;
+			margin-bottom: 18px;
+		}
+
+		.dark .about_main_heading {
+			color: #ffffff;
+		}
+
+		.text_gradient_purple {
+			background: linear-gradient(135deg, #4458dc 0%, #854fee 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+
+		.about_lead_summary {
+			font-size: 1.02rem;
+			line-height: 1.7;
+			color: #334155;
+			margin-bottom: 20px;
+		}
+
+		.dark .about_lead_summary {
+			color: #cbd5e1;
+		}
+
+		.concise_point_box {
+			display: flex;
+			align-items: flex-start;
+			gap: 14px;
+			padding: 14px;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 12px;
+			height: 100%;
+			transition: all 0.25s ease;
+		}
+
+		.dark .concise_point_box {
+			background: #0f172a;
+			border-color: #1e293b;
+		}
+
+		.concise_point_box:hover {
+			transform: translateY(-2px);
+			border-color: #4458dc;
+			box-shadow: 0 6px 16px rgba(68, 88, 220, 0.1);
+		}
+
+		.point_icon {
+			width: 38px;
+			height: 38px;
+			border-radius: 10px;
+			background: rgba(68, 88, 220, 0.1);
+			color: #4458dc;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			font-size: 1.05rem;
+			flex-shrink: 0;
 		}
-	
-		.testi_text {
-			margin-left: 20px;
+
+		.dark .point_icon {
+			background: rgba(99, 102, 241, 0.15);
+			color: #818cf8;
 		}
-	
-		.testi_text h4 {
-			color: #0f172a;
+
+		.point_title {
+			font-size: 0.95rem;
 			font-weight: 700;
-			margin-top: 0;
-			margin-bottom: 6px;
-		}
-	
-		.testi_text .date {
-			display: inline-block;
-			font-size: 13px;
-			font-weight: 600;
-			color: #4458dc;
-			background: #eef2ff;
-			padding: 2px 10px;
-			border-radius: 20px;
-			margin-bottom: 12px;
-		}
-	
-		.testi_text ul {
-			list-style: none;
-			padding: 0;
-		}
-	
-		.testi_text ul li {
-			margin: 8px 0;
-			font-size: 15px;
-			color: #334155;
-		}
-	
-		.testi_text ul li i {
-			margin-right: 10px;
-		}
-
-		/* Hero Analytics Cards */
-		.hero_analytics_container {
-			border-top: 1px solid rgba(226, 232, 240, 0.8);
-		}
-
-		.hero_stat_card {
-			background: rgba(255, 255, 255, 0.85);
-			backdrop-filter: blur(12px);
-			border: 1px solid rgba(226, 232, 240, 0.9);
-			border-radius: 14px;
-			padding: 18px 12px;
-			box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
-			transition: all 0.3s ease;
-		}
-
-		.hero_stat_card:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 14px 32px rgba(68, 88, 220, 0.15);
-			border-color: rgba(99, 102, 241, 0.4);
-		}
-
-		.stat_number {
-			font-size: 1.8rem;
-			font-weight: 800;
 			color: #0f172a;
-			line-height: 1.1;
-			margin-bottom: 4px;
-			font-family: 'Rubik', sans-serif;
+			margin: 0 0 3px 0;
 		}
 
-		.stat_label {
-			font-size: 0.78rem;
-			font-weight: 600;
+		.dark .point_title {
+			color: #ffffff;
+		}
+
+		.point_desc {
+			font-size: 0.82rem;
+			line-height: 1.45;
 			color: #64748b;
-			text-transform: uppercase;
-			letter-spacing: 0.05em;
+			margin: 0;
 		}
 
+		.dark .point_desc {
+			color: #94a3b8;
+		}
+
+		/* Responsive Adjustments */
 		@media (max-width: 767px) {
-			.testi_text {
-				margin-left: 0;
-				margin-top: 16px;
-				text-align: center;
+			.cutoff_card_container {
+				padding: 28px 20px;
 			}
-			.testi_icon {
-				margin-bottom: 0;
-			}
-			.stat_number {
-				font-size: 1.4rem;
-			}
-			.stat_label {
-				font-size: 0.7rem;
+			.about_main_heading {
+				font-size: 1.7rem;
 			}
 		}
-	` }} />
-	{/*  styke end  */}
-{/* ================ End Experience Area ================= */}
-
-	{/* ================ Start Newsletter Area ================= */}
-<section className="newsletter_area" style={{"backgroundColor": "#007FFF", "padding": "60px 0"}}>
-    <div className="container">
-        <div className="row justify-content-center align-items-center">
-            <div className="col-lg-12 text-center">
-                <div className="subscription_box text-center">
-                    <h2 className="text-uppercase text-white" style={{"fontSize": "36px", "fontWeight": "bold"}}>Get Updates from Anywhere</h2>
-                    <p className="text-white" style={{"fontSize": "18px", "marginTop": "10px"}}>
-                        Stay informed with the latest updates and exclusive offers. Subscribe now to receive notifications directly to your inbox.
-                    </p>
-                    <div className="subcribe-form" id="mc_embed_signup" style={{"marginTop": "20px"}}>
-                        <form target="_blank" noValidate action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get" className="subscription relative" style={{"display": "flex", "justifyContent": "center", "alignItems": "center"}}>
-                            <input name="EMAIL" placeholder="Email address"   required type="email" style={{"padding": "10px", "borderRadius": "5px", "border": "none", "marginRight": "10px", "width": "250px"}} />
-                            <button className="primary-btn hover d-inline" style={{"backgroundColor": "#FF6F61", "color": "#fff", "padding": "10px 20px", "border": "none", "borderRadius": "5px", "cursor": "pointer", "transition": "background-color 0.3s"}}>
-                                <i className="fa fa-paper-plane" aria-hidden="true"></i> Get Started
-                            </button>
-                            <div className="info"></div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-{/* ================ End Newsletter Area ================= */}
-
-<style dangerouslySetInnerHTML={{ __html: `
-    .newsletter_area {
-        background-color: #007FFF;
-        padding: 60px 0;
-        color: #fff;
-    }
-
-    .subscription_box h2 {
-        font-size: 36px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .subscription_box p {
-        font-size: 18px;
-        margin-top: 10px;
-    }
-
-    .subcribe-form form {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .subcribe-form input[type="email"] {
-        padding: 10px;
-        border-radius: 5px;
-        border: none;
-        margin-right: 10px;
-        width: 250px;
-    }
-
-    .primary-btn {
-        background-color: #FF6F61;
-        color: #fff;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .primary-btn:hover {
-        background-color: #FF4C4C;
-    }
-
-    .primary-btn i {
-        margin-right: 8px;
-    }
-` }} />
+	`}} />
 {/*  News letter css style end  */}
 
 

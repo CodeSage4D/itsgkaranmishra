@@ -101,7 +101,7 @@ export const Footer: React.FC = () => {
               </p>
 
               <div className="footer_status_pill">
-                <span className="footer_status_dot"></span>
+                <span className="footer_status_dot heartbeat_fluctuate"></span>
                 <span>Open for AI/ML Consulting &amp; Collaboration</span>
               </div>
 
@@ -354,8 +354,9 @@ export const Footer: React.FC = () => {
         <div className="footer_bottom_row">
           <div className="footer_copy_col">
             <p className="footer_copy_text">
-              &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; All rights reserved.
-              Building the future at <span className="text-white font-weight-bold">Aurxon</span>.
+              &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; Crafted with{" "}
+              <i className="fa fa-heart heartbeat_fluctuate" style={{ color: "#ef4444", margin: "0 4px" }}></i>
+              for <span className="text-white font-weight-bold">Aurxon</span>. All rights reserved.
             </p>
           </div>
           <div className="footer_top_btn_col">
