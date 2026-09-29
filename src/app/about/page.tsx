@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
 
 export default function AboutPage() {
   return (
@@ -113,64 +114,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Experience Area */}
-      <section className="experience_area section_gap">
-        <div className="container">
-          <div className="main_title text-center">
-            <h2>3+ Years of Professional Journey</h2>
-            <p>Milestones, Leadership &amp; Engineering Roles</p>
-          </div>
-          <div className="row">
-            {/* Experience 1 */}
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="experience_item h-100 p-4 bg-white rounded shadow-sm border">
-                <div className="icon mb-3">
-                  <i className="fa fa-rocket" style={{ fontSize: "2.5rem", color: "#4458dc" }}></i>
-                </div>
-                <div className="content">
-                  <h4 className="font-weight-bold">Aurxon &bull; Founder &amp; AI Architect</h4>
-                  <span className="badge badge-light text-primary font-weight-bold mb-2">2024 - Present</span>
-                  <p className="text-muted small">
-                    Leading product vision, technical architecture, and development of enterprise SaaS platforms and AI engines including Aurxon ERP Lite and Cognivex.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Experience 2 */}
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="experience_item h-100 p-4 bg-white rounded shadow-sm border">
-                <div className="icon mb-3">
-                  <i className="fa fa-cogs" style={{ fontSize: "2.5rem", color: "#854fee" }}></i>
-                </div>
-                <div className="content">
-                  <h4 className="font-weight-bold">Geek Theory &bull; R&amp;D Intern</h4>
-                  <span className="badge badge-light text-secondary font-weight-bold mb-2">2024</span>
-                  <p className="text-muted small">
-                    Spearheaded Cordova mobile plugins development, machine learning pipeline optimizations, and cross-functional team deliveries.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Experience 3 */}
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="experience_item h-100 p-4 bg-white rounded shadow-sm border">
-                <div className="icon mb-3">
-                  <i className="fa fa-code" style={{ fontSize: "2.5rem", color: "#10b981" }}></i>
-                </div>
-                <div className="content">
-                  <h4 className="font-weight-bold">Full-Stack &amp; Python Consultant</h4>
-                  <span className="badge badge-light text-success font-weight-bold mb-2">2022 - 2024</span>
-                  <p className="text-muted small">
-                    Engineered custom web applications, Python automation workflows, REST APIs, and sentiment analysis tools for multiple clients and projects.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Road Timeline Experience Area */}
+      <RoadTimelineExperience />
 
       <style dangerouslySetInnerHTML={{ __html: `
         .about {
