@@ -1,393 +1,312 @@
-import React from "react";
-import Link from "next/link";
+"use client";
 
-export default function SingleBlogPage() {
+import React, { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { getAllBlogs, getBlogBySlug, BlogPost } from "@/lib/cms-store";
+
+function SingleBlogContent() {
+  const searchParams = useSearchParams();
+  const slug = searchParams.get("slug") || "aims-to-fcos-intelligent-factory-operating-systems";
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [recentPosts, setRecentPosts] = useState<BlogPost[]>([]);
+
+  useEffect(() => {
+    const found = getBlogBySlug(slug);
+    if (found) {
+      setPost(found);
+    } else {
+      const all = getAllBlogs();
+      if (all.length > 0) setPost(all[0]);
+    }
+    const all = getAllBlogs();
+    setRecentPosts(all.slice(0, 4));
+  }, [slug]);
+
+  if (!post) {
+    return (
+      <div className="container py-5 text-center">
+        <h2>Loading article...</h2>
+      </div>
+    );
+  }
+
+  // Parse markdown headers and bullet points simply for clean readable layout
+  const renderFormattedContent = (content: string) => {
+    const lines = content.trim().split("\n");
+    return lines.map((line, idx) => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith("### ")) {
+        return (
+          <h3 key={idx} className="content_h3 mt-4 mb-3">
+            {trimmed.replace("### ", "")}
+          </h3>
+        );
+      }
+      if (trimmed.startsWith("#### ")) {
+        return (
+          <h4 key={idx} className="content_h4 mt-3 mb-2">
+            {trimmed.replace("#### ", "")}
+          </h4>
+        );
+      }
+      if (trimmed.startsWith("---")) {
+        return <hr key={idx} className="my-4 border_divider" />;
+      }
+      if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+        return (
+          <li key={idx} className="content_li ml-4 mb-2">
+            {trimmed.replace(/^(\*|-)\s+/, "")}
+          </li>
+        );
+      }
+      if (trimmed.match(/^[0-9]+\.\s+/)) {
+        return (
+          <div key={idx} className="content_num_point mb-2 pl-3 border-left border-primary">
+            {trimmed}
+          </div>
+        );
+      }
+      if (!trimmed) {
+        return <div key={idx} className="content_spacing my-2" />;
+      }
+      return (
+        <p key={idx} className="content_p mb-3">
+          {trimmed}
+        </p>
+      );
+    });
+  };
+
   return (
     <>
-      {/* ================ End Header Area ================= */}
-
-    {/* ================ Start Banner Area ================= */}
-    <section className="banner_area">
+      {/* Banner Area */}
+      <section className="banner_area">
         <div className="banner_inner d-flex align-items-center">
-            <div className="container">
-                <div className="banner_content text-center">
-                    <h2>Blog Details</h2>
-                    <div className="page_link">
-                        <a href="/">Home</a>
-                        <a href="/blog">Blog</a>
-                        <a href="/single-blog">Blog Details</a>
-                    </div>
-                </div>
+          <div className="container">
+            <div className="banner_content text-center">
+              <span className="badge badge-primary py-1 px-3 mb-2">{post.category}</span>
+              <h2 className="mt-2 text-white">{post.title}</h2>
+              <div className="page_link">
+                <Link href="/">Home</Link>
+                <Link href="/blog">Blog</Link>
+                <span className="text-white">Article</span>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
-    {/* ================ End Banner Area ================= */}
-    
-    {/* ================Blog Area ================= */}
-    <section className="blog_area single-post-area section_gap">
+      </section>
+
+      {/* Main Content Area */}
+      <section className="blog_area single-post-area section_gap">
         <div className="container">
-            <div className="row">
-                <div className="col-lg-8 posts-list">
-                    <div className="single-post row">
-                        <div className="col-lg-12">
-                            <div className="feature-img">
-                                <img className="img-fluid" src="/img/blog/feature-img1.jpg" alt="" />
-                            </div>									
-                        </div>
-                        <div className="col-lg-3  col-md-3">
-                            <div className="blog_info text-right">
-                                <div className="post_tag">
-                                    <a href="#">Food,</a>
-                                    <a className="active" href="#">Technology,</a>
-                                    <a href="#">Politics,</a>
-                                    <a href="#">Lifestyle</a>
-                                </div>
-                                <ul className="blog_meta list">
-                                    <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                    <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                    <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                    <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                </ul>
-                                <ul className="social-links">
-                                    <li><a href="#"><i className="fa fa-facebook"></i></a></li>
-                                    <li><a href="#"><i className="fa fa-twitter"></i></a></li>
-                                    <li><a href="#"><i className="fa fa-github"></i></a></li>
-                                    <li><a href="#"><i className="fa fa-behance"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-lg-9 col-md-9 blog_details">
-                            <h2>Astronomy Binoculars A Great Alternative</h2>
-                            <p className="excert">
-                                MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.
-                            </p>
-                            <p>
-                                Boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction of the camp price. However, who has the willpower to actually sit through a self-imposed MCSE training. who has the willpower to actually sit through a self-imposed
-                            </p>
-                            <p>
-                                Boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction of the camp price. However, who has the willpower to actually sit through a self-imposed MCSE training. who has the willpower to actually sit through a self-imposed
-                            </p>
-                        </div>
-                        <div className="col-lg-12">
-                            <div className="quotes">
-                                MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction of the camp price. However, who has the willpower to actually sit through a self-imposed MCSE training.										
-                            </div>
-                            <div className="row">
-                                <div className="col-6">
-                                    <img className="img-fluid" src="/img/blog/post-img1.jpg" alt="" />
-                                </div>
-                                <div className="col-6">
-                                    <img className="img-fluid" src="/img/blog/post-img2.jpg" alt="" />
-                                </div>	
-                                <div className="col-lg-12 mt-25">
-                                    <p>
-                                        MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction of the camp price. However, who has the willpower.
-                                    </p>
-                                    <p>
-                                        MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction of the camp price. However, who has the willpower.
-                                    </p>											
-                                </div>									
-                            </div>
-                        </div>
+          <div className="row">
+            <div className="col-lg-8 posts-list">
+              <div className="single-post row">
+                {/* Meta details bar */}
+                <div className="col-lg-3 col-md-3">
+                  <div className="blog_info text-md-right text-left mb-4 mb-md-0">
+                    <div className="post_tag mb-3">
+                      <span className="badge badge-info">{post.category}</span>
                     </div>
-                    <div className="navigation-area">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
-                                <div className="thumb">
-                                    <a href="#"><img className="img-fluid" src="/img/blog/prev.jpg" alt="" /></a>
-                                </div>
-                                <div className="arrow">
-                                    <a href="#"><span className="lnr text-white lnr-arrow-left"></span></a>
-                                </div>
-                                <div className="detials">
-                                    <p>Prev Post</p>
-                                    <a href="#"><h4>Space The Final Frontier</h4></a>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-12 nav-right flex-row d-flex justify-content-end align-items-center">
-                                <div className="detials">
-                                    <p>Next Post</p>
-                                    <a href="#"><h4>Telescopes 101</h4></a>
-                                </div>
-                                <div className="arrow">
-                                    <a href="#"><span className="lnr text-white lnr-arrow-right"></span></a>
-                                </div>
-                                <div className="thumb">
-                                    <a href="#"><img className="img-fluid" src="/img/blog/next.jpg" alt="" /></a>
-                                </div>										
-                            </div>									
-                        </div>
+                    <ul className="blog_meta list-unstyled">
+                      <li className="mb-2">
+                        <strong className="text-dark d-block">Author:</strong>
+                        <span className="text-muted">{post.author}</span>
+                      </li>
+                      <li className="mb-2">
+                        <strong className="text-dark d-block">Role:</strong>
+                        <span className="text-muted small">{post.authorRole}</span>
+                      </li>
+                      <li className="mb-2">
+                        <strong className="text-dark d-block">Published:</strong>
+                        <span className="text-muted small">{post.publishedDate}</span>
+                      </li>
+                      <li className="mb-2">
+                        <strong className="text-dark d-block">Read Time:</strong>
+                        <span className="text-muted small">{post.readTime}</span>
+                      </li>
+                      <li>
+                        <strong className="text-dark d-block">Engagement:</strong>
+                        <span className="text-muted small">{post.views} views</span>
+                      </li>
+                    </ul>
+
+                    <div className="article_share_strip mt-4 pt-3 border-top">
+                      <span className="small text-muted d-block mb-2 font-weight-bold">Share Article:</span>
+                      <div className="d-flex justify-content-md-end gap-2">
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent("https://itsgkaranmishra.web.app/single-blog?slug=" + post.slug)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm btn-outline-primary"
+                          title="Share on LinkedIn"
+                        >
+                          <i className="fa fa-linkedin"></i>
+                        </a>
+                        <a
+                          href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent("https://itsgkaranmishra.web.app/single-blog?slug=" + post.slug)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn btn-sm btn-outline-info"
+                          title="Share on Twitter / X"
+                        >
+                          <i className="fa fa-twitter"></i>
+                        </a>
+                      </div>
                     </div>
-                    <div className="comments-area">
-                        <h4>05 Comments</h4>
-                        <div className="comment-list">
-                            <div className="single-comment justify-content-between d-flex">
-                                <div className="user justify-content-between d-flex">
-                                    <div className="thumb">
-                                        <img src="/img/blog/c1.jpg" alt="" />
-                                    </div>
-                                    <div className="desc">
-                                        <h5><a href="#">Emilly Blunt</a></h5>
-                                        <p className="date">December 4, 2017 at 3:12 pm </p>
-                                        <p className="comment">
-                                            Never say goodbye till the end comes!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="reply-btn">
-                                        <a href="" className="btn-reply text-uppercase">reply</a> 
-                                </div>
-                            </div>
-                        </div>	
-                        <div className="comment-list left-padding">
-                            <div className="single-comment justify-content-between d-flex">
-                                <div className="user justify-content-between d-flex">
-                                    <div className="thumb">
-                                        <img src="/img/blog/c2.jpg" alt="" />
-                                    </div>
-                                    <div className="desc">
-                                        <h5><a href="#">Elsie Cunningham</a></h5>
-                                        <p className="date">December 4, 2017 at 3:12 pm </p>
-                                        <p className="comment">
-                                            Never say goodbye till the end comes!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="reply-btn">
-                                        <a href="" className="btn-reply text-uppercase">reply</a> 
-                                </div>
-                            </div>
-                        </div>	
-                        <div className="comment-list left-padding">
-                            <div className="single-comment justify-content-between d-flex">
-                                <div className="user justify-content-between d-flex">
-                                    <div className="thumb">
-                                        <img src="/img/blog/c3.jpg" alt="" />
-                                    </div>
-                                    <div className="desc">
-                                        <h5><a href="#">Annie Stephens</a></h5>
-                                        <p className="date">December 4, 2017 at 3:12 pm </p>
-                                        <p className="comment">
-                                            Never say goodbye till the end comes!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="reply-btn">
-                                        <a href="" className="btn-reply text-uppercase">reply</a> 
-                                </div>
-                            </div>
-                        </div>	
-                        <div className="comment-list">
-                            <div className="single-comment justify-content-between d-flex">
-                                <div className="user justify-content-between d-flex">
-                                    <div className="thumb">
-                                        <img src="/img/blog/c4.jpg" alt="" />
-                                    </div>
-                                    <div className="desc">
-                                        <h5><a href="#">Maria Luna</a></h5>
-                                        <p className="date">December 4, 2017 at 3:12 pm </p>
-                                        <p className="comment">
-                                            Never say goodbye till the end comes!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="reply-btn">
-                                        <a href="" className="btn-reply text-uppercase">reply</a> 
-                                </div>
-                            </div>
-                        </div>	
-                        <div className="comment-list">
-                            <div className="single-comment justify-content-between d-flex">
-                                <div className="user justify-content-between d-flex">
-                                    <div className="thumb">
-                                        <img src="/img/blog/c5.jpg" alt="" />
-                                    </div>
-                                    <div className="desc">
-                                        <h5><a href="#">Ina Hayes</a></h5>
-                                        <p className="date">December 4, 2017 at 3:12 pm </p>
-                                        <p className="comment">
-                                            Never say goodbye till the end comes!
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="reply-btn">
-                                        <a href="" className="btn-reply text-uppercase">reply</a> 
-                                </div>
-                            </div>
-                        </div>	                                             				
-                    </div>
-                    <div className="comment-form">
-                        <h4>Leave a Reply</h4>
-                        <form>
-                            <div className="form-group form-inline">
-                                <div className="form-group col-lg-6 col-md-6 name">
-                                <input type="text" className="form-control" id="name" placeholder="Enter Name"   />
-                                </div>
-                                <div className="form-group col-lg-6 col-md-6 email">
-                                <input type="email" className="form-control" id="email" placeholder="Enter email address"   />
-                                </div>										
-                            </div>
-                            <div className="form-group">
-                                <input type="text" className="form-control" id="subject" placeholder="Subject"   />
-                            </div>
-                            <div className="form-group">
-                                <textarea className="form-control mb-10" rows={5} name="message" placeholder="Messege"   required></textarea>
-                            </div>
-                            <a href="#" className="primary-btn primary_btn"><span>Post Comment</span></a>	
-                        </form>
-                    </div>
+                  </div>
                 </div>
-                <div className="col-lg-4">
-                    <div className="blog_right_sidebar">
-                        <aside className="single_sidebar_widget search_widget">
-                            <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Search Posts" />
-                                <span className="input-group-btn">
-                                    <button className="btn btn-default" type="button"><i className="lnr lnr-magnifier"></i></button>
-                                </span>
-                            </div>{/*  /input-group  */}
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget author_widget">
-                            <img className="author_img rounded-circle" src="/img/blog/author.png" alt="" />
-                            <h4>Charlie Barber</h4>
-                            <p>Senior blog writer</p>
-                            <div className="social_icon">
-                                <a href="#"><i className="fa fa-facebook"></i></a>
-                                <a href="#"><i className="fa fa-twitter"></i></a>
-                                <a href="#"><i className="fa fa-github"></i></a>
-                                <a href="#"><i className="fa fa-behance"></i></a>
-                            </div>
-                            <p>Boot camps have its supporters andit sdetractors. Some people do not understand why you should have to spend money on boot camp when you can get. Boot camps have itssuppor ters andits detractors.</p>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget popular_post_widget">
-                            <h3 className="widget_title">Popular Posts</h3>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post1.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="blog-details.html"><h3>Space The Final Frontier</h3></a>
-                                    <p>02 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post2.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="blog-details.html"><h3>The Amazing Hubble</h3></a>
-                                    <p>02 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post3.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="blog-details.html"><h3>Astronomy Or Astrology</h3></a>
-                                    <p>03 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post4.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="blog-details.html"><h3>Asteroids telescope</h3></a>
-                                    <p>01 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget ads_widget">
-                            <a href="#"><img className="img-fluid" src="/img/blog/add.jpg" alt="" /></a>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget post_category_widget">
-                            <h4 className="widget_title">Post Catgories</h4>
-                            <ul className="list cat-list">
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Technology</p>
-                                        <p>37</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Lifestyle</p>
-                                        <p>24</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Fashion</p>
-                                        <p>59</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Art</p>
-                                        <p>29</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Food</p>
-                                        <p>15</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Architecture</p>
-                                        <p>09</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Adventure</p>
-                                        <p>44</p>
-                                    </a>
-                                </li>															
-                            </ul>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single-sidebar-widget newsletter_widget">
-                            <h4 className="widget_title">Newsletter</h4>
-                            <p>
-                            Here, I focus on a range of items and features that we use in life without
-                            giving them a second thought.
-                            </p>
-                            <div className="form-group d-flex flex-row">
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <div className="input-group-text"><i className="fa fa-envelope" aria-hidden="true"></i></div>
-                                    </div>
-                                    <input type="text" className="form-control" id="inlineFormInputGroup" placeholder="Enter email"   />
-                                </div>
-                                <a href="#" className="bbtns">Subcribe</a>
-                            </div>	
-                            <p className="text-bottom">You can unsubscribe at any time</p>	
-                            <div className="br"></div>							
-                        </aside>
-                        <aside className="single-sidebar-widget tag_cloud_widget">
-                            <h4 className="widget_title">Tag Clouds</h4>
-                            <ul className="list">
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Fashion</a></li>
-                                <li><a href="#">Architecture</a></li>
-                                <li><a href="#">Fashion</a></li>
-                                <li><a href="#">Food</a></li>
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Art</a></li>
-                                <li><a href="#">Adventure</a></li>
-                                <li><a href="#">Food</a></li>
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Adventure</a></li>
-                            </ul>
-                        </aside>
+
+                {/* Article Body */}
+                <div className="col-lg-9 col-md-9 blog_details">
+                  <div className="article_header_box mb-4">
+                    <h1 className="article_main_title">{post.title}</h1>
+                    <p className="article_lead_summary">{post.summary}</p>
+                  </div>
+
+                  <div className="article_markdown_body">
+                    {renderFormattedContent(post.content)}
+                  </div>
+
+                  {/* Article Tags */}
+                  <div className="tags_wrap mt-5 pt-4 border-top">
+                    <h5 className="mb-3 font-weight-bold">Categorized Tags:</h5>
+                    <div className="d-flex flex-wrap gap-2">
+                      {post.tags.map((t, idx) => (
+                        <span key={idx} className="badge badge-light p-2 border mr-2 mb-2 font-weight-normal">
+                          #{t}
+                        </span>
+                      ))}
                     </div>
+                  </div>
+
+                  {/* Bottom Navigation */}
+                  <div className="navigation-area mt-5 pt-4 border-top d-flex justify-content-between">
+                    <Link href="/blog" className="btn btn-outline-secondary">
+                      &larr; Back to All Insights
+                    </Link>
+                    <Link href="/contact" className="primary_btn heartbeat_soft">
+                      <span>Inquire About Engineering Consulting &rarr;</span>
+                    </Link>
+                  </div>
                 </div>
+              </div>
             </div>
+
+            {/* Sidebar */}
+            <div className="col-lg-4">
+              <div className="blog_right_sidebar">
+                <aside className="single_sidebar_widget author_widget p-4 mb-4">
+                  <div className="text-center">
+                    <div className="author_avatar_circle mx-auto mb-3">
+                      <img src="/img/png/logo-no-background.png" alt="Karan Mishra" className="img-fluid" />
+                    </div>
+                    <h4>Karan Mishra</h4>
+                    <p className="text-primary font-weight-bold mb-2">Founder, Aurxon &bull; AI Engineer</p>
+                    <p className="small text-muted mb-3">
+                      Building the autonomous enterprise with Factory Central OS (FCOS) and ALAMS agentic architectures.
+                    </p>
+                    <Link href="/contact" className="primary_btn btn-sm">
+                      <span>Direct Consultation</span>
+                    </Link>
+                  </div>
+                </aside>
+
+                {/* Recent Articles */}
+                <aside className="single_sidebar_widget popular_post_widget p-4 mb-4">
+                  <h4 className="widget_title mb-3 font-weight-bold">Recent Insights</h4>
+                  {recentPosts.map((r) => (
+                    <div key={r.id} className="media post_item mb-3 pb-2 border-bottom">
+                      <div className="media-body">
+                        <Link href={`/single-blog?slug=${r.slug}`}>
+                          <h6 className="font-weight-bold text-dark mb-1">{r.title}</h6>
+                        </Link>
+                        <p className="small text-muted mb-0">{r.publishedDate} &bull; {r.readTime}</p>
+                      </div>
+                    </div>
+                  ))}
+                </aside>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
-    {/* ================Blog Area ================= */}
-        
-    {/* ================Footer Area ================= */}
+      </section>
+
+      {/* Scoped CSS */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .article_main_title {
+          font-size: 2.1rem;
+          font-weight: 800;
+          color: #0f172a;
+          line-height: 1.3;
+          margin-bottom: 14px;
+        }
+        .dark .article_main_title {
+          color: #ffffff;
+        }
+        .article_lead_summary {
+          font-size: 1.1rem;
+          line-height: 1.7;
+          color: #475569;
+          font-weight: 500;
+          border-left: 4px solid #4458dc;
+          padding-left: 18px;
+        }
+        .dark .article_lead_summary {
+          color: #94a3b8;
+        }
+        .article_markdown_body {
+          font-size: 1.02rem;
+          line-height: 1.8;
+          color: #334155;
+        }
+        .dark .article_markdown_body {
+          color: #cbd5e1;
+        }
+        .content_h3 {
+          font-size: 1.45rem;
+          font-weight: 800;
+          color: #0f172a;
+        }
+        .dark .content_h3 {
+          color: #f1f5f9;
+        }
+        .content_h4 {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #1e293b;
+        }
+        .dark .content_h4 {
+          color: #e2e8f0;
+        }
+        .content_li {
+          list-style-type: disc;
+          line-height: 1.7;
+        }
+        .border_divider {
+          border-color: #e2e8f0;
+        }
+        .dark .border_divider {
+          border-color: #1e293b;
+        }
+      `}} />
     </>
   );
 }
+
+export default function SingleBlogPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container py-5 text-center">
+          <div className="spinner-border text-primary" role="status"></div>
+          <p className="mt-2 text-muted">Loading technical article...</p>
+        </div>
+      }
+    >
+      <SingleBlogContent />
+    </Suspense>
+  );
+}
+

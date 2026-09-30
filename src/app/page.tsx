@@ -6,6 +6,7 @@ import { NeuralBackground } from "@/components/NeuralBackground";
 import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
 import { ModernContactSection } from "@/components/ModernContactSection";
 import { ModernProjectsSection } from "@/components/ModernProjectsSection";
+import { FeedbackSection } from "@/components/FeedbackSection";
 
 export default function Home() {
   const [filter, setFilter] = useState("*");
@@ -373,6 +374,10 @@ export default function Home() {
 	{/* ================ Start Storytelling Road Timeline Experience Area ================= */}
 	<RoadTimelineExperience />
 	{/* ================ End Storytelling Road Timeline Experience Area ================= */}
+
+	{/* ================ Start Client & Peer Feedback Endorsements ================= */}
+	<FeedbackSection />
+	{/* ================ End Client & Peer Feedback Endorsements ================= */}
 
 	{/* ================ Start Modern Direct Contact & Consultation Area ================= */}
 	<ModernContactSection />

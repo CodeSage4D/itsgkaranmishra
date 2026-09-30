@@ -1,10 +1,8 @@
 import sqlite3 from "sqlite3";
 import path from "path";
-import fs from "fs";
 
 const DB_PATH = path.resolve(process.cwd(), "portfolio_analytics.sqlite3");
 
-// Ensure database file directory exists
 let dbInstance: sqlite3.Database | null = null;
 
 export function getDatabase(): sqlite3.Database {
@@ -14,11 +12,11 @@ export function getDatabase(): sqlite3.Database {
     if (err) {
       console.error("Failed to connect to SQLite3 database:", err);
     } else {
-      console.log("Connected to SQLite3 analytics database at", DB_PATH);
+      console.log("Connected to SQLite3 analytics & CMS database at", DB_PATH);
     }
   });
 
-  // Initialize tables
+  // Initialize relational tables
   db.serialize(() => {
     db.run(`
       CREATE TABLE IF NOT EXISTS visitors (
@@ -26,11 +24,16 @@ export function getDatabase(): sqlite3.Database {
         session_id TEXT NOT NULL,
         ip TEXT,
         country TEXT,
+        country_code TEXT,
         city TEXT,
         region TEXT,
-        user_agent TEXT,
+        org TEXT,
         device_type TEXT,
         browser TEXT,
+        os TEXT,
+        screen_resolution TEXT,
+        timezone TEXT,
+        network_type TEXT,
         referrer TEXT,
         landing_page TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -67,12 +70,64 @@ export function getDatabase(): sqlite3.Database {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         session_id TEXT,
         ip TEXT,
+        city TEXT,
+        country TEXT,
         name TEXT NOT NULL,
         email TEXT NOT NULL,
         phone TEXT,
         subject TEXT,
         message TEXT,
         status TEXT DEFAULT 'New',
+        priority TEXT DEFAULT 'High',
+        admin_notes TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS blogs (
+        id TEXT PRIMARY KEY,
+        slug TEXT UNIQUE NOT NULL,
+        title TEXT NOT NULL,
+        category TEXT,
+        author TEXT,
+        author_role TEXT,
+        read_time TEXT,
+        summary TEXT,
+        content TEXT NOT NULL,
+        tags TEXT,
+        views INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        category TEXT,
+        description TEXT,
+        image TEXT,
+        tags TEXT,
+        live_url TEXT,
+        github_url TEXT,
+        featured INTEGER DEFAULT 1,
+        sort_order INTEGER DEFAULT 1,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS feedbacks (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        role TEXT,
+        company TEXT,
+        rating INTEGER DEFAULT 5,
+        message TEXT NOT NULL,
+        status TEXT DEFAULT 'Approved',
+        featured_on_home INTEGER DEFAULT 1,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
@@ -80,103 +135,4 @@ export function getDatabase(): sqlite3.Database {
 
   dbInstance = db;
   return dbInstance;
-}
-
-export interface VisitorRecord {
-  id?: number;
-  session_id: string;
-  ip?: string;
-  country?: string;
-  city?: string;
-  region?: string;
-  user_agent?: string;
-  device_type?: string;
-  browser?: string;
-  referrer?: string;
-  landing_page?: string;
-  created_at?: string;
-}
-
-export interface LeadRecord {
-  id?: number;
-  session_id?: string;
-  ip?: string;
-  name: string;
-  email: string;
-  phone?: string;
-  subject?: string;
-  message?: string;
-  status?: string;
-  created_at?: string;
-}
-
-export interface ClickRecord {
-  id?: number;
-  session_id: string;
-  ip?: string;
-  element_id?: string;
-  element_text?: string;
-  target_url?: string;
-  page_path?: string;
-  created_at?: string;
-}
-
-export interface PageViewRecord {
-  id?: number;
-  session_id: string;
-  ip?: string;
-  path: string;
-  title?: string;
-  referrer?: string;
-  created_at?: string;
-}
-
-export function logVisitorDb(v: VisitorRecord): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const db = getDatabase();
-    db.run(
-      `INSERT INTO visitors (session_id, ip, country, city, region, user_agent, device_type, browser, referrer, landing_page)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        v.session_id,
-        v.ip || "127.0.0.1",
-        v.country || "Unknown",
-        v.city || "Unknown",
-        v.region || "Unknown",
-        v.user_agent || "",
-        v.device_type || "Desktop",
-        v.browser || "Unknown",
-        v.referrer || "Direct",
-        v.landing_page || "/",
-      ],
-      function (err) {
-        if (err) reject(err);
-        else resolve(this.lastID);
-      }
-    );
-  });
-}
-
-export function logLeadDb(l: LeadRecord): Promise<number> {
-  return new Promise((resolve, reject) => {
-    const db = getDatabase();
-    db.run(
-      `INSERT INTO leads (session_id, ip, name, email, phone, subject, message, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        l.session_id || "direct",
-        l.ip || "Unknown",
-        l.name,
-        l.email,
-        l.phone || "",
-        l.subject || "General",
-        l.message || "",
-        l.status || "New",
-      ],
-      function (err) {
-        if (err) reject(err);
-        else resolve(this.lastID);
-      }
-    );
-  });
 }

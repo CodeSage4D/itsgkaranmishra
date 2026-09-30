@@ -1,394 +1,400 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import { getAllBlogs, BlogPost } from "@/lib/cms-store";
 
 export default function BlogPage() {
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const loadBlogs = () => {
+    setBlogs(getAllBlogs());
+  };
+
+  useEffect(() => {
+    loadBlogs();
+    const handleUpdate = () => loadBlogs();
+    window.addEventListener("ahs_cms_updated", handleUpdate);
+    return () => window.removeEventListener("ahs_cms_updated", handleUpdate);
+  }, []);
+
+  const categories = useMemo(() => {
+    const set = new Set<string>(["All"]);
+    blogs.forEach((b) => {
+      if (b.category) set.add(b.category);
+    });
+    return Array.from(set);
+  }, [blogs]);
+
+  const filteredBlogs = useMemo(() => {
+    return blogs.filter((b) => {
+      const matchCat = selectedCategory === "All" || b.category.toLowerCase() === selectedCategory.toLowerCase();
+      const matchQuery =
+        !searchQuery.trim() ||
+        b.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        b.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        b.tags.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchCat && matchQuery;
+    });
+  }, [blogs, selectedCategory, searchQuery]);
+
   return (
     <>
-      {/* ================ End Header Area ================= */}
-
-    {/* ================ Start Banner Area ================= */}
-    <section className="banner_area">
+      {/* Banner Area */}
+      <section className="banner_area">
         <div className="banner_inner d-flex align-items-center">
-            <div className="container">
-                <div className="banner_content text-center">
-                    <h2>Blog</h2>
-                    <div className="page_link">
-                        <a href="/">Home</a>
-                        <a href="/blog">Our Blog</a>
-                    </div>
-                </div>
+          <div className="container">
+            <div className="banner_content text-center">
+              <span className="blog_top_badge mb-2">Aurxon Technical Insights &bull; Engineering Blog</span>
+              <h2 className="mt-2">AI Systems, FCOS &amp; Agentic Architectures</h2>
+              <div className="page_link">
+                <Link href="/">Home</Link>
+                <Link href="/blog">Our Insights</Link>
+              </div>
             </div>
+          </div>
         </div>
-    </section>
-    {/* ================ End Banner Area ================= */}
-        
-    {/* ================Blog Categorie Area ================= */}
-    <section className="blog_categorie_area section_gap_top">
+      </section>
+
+      {/* Blog Listing Area */}
+      <section className="blog_area section_gap">
         <div className="container">
-            <div className="row">
-                <div className="col-lg-4">
-                    <div className="categories_post">
-                        <img src="/img/blog/cat-post/cat-post-3.jpg" alt="post" />
-                        <div className="categories_details">
-                            <div className="categories_text">
-                                <a href="/single-blog"><h5>Social Life</h5></a>
-                                <div className="border_line"></div>
-                                <p>Enjoy your social life together</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-4">
-                    <div className="categories_post">
-                        <img src="/img/blog/cat-post/cat-post-2.jpg" alt="post" />
-                        <div className="categories_details">
-                            <div className="categories_text">
-                                <a href="/single-blog"><h5>Politics</h5></a>
-                                <div className="border_line"></div>
-                                <p>Be a part of politics</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-4">
-                    <div className="categories_post">
-                        <img src="/img/blog/cat-post/cat-post-1.jpg" alt="post" />
-                        <div className="categories_details">
-                            <div className="categories_text">
-                                <a href="/single-blog"><h5>Food</h5></a>
-                                <div className="border_line"></div>
-                                <p>Let the food be finished</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+          {/* Filter and Search Bar */}
+          <div className="blog_filter_bar mb-5">
+            <div className="category_pill_list">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`cat_pill_btn ${selectedCategory === cat ? "active_cat_pill" : ""}`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
-        </div>
-    </section>
-    {/* ================Blog Categorie Area ================= */}
-    
-    {/* ================Blog Area ================= */}
-    <section className="blog_area">
-        <div className="container">
-            <div className="row">
-                <div className="col-lg-8">
-                    <div className="blog_left_sidebar">
-                        <article className="row blog_item">
-                            <div className="col-md-3">
-                                <div className="blog_info text-right">
-                                    <div className="post_tag">
-                                        <a href="#">Food,</a>
-                                        <a className="active" href="#">Technology,</a>
-                                        <a href="#">Politics,</a>
-                                        <a href="#">Lifestyle</a>
-                                    </div>
-                                    <ul className="blog_meta list">
-                                        <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                        <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-md-9">
-                                <div className="blog_post">
-                                    <img src="/img/blog/main-blog/m-blog-1.jpg" alt="" />
-                                    <div className="blog_details">
-                                        <a href="/single-blog"><h2>Astronomy Binoculars A Great Alternative</h2></a>
-                                        <p>MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.</p>
-                                        <a href="/single-blog" className="primary_btn"><span>View More</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <article className="row blog_item">
-                            <div className="col-md-3">
-                                <div className="blog_info text-right">
-                                    <div className="post_tag">
-                                        <a href="#">Food,</a>
-                                        <a className="active" href="#">Technology,</a>
-                                        <a href="#">Politics,</a>
-                                        <a href="#">Lifestyle</a>
-                                    </div>
-                                    <ul className="blog_meta list">
-                                        <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                        <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-md-9">
-                                <div className="blog_post">
-                                    <img src="/img/blog/main-blog/m-blog-2.jpg" alt="" />
-                                    <div className="blog_details">
-                                        <a href="/single-blog"><h2>The Basics Of Buying A Telescope</h2></a>
-                                        <p>MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.</p>
-                                        <a href="/single-blog" className="primary_btn"><span>View More</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <article className="row blog_item">
-                            <div className="col-md-3">
-                                <div className="blog_info text-right">
-                                    <div className="post_tag">
-                                        <a href="#">Food,</a>
-                                        <a className="active" href="#">Technology,</a>
-                                        <a href="#">Politics,</a>
-                                        <a href="#">Lifestyle</a>
-                                    </div>
-                                    <ul className="blog_meta list">
-                                        <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                        <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-md-9">
-                                <div className="blog_post">
-                                    <img src="/img/blog/main-blog/m-blog-3.jpg" alt="" />
-                                    <div className="blog_details">
-                                        <a href="/single-blog"><h2>The Glossary Of Telescopes</h2></a>
-                                        <p>MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.</p>
-                                        <a href="/single-blog" className="primary_btn"><span>View More</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <article className="row blog_item">
-                            <div className="col-md-3">
-                                <div className="blog_info text-right">
-                                    <div className="post_tag">
-                                        <a href="#">Food,</a>
-                                        <a className="active" href="#">Technology,</a>
-                                        <a href="#">Politics,</a>
-                                        <a href="#">Lifestyle</a>
-                                    </div>
-                                    <ul className="blog_meta list">
-                                        <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                        <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-md-9">
-                                <div className="blog_post">
-                                    <img src="/img/blog/main-blog/m-blog-4.jpg" alt="" />
-                                    <div className="blog_details">
-                                        <a href="/single-blog"><h2>The Night Sky</h2></a>
-                                        <p>MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.</p>
-                                        <a href="/single-blog" className="primary_btn"><span>View More</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <article className="row blog_item">
-                            <div className="col-md-3">
-                                <div className="blog_info text-right">
-                                    <div className="post_tag">
-                                        <a href="#">Food,</a>
-                                        <a className="active" href="#">Technology,</a>
-                                        <a href="#">Politics,</a>
-                                        <a href="#">Lifestyle</a>
-                                    </div>
-                                    <ul className="blog_meta list">
-                                        <li><a href="#">Mark wiens<i className="lnr lnr-user"></i></a></li>
-                                        <li><a href="#">12 Dec, 2017<i className="lnr lnr-calendar-full"></i></a></li>
-                                        <li><a href="#">1.2M Views<i className="lnr lnr-eye"></i></a></li>
-                                        <li><a href="#">06 Comments<i className="lnr lnr-bubble"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div className="col-md-9">
-                                <div className="blog_post">
-                                    <img src="/img/blog/main-blog/m-blog-5.jpg" alt="" />
-                                    <div className="blog_details">
-                                        <a href="/single-blog"><h2>Telescopes 101</h2></a>
-                                        <p>MCSE boot camps have its supporters and its detractors. Some people do not understand why you should have to spend money on boot camp when you can get the MCSE study materials yourself at a fraction.</p>
-                                        <a href="/single-blog" className="primary_btn"><span>View More</span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                        <nav className="blog-pagination justify-content-center d-flex">
-                            <ul className="pagination">
-                                <li className="page-item">
-                                    <a href="#" className="page-link" aria-label="Previous">
-                                        <span aria-hidden="true">
-                                            <span className="lnr lnr-chevron-left"></span>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li className="page-item"><a href="#" className="page-link">01</a></li>
-                                <li className="page-item active"><a href="#" className="page-link">02</a></li>
-                                <li className="page-item"><a href="#" className="page-link">03</a></li>
-                                <li className="page-item"><a href="#" className="page-link">04</a></li>
-                                <li className="page-item"><a href="#" className="page-link">09</a></li>
-                                <li className="page-item">
-                                    <a href="#" className="page-link" aria-label="Next">
-                                        <span aria-hidden="true">
-                                            <span className="lnr lnr-chevron-right"></span>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div className="col-lg-4">
-                    <div className="blog_right_sidebar">
-                        <aside className="single_sidebar_widget search_widget">
-                            <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Search Posts" />
-                                <span className="input-group-btn">
-                                    <button className="btn btn-default" type="button"><i className="lnr lnr-magnifier"></i></button>
-                                </span>
-                            </div>{/*  /input-group  */}
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget author_widget">
-                            <img className="author_img rounded-circle" src="/img/blog/author.png" alt="" />
-                            <h4>Charlie Barber</h4>
-                            <p>Senior blog writer</p>
-                            <div className="social_icon">
-                                <a href="#"><i className="fa fa-facebook"></i></a>
-                                <a href="#"><i className="fa fa-twitter"></i></a>
-                                <a href="#"><i className="fa fa-github"></i></a>
-                                <a href="#"><i className="fa fa-behance"></i></a>
-                            </div>
-                            <p>Boot camps have its supporters andit sdetractors. Some people do not understand why you should have to spend money on boot camp when you can get. Boot camps have itssuppor ters andits detractors.</p>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget popular_post_widget">
-                            <h3 className="widget_title">Popular Posts</h3>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post1.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="/single-blog"><h3>Space The Final Frontier</h3></a>
-                                    <p>02 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post2.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="/single-blog"><h3>The Amazing Hubble</h3></a>
-                                    <p>02 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post3.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="/single-blog"><h3>Astronomy Or Astrology</h3></a>
-                                    <p>03 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="media post_item">
-                                <img src="/img/blog/popular-post/post4.jpg" alt="post" />
-                                <div className="media-body">
-                                    <a href="/single-blog"><h3>Asteroids telescope</h3></a>
-                                    <p>01 Hours ago</p>
-                                </div>
-                            </div>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget ads_widget">
-                            <a href="#"><img className="img-fluid" src="/img/blog/add.jpg" alt="" /></a>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single_sidebar_widget post_category_widget">
-                            <h4 className="widget_title">Post Catgories</h4>
-                            <ul className="list cat-list">
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Technology</p>
-                                        <p>37</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Lifestyle</p>
-                                        <p>24</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Fashion</p>
-                                        <p>59</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Art</p>
-                                        <p>29</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Food</p>
-                                        <p>15</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Architecture</p>
-                                        <p>09</p>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" className="d-flex justify-content-between">
-                                        <p>Adventure</p>
-                                        <p>44</p>
-                                    </a>
-                                </li>															
-                            </ul>
-                            <div className="br"></div>
-                        </aside>
-                        <aside className="single-sidebar-widget newsletter_widget">
-                            <h4 className="widget_title">Newsletter</h4>
-                            <p>
-                            Here, I focus on a range of items and features that we use in life without
-                            giving them a second thought.
-                            </p>
-                            <div className="form-group d-flex flex-row">
-                                <div className="input-group">
-                                    <div className="input-group-prepend">
-                                        <div className="input-group-text"><i className="fa fa-envelope" aria-hidden="true"></i></div>
-                                    </div>
-                                    <input type="text" className="form-control" id="inlineFormInputGroup" placeholder="Enter email"   />
-                                </div>
-                                <a href="#" className="bbtns">Subcribe</a>
-                            </div>	
-                            <p className="text-bottom">You can unsubscribe at any time</p>	
-                            <div className="br"></div>							
-                        </aside>
-                        <aside className="single-sidebar-widget tag_cloud_widget">
-                            <h4 className="widget_title">Tag Clouds</h4>
-                            <ul className="list">
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Fashion</a></li>
-                                <li><a href="#">Architecture</a></li>
-                                <li><a href="#">Fashion</a></li>
-                                <li><a href="#">Food</a></li>
-                                <li><a href="#">Technology</a></li>
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Art</a></li>
-                                <li><a href="#">Adventure</a></li>
-                                <li><a href="#">Food</a></li>
-                                <li><a href="#">Lifestyle</a></li>
-                                <li><a href="#">Adventure</a></li>
-                            </ul>
-                        </aside>
-                    </div>
-                </div>
+
+            <div className="blog_search_wrapper">
+              <input
+                type="text"
+                placeholder="Search AIMS, FCOS, ALAMS, Neural ERP, Machine Vision..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="blog_search_input"
+              />
+              <span className="search_icon">🔍</span>
             </div>
+          </div>
+
+          <div className="row">
+            {/* Main Blog Posts Column */}
+            <div className="col-lg-8">
+              <div className="blog_left_sidebar">
+                {filteredBlogs.length === 0 ? (
+                  <div className="empty_blogs_card text-center p-5">
+                    <h3>No articles found</h3>
+                    <p className="text-muted">Try adjusting your search query or selected category.</p>
+                    <button
+                      className="primary_btn mt-3"
+                      onClick={() => {
+                        setSelectedCategory("All");
+                        setSearchQuery("");
+                      }}
+                    >
+                      <span>Reset Filters</span>
+                    </button>
+                  </div>
+                ) : (
+                  filteredBlogs.map((blog) => (
+                    <article key={blog.id} className="row blog_item mb-5 pb-4 border-bottom">
+                      <div className="col-md-3">
+                        <div className="blog_info text-md-right text-left mb-3 mb-md-0">
+                          <div className="post_tag mb-2">
+                            <span className="badge badge-primary py-1 px-2">{blog.category}</span>
+                          </div>
+                          <ul className="blog_meta list-unstyled">
+                            <li>
+                              <span className="text-muted small">
+                                <i className="fa fa-user mr-1 text-primary"></i> {blog.author}
+                              </span>
+                            </li>
+                            <li>
+                              <span className="text-muted small">
+                                <i className="fa fa-calendar mr-1 text-primary"></i> {blog.publishedDate}
+                              </span>
+                            </li>
+                            <li>
+                              <span className="text-muted small">
+                                <i className="fa fa-clock-o mr-1 text-primary"></i> {blog.readTime}
+                              </span>
+                            </li>
+                            <li>
+                              <span className="text-muted small">
+                                <i className="fa fa-eye mr-1 text-primary"></i> {blog.views} views
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+
+                      <div className="col-md-9">
+                        <div className="blog_post_card">
+                          <Link href={`/single-blog?slug=${blog.slug}`} className="blog_title_link">
+                            <h3 className="blog_entry_title">{blog.title}</h3>
+                          </Link>
+                          <p className="blog_summary_text">{blog.summary}</p>
+
+                          <div className="tags_row mb-3">
+                            {blog.tags.map((t, idx) => (
+                              <span key={idx} className="single_tag_badge">
+                                #{t}
+                              </span>
+                            ))}
+                          </div>
+
+                          <Link href={`/single-blog?slug=${blog.slug}`} className="primary_btn heartbeat_soft">
+                            <span>Read Full Technical Article &rarr;</span>
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  ))
+                )}
+              </div>
+            </div>
+
+            {/* Sidebar Column */}
+            <div className="col-lg-4">
+              <div className="blog_right_sidebar">
+                {/* Author Widget */}
+                <aside className="single_sidebar_widget author_widget p-4 mb-4">
+                  <div className="text-center">
+                    <div className="author_avatar_circle mx-auto mb-3">
+                      <img src="/img/png/logo-no-background.png" alt="Karan Mishra" className="img-fluid" />
+                    </div>
+                    <h4 className="sidebar_heading">Karan Mishra</h4>
+                    <p className="sidebar_role text-primary font-weight-bold mb-2">Founder &bull; Aurxon &bull; AI Engineer</p>
+                    <p className="sidebar_bio small text-muted">
+                      Architecting intelligent factory operating systems (FCOS), autonomous agentic management networks (ALAMS), and high-performance machine vision platforms.
+                    </p>
+                    <div className="social_sidebar_icons d-flex justify-content-center gap-2 mt-3">
+                      <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer" className="social_circle">
+                        <i className="fa fa-github"></i>
+                      </a>
+                      <a href="https://www.linkedin.com/in/itsgkaranmishra4" target="_blank" rel="noopener noreferrer" className="social_circle">
+                        <i className="fa fa-linkedin"></i>
+                      </a>
+                      <a href="mailto:karannmishra136@gmail.com" className="social_circle">
+                        <i className="fa fa-envelope-o"></i>
+                      </a>
+                    </div>
+                  </div>
+                </aside>
+
+                {/* Post a Blog in Admin Quick Link */}
+                <aside className="single_sidebar_widget admin_cta_widget p-4 mb-4">
+                  <h4 className="widget_title mb-2">Have New Technical Insights?</h4>
+                  <p className="small text-muted mb-3">
+                    Authorized Aurxon contributors can publish new articles, case studies, and engineering updates directly from the Admin Portal.
+                  </p>
+                  <Link href="/admin" className="btn btn-outline-primary btn-block font-weight-bold">
+                    🛡️ Open Admin CMS Portal
+                  </Link>
+                </aside>
+
+                {/* Popular Topics */}
+                <aside className="single_sidebar_widget popular_topics_widget p-4 mb-4">
+                  <h4 className="widget_title mb-3">Core Research Topics</h4>
+                  <ul className="list-unstyled mb-0">
+                    <li className="d-flex justify-content-between py-2 border-bottom">
+                      <span>Factory Central OS (FCOS)</span>
+                      <span className="badge badge-light">AIMS Evolution</span>
+                    </li>
+                    <li className="d-flex justify-content-between py-2 border-bottom">
+                      <span>ALAMS Agentic Systems</span>
+                      <span className="badge badge-light">Multi-Agent</span>
+                    </li>
+                    <li className="d-flex justify-content-between py-2 border-bottom">
+                      <span>Neural ERP &amp; Supply Chain</span>
+                      <span className="badge badge-light">ACID + ML</span>
+                    </li>
+                    <li className="d-flex justify-content-between py-2">
+                      <span>Medical Computer Vision</span>
+                      <span className="badge badge-light">Cognivex</span>
+                    </li>
+                  </ul>
+                </aside>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
-    {/* ================Blog Area ================= */}
-    
-    {/* ================Footer Area ================= */}
+      </section>
+
+      {/* Scoped CSS Styles */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .blog_top_badge {
+          display: inline-block;
+          font-size: 0.82rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          background: rgba(99, 102, 241, 0.15);
+          color: #6366f1;
+          padding: 6px 16px;
+          border-radius: 50px;
+        }
+        .dark .blog_top_badge {
+          color: #a5b4fc;
+          background: rgba(99, 102, 241, 0.25);
+        }
+        .blog_filter_bar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 16px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 14px;
+          padding: 16px 20px;
+        }
+        .dark .blog_filter_bar {
+          background: #0f172a;
+          border-color: #1e293b;
+        }
+        .category_pill_list {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .cat_pill_btn {
+          padding: 7px 16px;
+          border-radius: 50px;
+          font-size: 0.82rem;
+          font-weight: 600;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          color: #475569;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .dark .cat_pill_btn {
+          background: #1e293b;
+          border-color: #334155;
+          color: #cbd5e1;
+        }
+        .active_cat_pill {
+          background: #4458dc !important;
+          color: #ffffff !important;
+          border-color: #4458dc !important;
+        }
+        .blog_search_wrapper {
+          position: relative;
+          min-width: 280px;
+          flex: 1;
+          max-width: 380px;
+        }
+        .blog_search_input {
+          width: 100%;
+          padding: 8px 36px 8px 14px;
+          border-radius: 10px;
+          border: 1px solid #cbd5e1;
+          background: #ffffff;
+          font-size: 0.88rem;
+          outline: none;
+        }
+        .dark .blog_search_input {
+          background: #1e293b;
+          border-color: #334155;
+          color: #ffffff;
+        }
+        .search_icon {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 0.9rem;
+          opacity: 0.6;
+        }
+        .blog_entry_title {
+          font-size: 1.55rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin-bottom: 12px;
+          line-height: 1.35;
+          transition: color 0.2s;
+        }
+        .dark .blog_entry_title {
+          color: #f8fafc;
+        }
+        .blog_entry_title:hover {
+          color: #4458dc;
+        }
+        .blog_summary_text {
+          font-size: 0.96rem;
+          line-height: 1.65;
+          color: #475569;
+          margin-bottom: 16px;
+        }
+        .dark .blog_summary_text {
+          color: #94a3b8;
+        }
+        .single_tag_badge {
+          display: inline-block;
+          font-size: 0.76rem;
+          font-weight: 600;
+          color: #6366f1;
+          background: rgba(99, 102, 241, 0.08);
+          padding: 2px 8px;
+          border-radius: 6px;
+          margin-right: 6px;
+          margin-bottom: 6px;
+        }
+        .dark .single_tag_badge {
+          color: #a5b4fc;
+          background: rgba(99, 102, 241, 0.18);
+        }
+        .single_sidebar_widget {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+        }
+        .dark .single_sidebar_widget {
+          background: #0f172a;
+          border-color: #1e293b;
+        }
+        .author_avatar_circle {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: #ffffff;
+          padding: 8px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        .social_circle {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: #ffffff;
+          border: 1px solid #cbd5e1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #334155;
+          text-decoration: none !important;
+          transition: all 0.2s;
+        }
+        .dark .social_circle {
+          background: #1e293b;
+          border-color: #334155;
+          color: #f1f5f9;
+        }
+        .social_circle:hover {
+          background: #4458dc;
+          color: #ffffff;
+        }
+      `}} />
     </>
   );
 }
