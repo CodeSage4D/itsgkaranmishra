@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { recordLead } from "@/lib/analytics-client";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -30,6 +31,17 @@ export default function ContactPage() {
     setLoading(true);
     setFeedback(null);
 
+    // Record lead in database
+    try {
+      recordLead({
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        source: "Contact Page Direct",
+      });
+    } catch (e) {}
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -37,9 +49,14 @@ export default function ContactPage() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        data = null;
+      }
 
-      if (res.ok && data.success) {
+      if (res.ok && data?.success) {
         setFeedback({
           type: "success",
           message: "Thank you! Your message has been sent directly to Karan's inbox (karannmishra136@gmail.com). You will receive a response shortly.",
@@ -51,15 +68,27 @@ export default function ContactPage() {
           message: "",
         });
       } else {
+        const mailtoUri = `mailto:karannmishra136@gmail.com?subject=${encodeURIComponent(
+          `[Portfolio Contact] ${formData.subject} - ${formData.name}`
+        )}&body=${encodeURIComponent(
+          `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+        )}`;
+        window.location.href = mailtoUri;
         setFeedback({
-          type: "error",
-          message: data.error || "Unable to send your message right now. Please try again or email directly.",
+          type: "success",
+          message: "Opening your email client to deliver directly to karannmishra136@gmail.com. You can also reach out directly via phone/WhatsApp at +91 7804895074.",
         });
       }
     } catch {
+      const mailtoUri = `mailto:karannmishra136@gmail.com?subject=${encodeURIComponent(
+        `[Portfolio Contact] ${formData.subject} - ${formData.name}`
+      )}&body=${encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+      )}`;
+      window.location.href = mailtoUri;
       setFeedback({
-        type: "error",
-        message: "Network error occurred while delivering your message. Please try again.",
+        type: "success",
+        message: "Opening your email client to deliver directly to karannmishra136@gmail.com. You can also reach out directly via phone/WhatsApp at +91 7804895074.",
       });
     } finally {
       setLoading(false);

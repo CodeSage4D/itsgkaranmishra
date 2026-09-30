@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { GravityUniverseBackground } from "@/components/GravityUniverseBackground";
 import { FloatingConnectHub } from "@/components/FloatingConnectHub";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
   title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
@@ -43,6 +44,7 @@ export default function RootLayout({
         <ThemeProvider>
           {/* Universal Gravity Cosmos & Neural Universe Background */}
           <GravityUniverseBackground />
+          <AnalyticsTracker />
           <Header />
           <main id="main_content">{children}</main>
           <Footer />
