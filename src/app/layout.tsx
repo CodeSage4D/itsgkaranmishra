@@ -8,10 +8,38 @@ import { FloatingConnectHub } from "@/components/FloatingConnectHub";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://itsgkaranmishra.web.app"),
   title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
-  description: "Official portfolio of Karan Mishra - Founder at Aurxon, Machine Learning & Python Engineer. Explore AI/ML architectures, Aurxon ERP, Cognivex, HemoAI, and scalable systems.",
+  description:
+    "Official portfolio of Karan Mishra - Founder at Aurxon, Machine Learning & Python Engineer. Explore AI/ML architectures, Factory Central OS (FCOS), ALAMS agentic networks, Neural ERPs, and edge computer vision.",
   icons: {
-    icon: "/img/logo/favicon-16x16.png",
+    icon: "/img/png/logo-no-background.png",
+    shortcut: "/img/png/logo-no-background.png",
+    apple: "/img/png/logo-color.png",
+  },
+  openGraph: {
+    title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
+    description:
+      "Explore AI/ML architectures, FCOS intelligent factory operating systems, ALAMS agentic networks, Neural ERPs, and computer vision platforms.",
+    url: "https://itsgkaranmishra.web.app",
+    siteName: "Aurxon &bull; Karan Mishra Portfolio",
+    images: [
+      {
+        url: "/img/png/logo-color.png",
+        width: 1200,
+        height: 630,
+        alt: "Aurxon Official Logo - Karan Mishra Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Karan Mishra | Founder, Aurxon - AI & Machine Learning Engineer",
+    description: "Official portfolio of Karan Mishra - AI systems, FCOS, ALAMS, and neural architectures.",
+    images: ["/img/png/logo-color.png"],
+    creator: "@itsgkaranmishra",
   },
 };
 

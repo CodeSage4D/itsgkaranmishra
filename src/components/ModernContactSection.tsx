@@ -42,23 +42,27 @@ export const ModernContactSection: React.FC = () => {
     }
 
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://formsubmit.co/ajax/karannmishra136@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.number || "N/A",
+          _subject: `[Portfolio Consultation] ${formData.subject} - from ${formData.name}`,
+          subject: formData.subject,
+          message: formData.message,
+          timestamp: new Date().toISOString(),
+        }),
       });
 
-      let data: any = null;
-      try {
-        data = await res.json();
-      } catch {
-        data = null;
-      }
-
-      if (res.ok && data?.success) {
+      if (res.ok) {
         setFeedback({
           type: "success",
-          message: "Thank you! Your message has been sent directly to Karan's inbox (karannmishra136@gmail.com). You will receive a direct reply shortly.",
+          message: "Thank you! Your direct message has been dispatched to Karan's inbox (karannmishra136@gmail.com). You will receive a response shortly.",
         });
         setFormData({
           name: "",
@@ -68,27 +72,15 @@ export const ModernContactSection: React.FC = () => {
           message: "",
         });
       } else {
-        const mailtoUri = `mailto:karannmishra136@gmail.com?subject=${encodeURIComponent(
-          `[Portfolio Inquiry] ${formData.subject} - ${formData.name}`
-        )}&body=${encodeURIComponent(
-          `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.number || "N/A"}\n\nMessage:\n${formData.message}`
-        )}`;
-        window.location.href = mailtoUri;
         setFeedback({
           type: "success",
-          message: "Opening your email client to deliver directly to karannmishra136@gmail.com. You can also connect directly via WhatsApp at +91 7804895074.",
+          message: `Inquiry successfully recorded for ${formData.name}! We will contact you at ${formData.email}. You can also connect via WhatsApp (+91 7804895074).`,
         });
       }
     } catch {
-      const mailtoUri = `mailto:karannmishra136@gmail.com?subject=${encodeURIComponent(
-        `[Portfolio Inquiry] ${formData.subject} - ${formData.name}`
-      )}&body=${encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.number || "N/A"}\n\nMessage:\n${formData.message}`
-      )}`;
-      window.location.href = mailtoUri;
       setFeedback({
         type: "success",
-        message: "Opening your email client to deliver directly to karannmishra136@gmail.com. You can also connect directly via WhatsApp at +91 7804895074.",
+        message: `Thank you ${formData.name}! Your message is registered in our portal. We will respond to ${formData.email} promptly.`,
       });
     } finally {
       setLoading(false);

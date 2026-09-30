@@ -69,6 +69,22 @@ export const FloatingConnectHub: React.FC = () => {
             onMouseLeave={() => setExpanded(false)}
           >
             <a
+              href="/card"
+              className="quick_tray_item"
+              title="Digital Smart Business Card (QR & vCard)"
+            >
+              <i className="fa fa-id-card-o"></i>
+            </a>
+            <a
+              href="https://wa.me/917804895074"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quick_tray_item"
+              title="WhatsApp Chat"
+            >
+              <i className="fa fa-whatsapp"></i>
+            </a>
+            <a
               href="mailto:karannmishra136@gmail.com"
               className="quick_tray_item"
               title="Send Direct Email"

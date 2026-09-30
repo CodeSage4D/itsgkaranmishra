@@ -558,23 +558,84 @@ img, video, canvas, svg {
    ========================================================= */
 
 @media (max-width: 767px) {
+  html, body {
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+  .container {
+    padding-left: 18px !important;
+    padding-right: 18px !important;
+  }
   .banner_content h1 {
-    font-size: 2.1rem !important;
+    font-size: 2rem !important;
     line-height: 1.25 !important;
+    word-break: break-word !important;
   }
   .banner_content h5 {
-    font-size: 0.95rem !important;
+    font-size: 0.92rem !important;
+  }
+  .banner_content p {
+    font-size: 0.94rem !important;
   }
   .main_title h2 {
-    font-size: 1.85rem !important;
+    font-size: 1.75rem !important;
+    line-height: 1.3 !important;
   }
   .hero_stat_card {
     padding: 16px 10px;
+    margin-bottom: 12px;
   }
   .stat_number {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
   .stat_label {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
+  }
+  .hero_cta_group {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 10px !important;
+  }
+  .hero_cta_group .primary_btn {
+    width: 100% !important;
+    text-align: center !important;
+    display: block !important;
+    margin-right: 0 !important;
+  }
+  .home_right_img {
+    margin-top: 30px !important;
+  }
+  .home_right_img img {
+    max-width: 280px !important;
+  }
+  .floating_connect_hub {
+    bottom: 16px !important;
+    right: 16px !important;
+  }
+  .floating_connect_btn {
+    padding: 10px 16px !important;
+    font-size: 0.84rem !important;
+  }
+  .admin_dash_wrapper {
+    padding: 16px 12px !important;
+  }
+  .admin_dash_header {
+    padding: 14px 16px !important;
+  }
+  .header_title {
+    font-size: 1.15rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner_content h1 {
+    font-size: 1.75rem !important;
+  }
+  .section_gap {
+    padding: 55px 0 !important;
+  }
+  .main_title {
+    margin-bottom: 30px !important;
   }
 }

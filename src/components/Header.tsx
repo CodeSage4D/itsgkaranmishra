@@ -48,6 +48,8 @@ export const Header: React.FC = () => {
     { href: "/about", label: "About", sectionId: "about-section" },
     { href: "/services", label: "Services", sectionId: "services-section" },
     { href: "/portfolio", label: "Portfolio", sectionId: "portfolio" },
+    { href: "/blog", label: "Insights", sectionId: "blog" },
+    { href: "/card", label: "📇 Card", sectionId: "card" },
     { href: "/contact", label: "Contact", sectionId: "direct-contact-section" },
   ];
 
