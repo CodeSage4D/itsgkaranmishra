@@ -1,19 +1,61 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { NeuralBackground } from "@/components/NeuralBackground";
 import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
 import { ModernContactSection } from "@/components/ModernContactSection";
 import { ModernProjectsSection } from "@/components/ModernProjectsSection";
 import { FeedbackSection } from "@/components/FeedbackSection";
+import { generateAndDownloadBusinessCard } from "@/lib/card-canvas";
 
 export default function Home() {
   const [filter, setFilter] = useState("*");
   const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [cardToast, setCardToast] = useState<string | null>(null);
+
+  // Auto-download smart business card image on opening portfolio
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const alreadyDownloaded = sessionStorage.getItem("portfolio_card_auto_downloaded");
+      if (!alreadyDownloaded) {
+        sessionStorage.setItem("portfolio_card_auto_downloaded", "true");
+        const timer = setTimeout(async () => {
+          try {
+            await generateAndDownloadBusinessCard("png");
+            setCardToast("🪪 Karan Mishra's Official Aurxon Business Card (PNG) has been automatically downloaded to your device!");
+            setTimeout(() => setCardToast(null), 6500);
+          } catch (e) {
+            console.error("Auto card download error:", e);
+          }
+        }, 1600);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
 
   return (
     <>
+      {/* Toast Alert for Auto-Downloaded Card */}
+      {cardToast && (
+        <div className="card_auto_download_toast">
+          <div className="toast_inner">
+            <span className="toast_pulse_dot"></span>
+            <span className="toast_text">{cardToast}</span>
+            <Link href="/card" className="toast_action_link">
+              View HD Card &rarr;
+            </Link>
+            <button
+              onClick={() => setCardToast(null)}
+              className="toast_close_btn"
+              aria-label="Close Toast"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Backdrop when modal is active */}
       {activeModal && (
         <div
@@ -50,11 +92,22 @@ export default function Home() {
 								>
 									<span><i className="fa fa-comments mr-2"></i>Let&apos;s Connect</span>
 								</a>
-								<Link className="primary_btn tr-bg" href="/contact">
-									<span><i className="fa fa-envelope-o mr-2"></i>Direct Message</span>
+								<Link className="primary_btn tr-bg" href="/card" title="9:16 Portrait Smart Business Card">
+									<span><i className="fa fa-id-card-o mr-2"></i>Smart Card</span>
 								</Link>
+								<button
+									className="primary_btn tr-bg"
+									onClick={async () => {
+										await generateAndDownloadBusinessCard("png");
+										setCardToast("🪪 Business Card (PNG) downloaded successfully!");
+										setTimeout(() => setCardToast(null), 4500);
+									}}
+									title="Direct Download Business Card Image"
+								>
+									<span><i className="fa fa-download mr-2"></i>Card (PNG)</span>
+								</button>
 								<a className="primary_btn tr-bg" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
-									<span><i className="fa fa-download mr-2"></i>Get CV</span>
+									<span><i className="fa fa-file-text-o mr-2"></i>Get CV</span>
 								</a>
 							</div>
 						</div>

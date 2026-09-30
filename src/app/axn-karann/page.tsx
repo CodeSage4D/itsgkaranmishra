@@ -29,7 +29,7 @@ import {
 
 // Secret Admin Credentials
 const ADMIN_USER = "karann";
-const ADMIN_PASS = "KarranAurxon$22";
+const ADMIN_PASS = "KarannAurxon$22";
 
 export default function AxnKarannCommandPortal() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -429,7 +429,7 @@ export default function AxnKarannCommandPortal() {
                 className="helper_chip_btn"
                 onClick={() => {
                   setUsernameInput("karann");
-                  setPasswordInput("KarranAurxon$22");
+                  setPasswordInput("KarannAurxon$22");
                 }}
               >
                 ⚡ Autofill Admin Token

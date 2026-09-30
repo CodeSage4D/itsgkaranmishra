@@ -1,15 +1,57 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { generateAndDownloadBusinessCard } from "@/lib/card-canvas";
 
-export default function BusinessCardPage() {
+function CardContent() {
+  const searchParams = useSearchParams();
+  const autoDownloadParam = searchParams.get("autodownload");
+
   const [copied, setCopied] = useState(false);
+  const [downloadingFormat, setDownloadingFormat] = useState<string | null>(null);
+  const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
 
   const portfolioUrl = "https://itsgkaranmishra.web.app";
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
     portfolioUrl
   )}&color=0f172a&bgcolor=ffffff&qzone=1`;
+
+  // Auto-download on mount if requested or by default
+  useEffect(() => {
+    if (autoDownloadParam === "false") return;
+
+    const timer = setTimeout(async () => {
+      try {
+        setDownloadingFormat("png");
+        setDownloadStatus("Auto-generating and downloading high-res Business Card (PNG)...");
+        await generateAndDownloadBusinessCard("png");
+        setDownloadStatus("Business card (PNG) downloaded successfully!");
+        setTimeout(() => setDownloadStatus(null), 4000);
+      } catch (err) {
+        console.error("Auto-download error:", err);
+      } finally {
+        setDownloadingFormat(null);
+      }
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [autoDownloadParam]);
+
+  const handleDownloadImage = async (format: "png" | "jpeg") => {
+    try {
+      setDownloadingFormat(format);
+      setDownloadStatus(`Rendering ultra-HD business card in ${format.toUpperCase()} format...`);
+      await generateAndDownloadBusinessCard(format);
+      setDownloadStatus(`Card downloaded as ${format.toUpperCase()}!`);
+      setTimeout(() => setDownloadStatus(null), 3000);
+    } catch (err) {
+      alert("Error generating card image. Please try again.");
+    } finally {
+      setDownloadingFormat(null);
+    }
+  };
 
   const downloadVCard = () => {
     const vCardData = [
@@ -22,6 +64,9 @@ export default function BusinessCardPage() {
       "TEL;TYPE=CELL,VOICE,WHATSAPP:+917804895074",
       "EMAIL;TYPE=WORK,INTERNET:karannmishra136@gmail.com",
       "URL:https://itsgkaranmishra.web.app",
+      "URL;TYPE=GitHub:https://github.com/CodeSage4D",
+      "URL;TYPE=LinkedIn:https://linkedin.com/in/itsgkaranmishra4",
+      "URL;TYPE=Instagram:https://instagram.com/itsgkaranmishra",
       "ADR;TYPE=WORK:;;Sikandar Bag Colony, VIP Road;Indore;Madhya Pradesh;452006;India",
       "NOTE:Founder at Aurxon - Building FCOS factory intelligence, ALAMS agentic AI, and Neural ERP systems.",
       "END:VCARD",
@@ -41,7 +86,7 @@ export default function BusinessCardPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Karan Mishra | Founder, Aurxon - Digital Business Card",
+          title: "Karan Mishra | Founder, Aurxon - Digital Smart Business Card",
           text: "Connect with Karan Mishra - Founder at Aurxon, AI & Machine Learning Engineer.",
           url: window.location.href,
         });
@@ -57,6 +102,14 @@ export default function BusinessCardPage() {
 
   return (
     <div className="card_page_container">
+      {/* Status Notification Banner */}
+      {downloadStatus && (
+        <div className="download_status_banner animate_slide_down">
+          <span className="pulse_dot"></span>
+          <span>{downloadStatus}</span>
+        </div>
+      )}
+
       {/* 9:16 Portrait Digital Smart Business Card */}
       <div className="portrait_business_card">
         {/* Holographic Border Glow */}
@@ -76,7 +129,7 @@ export default function BusinessCardPage() {
           <div className="profile_identity_section">
             <h1 className="profile_full_name">Karan Mishra</h1>
             <p className="profile_designation">Founder &bull; Aurxon</p>
-            <div className="specialty_pill">AI &amp; Machine Learning Engineer</div>
+            <div className="specialty_pill">Machine Learning &amp; Python Architect</div>
           </div>
 
           {/* Auto-Generated Live QR Code */}
@@ -90,28 +143,12 @@ export default function BusinessCardPage() {
             </div>
             <div className="qr_scan_instruction">
               <span className="camera_scan_icon">📷</span>
-              <span>Scan with camera to open live portfolio</span>
+              <span>Scan to open live portfolio &amp; AI models</span>
             </div>
           </div>
 
-          {/* Quick Contact Details */}
+          {/* Contact Details & All Profile URLs */}
           <div className="contact_strip_list">
-            <a href="tel:+917804895074" className="contact_strip_item">
-              <div className="strip_icon">📞</div>
-              <div className="strip_info">
-                <span className="strip_title">Phone &bull; WhatsApp</span>
-                <span className="strip_val">+91 7804895074</span>
-              </div>
-            </a>
-
-            <a href="mailto:karannmishra136@gmail.com" className="contact_strip_item">
-              <div className="strip_icon">✉️</div>
-              <div className="strip_info">
-                <span className="strip_title">Direct Email</span>
-                <span className="strip_val">karannmishra136@gmail.com</span>
-              </div>
-            </a>
-
             <a
               href="https://itsgkaranmishra.web.app"
               target="_blank"
@@ -120,21 +157,88 @@ export default function BusinessCardPage() {
             >
               <div className="strip_icon">🌐</div>
               <div className="strip_info">
-                <span className="strip_title">Portfolio &bull; Company URL</span>
+                <span className="strip_title">Live Portfolio &bull; Company</span>
                 <span className="strip_val">itsgkaranmishra.web.app</span>
               </div>
             </a>
 
-            <div className="contact_strip_item">
-              <div className="strip_icon">📍</div>
+            <a
+              href="https://github.com/CodeSage4D"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact_strip_item"
+            >
+              <div className="strip_icon">💻</div>
               <div className="strip_info">
-                <span className="strip_title">Headquarters</span>
-                <span className="strip_val">Indore, Madhya Pradesh, India</span>
+                <span className="strip_title">GitHub Repositories (47+)</span>
+                <span className="strip_val">github.com/CodeSage4D</span>
               </div>
+            </a>
+
+            <a
+              href="https://linkedin.com/in/itsgkaranmishra4"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact_strip_item"
+            >
+              <div className="strip_icon">💼</div>
+              <div className="strip_info">
+                <span className="strip_title">LinkedIn Executive Profile</span>
+                <span className="strip_val">linkedin.com/in/itsgkaranmishra4</span>
+              </div>
+            </a>
+
+            <a
+              href="https://instagram.com/itsgkaranmishra"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact_strip_item"
+            >
+              <div className="strip_icon">📸</div>
+              <div className="strip_info">
+                <span className="strip_title">Instagram Personal Network</span>
+                <span className="strip_val">@itsgkaranmishra</span>
+              </div>
+            </a>
+
+            <a href="mailto:karannmishra136@gmail.com" className="contact_strip_item">
+              <div className="strip_icon">✉️</div>
+              <div className="strip_info">
+                <span className="strip_title">Direct Email Inbox</span>
+                <span className="strip_val">karannmishra136@gmail.com</span>
+              </div>
+            </a>
+
+            <a href="tel:+917804895074" className="contact_strip_item">
+              <div className="strip_icon">📱</div>
+              <div className="strip_info">
+                <span className="strip_title">Phone &bull; WhatsApp Direct</span>
+                <span className="strip_val">+91 7804895074</span>
+              </div>
+            </a>
+          </div>
+
+          {/* Interactive Action Buttons: PNG, JPG, vCard, Share */}
+          <div className="card_download_format_group">
+            <span className="download_group_label">DOWNLOAD BUSINESS CARD TEMPLATE</span>
+            <div className="format_btn_grid">
+              <button
+                onClick={() => handleDownloadImage("png")}
+                disabled={downloadingFormat !== null}
+                className="btn_format btn_png"
+              >
+                {downloadingFormat === "png" ? "⏳ Rendering..." : "📥 Download PNG"}
+              </button>
+              <button
+                onClick={() => handleDownloadImage("jpeg")}
+                disabled={downloadingFormat !== null}
+                className="btn_format btn_jpg"
+              >
+                {downloadingFormat === "jpeg" ? "⏳ Rendering..." : "📥 Download JPG"}
+              </button>
             </div>
           </div>
 
-          {/* Interactive Action Buttons */}
           <div className="card_actions_row">
             <button onClick={downloadVCard} className="btn_card_action btn_vcard">
               <span>📲 Save Contact (vCard)</span>
@@ -158,25 +262,62 @@ export default function BusinessCardPage() {
         .card_page_container {
           min-height: 100vh;
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
           background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #06080e 100%);
           padding: 30px 16px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          position: relative;
+        }
+
+        .download_status_banner {
+          position: fixed;
+          top: 20px;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          background: rgba(16, 185, 129, 0.95);
+          color: #ffffff;
+          padding: 10px 20px;
+          border-radius: 999px;
+          font-size: 0.88rem;
+          font-weight: 700;
+          box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+          backdrop-filter: blur(10px);
+          animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+
+        .pulse_dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #ffffff;
+          box-shadow: 0 0 10px #ffffff;
+          animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.8); }
         }
 
         /* Standard 9:16 Portrait Ratio Card */
         .portrait_business_card {
           width: 100%;
-          max-width: 420px;
-          aspect-ratio: 9 / 16;
-          min-height: 720px;
-          background: linear-gradient(145deg, rgba(30, 27, 75, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border: 1px solid rgba(129, 140, 248, 0.35);
+          max-width: 440px;
+          background: linear-gradient(145deg, rgba(30, 27, 75, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
+          backdrop-filter: blur(28px);
+          -webkit-backdrop-filter: blur(28px);
+          border: 1px solid rgba(129, 140, 248, 0.4);
           border-radius: 28px;
-          box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(99, 102, 241, 0.2);
+          box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 45px rgba(99, 102, 241, 0.25);
           overflow: hidden;
           position: relative;
           color: #ffffff;
@@ -188,8 +329,7 @@ export default function BusinessCardPage() {
           padding: 28px 24px;
           display: flex;
           flex-direction: column;
-          height: 100%;
-          justify-content: space-between;
+          gap: 14px;
           position: relative;
           z-index: 2;
         }
@@ -237,11 +377,11 @@ export default function BusinessCardPage() {
 
         .profile_identity_section {
           text-align: center;
-          margin: 12px 0;
+          margin: 4px 0;
         }
 
         .profile_full_name {
-          font-size: 1.85rem;
+          font-size: 1.95rem;
           font-weight: 900;
           margin: 0;
           color: #ffffff;
@@ -268,12 +408,11 @@ export default function BusinessCardPage() {
           border-radius: 50px;
         }
 
-        /* Auto-Generated QR Code Container */
         .card_qr_container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          margin: 10px 0;
+          margin: 6px 0;
         }
 
         .qr_code_frame {
@@ -346,7 +485,7 @@ export default function BusinessCardPage() {
         }
 
         .strip_title {
-          font-size: 0.68rem;
+          font-size: 0.66rem;
           font-weight: 700;
           text-transform: uppercase;
           color: #94a3b8;
@@ -361,10 +500,64 @@ export default function BusinessCardPage() {
           text-overflow: ellipsis;
         }
 
+        .card_download_format_group {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px dashed rgba(129, 140, 248, 0.35);
+          border-radius: 14px;
+          padding: 10px 12px;
+          text-align: center;
+        }
+
+        .download_group_label {
+          display: block;
+          font-size: 0.66rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #a5b4fc;
+          margin-bottom: 8px;
+        }
+
+        .format_btn_grid {
+          display: flex;
+          gap: 8px;
+        }
+
+        .btn_format {
+          flex: 1;
+          padding: 10px 8px;
+          border-radius: 10px;
+          font-size: 0.8rem;
+          font-weight: 750;
+          border: none;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .btn_png {
+          background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+          color: #ffffff;
+          box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn_png:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
+        }
+
+        .btn_jpg {
+          background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+          color: #ffffff;
+          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn_jpg:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+
         .card_actions_row {
           display: flex;
           gap: 8px;
-          margin-top: 10px;
         }
 
         .btn_card_action {
@@ -404,7 +597,7 @@ export default function BusinessCardPage() {
 
         .card_bottom_footer {
           text-align: center;
-          margin-top: 8px;
+          margin-top: 4px;
         }
 
         .back_portfolio_link {
@@ -419,26 +612,21 @@ export default function BusinessCardPage() {
           color: #818cf8;
           text-decoration: underline;
         }
-
-        /* Mobile adaptivity */
-        @media (max-width: 480px) {
-          .portrait_business_card {
-            min-height: auto;
-            aspect-ratio: auto;
-            border-radius: 20px;
-          }
-          .card_inner {
-            padding: 22px 18px;
-          }
-          .profile_full_name {
-            font-size: 1.6rem;
-          }
-          .qr_code_frame {
-            width: 120px;
-            height: 120px;
-          }
-        }
       `}} />
     </div>
+  );
+}
+
+export default function BusinessCardPage() {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#06080e", color: "#ffffff" }}>
+          Generating Executive Card...
+        </div>
+      }
+    >
+      <CardContent />
+    </Suspense>
   );
 }
