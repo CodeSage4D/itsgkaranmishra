@@ -29,9 +29,11 @@ export default function Home() {
 				<div className="row align-items-center">
 					<div className="col-lg-7">
 						<div className="banner_content">
-							<h3 className="text-uppercase" style={{ letterSpacing: "2px", color: "#4458dc", fontWeight: 700 }}>Hello</h3>
-							<h1 className="text-uppercase" style={{ fontWeight: 800 }}>I am Karan Mishra</h1>
-							<h5 className="text-uppercase" style={{ color: "#334155", fontWeight: 600 }}>
+							<h3 className="hero_greeting text-uppercase">Hello</h3>
+							<h1 className="hero_person_name text-uppercase">
+								I am <span className="hero_name_highlight">Karan Mishra</span>
+							</h1>
+							<h5 className="hero_person_subtitle text-uppercase">
 								Founder &bull; Aurxon &bull; Machine Learning &amp; Python Engineer
 							</h5>
 							<p className="mt-3 mb-4 text-muted" style={{ maxWidth: "560px", lineHeight: "1.7", fontSize: "1.05rem" }}>
@@ -162,7 +164,7 @@ export default function Home() {
 							Let&apos;s Introduce About Myself
 						</h2>
 						<p>
-							Hey there! I&apos;m <strong>Karan Mishra</strong>, a tech enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative software solutions. With over <strong>3+ years of professional engineering experience</strong>, my journey spans deep machine learning, Python systems architecture, and scalable full-stack development.
+							Hey there! I&apos;m <strong className="brand_highlight_name">Karan Mishra</strong>, a tech enthusiast and AI engineer with a passion for turning complex ideas into practical, innovative software solutions. With over <strong>3+ years of professional engineering experience</strong>, my journey spans deep machine learning, Python systems architecture, and scalable full-stack development.
 						</p>
 						<p>
 							I&apos;m the proud founder of <strong>Aurxon</strong> (formerly known as i AIM LABS), where I bring my vision to life—creating cutting-edge software solutions, enterprise platforms (like <strong>Aurxon ERP Lite</strong>), and AI intelligence engines (such as <strong>Cognivex</strong> and <strong>HemoAI</strong>) that empower modern organizations.

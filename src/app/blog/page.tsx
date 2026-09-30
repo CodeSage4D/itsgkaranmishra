@@ -192,14 +192,14 @@ export default function BlogPage() {
                   </div>
                 </aside>
 
-                {/* Post a Blog in Admin Quick Link */}
+                {/* Technical Inquiries & Guest Submissions */}
                 <aside className="single_sidebar_widget admin_cta_widget p-4 mb-4">
-                  <h4 className="widget_title mb-2">Have New Technical Insights?</h4>
+                  <h4 className="widget_title mb-2">Have Technical Research to Share?</h4>
                   <p className="small text-muted mb-3">
-                    Authorized Aurxon contributors can publish new articles, case studies, and engineering updates directly from the Admin Portal.
+                    Collaborate with Karan Mishra on AI research, FCOS/ALAMS case studies, or system whitepapers.
                   </p>
-                  <Link href="/admin" className="btn btn-outline-primary btn-block font-weight-bold">
-                    🛡️ Open Admin CMS Portal
+                  <Link href="/contact" className="btn btn-outline-primary btn-block font-weight-bold">
+                    🚀 Submit Research Inquiry
                   </Link>
                 </aside>
 
