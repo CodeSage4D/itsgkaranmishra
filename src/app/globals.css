@@ -720,97 +720,91 @@ img, video, canvas, svg {
 }
 
 /* =========================================================
-   AUTO-DOWNLOAD BUSINESS CARD TOAST ALERT
+   UNIVERSAL AUTONOMOUS MOBILE & RESPONSIVE ENGINE
    ========================================================= */
 
-.card_auto_download_toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1050;
-  max-width: 480px;
-  width: calc(100vw - 32px);
-  animation: slideUpToast 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes slideUpToast {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
+@media (max-width: 991px) {
+  .banner_content {
+    margin-top: 20px;
+    text-align: center;
   }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+  .banner_btn_row {
+    justify-content: center;
+  }
+  .aurxon_header_badge {
+    margin: 0 auto;
+  }
+  .about_img_wrapper {
+    margin-bottom: 30px;
   }
 }
 
-.toast_inner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(99, 102, 241, 0.4);
-  border-radius: 16px;
-  padding: 12px 18px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.25);
-  color: #ffffff;
-  font-size: 0.86rem;
+@media (max-width: 768px) {
+  .regional_telemetry_bar {
+    padding: 14px 16px !important;
+    border-radius: 18px !important;
+  }
+  .regional_telemetry_bar .d-flex {
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .regional_time_box {
+    margin-top: 8px;
+    justify-content: center !important;
+    width: 100%;
+  }
+  .feature_interactive {
+    margin-bottom: 16px;
+  }
+  .service_deep_specs_drawer {
+    padding: 18px 14px !important;
+    border-radius: 16px !important;
+  }
+  .metrics_telemetry_box {
+    margin-top: 14px;
+  }
+  .banner_btn_row .primary_btn {
+    width: 100% !important;
+    text-align: center !important;
+    margin-bottom: 8px;
+  }
+  .projects_controls_bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .filter_pills_container {
+    width: 100% !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding-bottom: 8px;
+  }
+  .projects_search_wrapper {
+    width: 100% !important;
+  }
+  .velocity_bars_container {
+    height: 110px !important;
+    gap: 6px !important;
+  }
+  .probability_matrix_grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
-.toast_pulse_dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 12px #10b981;
-  flex-shrink: 0;
-  animation: pulseToast 1.8s infinite;
-}
-
-@keyframes pulseToast {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(0.85); opacity: 0.5; }
-}
-
-.toast_text {
-  flex: 1;
-  line-height: 1.4;
-  color: #f1f5f9;
-}
-
-.toast_action_link {
-  font-size: 0.78rem;
-  font-weight: 750;
-  color: #38bdf8;
-  white-space: nowrap;
-  text-decoration: none;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 4px 10px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.toast_action_link:hover {
-  background: rgba(56, 189, 248, 0.25);
-  color: #ffffff;
-}
-
-.toast_close_btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-  transition: color 0.2s;
-}
-
-.toast_close_btn:hover {
-  color: #ffffff;
+@media (max-width: 480px) {
+  .container {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .banner_content h1 {
+    font-size: 1.85rem !important;
+  }
+  .dynamic_role_cycler_box {
+    font-size: 0.8rem !important;
+    padding: 6px 12px !important;
+  }
+  .main_title h2 {
+    font-size: 1.6rem !important;
+  }
 }
 
 /* =========================================================

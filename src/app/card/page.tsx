@@ -23,31 +23,7 @@ function CardContent() {
     portfolioUrl
   )}&color=082f49&bgcolor=ffffff&qzone=1`;
 
-  // Auto-download both PNG business card and phone contact on mount
-  useEffect(() => {
-    if (autoDownloadParam === "false") return;
-
-    const hasDownloaded = sessionStorage.getItem("axn_card_auto_downloaded_v3");
-    if (!hasDownloaded) {
-      sessionStorage.setItem("axn_card_auto_downloaded_v3", "true");
-      const timer = setTimeout(async () => {
-        try {
-          setDownloadingFormat("bundle");
-          setDownloadStatus("Auto-saving Karan Mishra's Official Card (PNG) & Phone Contact (.VCF)...");
-          await generateAndDownloadBusinessCard("png", selectedTheme);
-          downloadVCardContact();
-          setDownloadStatus("✓ Crystal-HD Card and Phone Contact (.vcf) saved to your device!");
-          setTimeout(() => setDownloadStatus(null), 5000);
-        } catch (err) {
-          console.error("Auto-download error:", err);
-        } finally {
-          setDownloadingFormat(null);
-        }
-      }, 1200);
-
-      return () => clearTimeout(timer);
-    }
-  }, [autoDownloadParam, selectedTheme]);
+  // Strictly user-initiated downloads on manual button click
 
   const handleDownloadImage = async (format: "png" | "jpeg") => {
     try {
