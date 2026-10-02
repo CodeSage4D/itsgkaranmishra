@@ -199,6 +199,7 @@ export const ModernProjectsSection: React.FC = () => {
     lastSynced: "Live Synchronized",
   });
   const [activeBarHover, setActiveBarHover] = useState<number | null>(null);
+  const [showVelocityDrawer, setShowVelocityDrawer] = useState<boolean>(false);
 
   const weeklyCommitVelocity = [
     { day: "Mon", commits: 22, height: "55%", label: "22 Commits • Cognivex Transformers" },
@@ -386,8 +387,8 @@ export const ModernProjectsSection: React.FC = () => {
         {/* Section Header */}
         <div className="row justify-content-center">
           <div className="col-lg-10 text-center">
-            <div className="main_title mb-4">
-              <div className="d-flex align-items-center justify-content-center gap-2 mb-3 flex-wrap">
+            <div className="main_title mb-3">
+              <div className="d-flex align-items-center justify-content-center gap-2 mb-2 flex-wrap">
                 <span className="projects_badge">
                   <i className="fa fa-code-fork mr-2"></i> Quality Work &bull; Real-Time Codebases
                 </span>
@@ -406,160 +407,189 @@ export const ModernProjectsSection: React.FC = () => {
               </div>
 
               <h2 className="mt-2 font-weight-bold">Real-Time Projects &amp; GitHub Repositories</h2>
-              <p className="projects_header_sub">
+              <p className="projects_header_sub mb-0">
                 Live repositories, deployed enterprise platforms, and open-source architectures authored by <strong>Karan Mishra (@CodeSage4D)</strong>. Copy CLI commands, inspect source code, or launch live interactive demos.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Real-Time Contribution Velocity & Codebase Telemetry Board */}
-        <div className="contribution_analytics_board mb-4">
-          <div className="row align-items-center">
-            {/* Weekly Git Contribution Bar Chart */}
-            <div className="col-lg-7 mb-4 mb-lg-0">
-              <div className="velocity_chart_wrapper">
-                <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="live_chart_sparkle">📊</span>
-                    <h5 className="mb-0 text-white font-weight-bold" style={{ fontSize: "1rem" }}>
-                      Weekly Code Velocity &amp; Contribution Intensity
-                    </h5>
-                  </div>
-                  <span className="chart_status_tag">
-                    <span className="radar_ping_tiny"></span> 239 Commits / 7 Days
-                  </span>
-                </div>
-
-                {/* SVG/CSS Bar Chart with Tooltips */}
-                <div className="velocity_bars_container">
-                  {weeklyCommitVelocity.map((item, idx) => (
-                    <div
-                      key={item.day}
-                      className={`velocity_bar_col ${activeBarHover === idx ? "bar_active" : ""}`}
-                      onMouseEnter={() => setActiveBarHover(idx)}
-                      onMouseLeave={() => setActiveBarHover(null)}
-                    >
-                      <div className="velocity_bar_track">
-                        <div
-                          className="velocity_bar_fill"
-                          style={{ height: item.height }}
-                        >
-                          {activeBarHover === idx && (
-                            <div className="velocity_tooltip">
-                              <strong>{item.commits} Commits</strong>
-                              <span className="tooltip_sub">{item.label}</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <span className="velocity_day_label">{item.day}</span>
-                      <span className="velocity_val_label">{item.commits}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+        {/* Compact Unified Control HUD: Filters, Auto-Adjust Toggle, Velocity Trigger, Search */}
+        <div className="projects_unified_hud mb-4">
+          <div className="hud_top_row">
+            {/* Filter Navigation Tabs */}
+            <div className="filter_pills_container">
+              {filterTabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`filter_pill_btn ${activeTab === tab.id ? "active" : ""}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <span>{tab.label}</span>
+                  <span className="pill_count_badge">{tab.count}</span>
+                </button>
+              ))}
             </div>
 
-            {/* Language Distribution & Probability Reliability Stats */}
-            <div className="col-lg-5">
-              <div className="code_telemetry_card">
-                <div className="d-flex align-items-center justify-content-between mb-2">
-                  <span className="telemetry_section_title">Repository Stack Distribution</span>
-                  <span className="telemetry_highlight">47+ Active Repos</span>
-                </div>
+            {/* Right Action Suite: Auto-Adjust & Telemetry Toggle */}
+            <div className="hud_actions_suite">
+              {/* Auto-Adjust Mode Pill */}
+              <button
+                type="button"
+                className={`hud_action_pill ${isAutoAdjustActive ? "is_active" : ""}`}
+                onClick={() => setIsAutoAdjustActive(!isAutoAdjustActive)}
+                title="Toggle Auto-Adjust between Flagships and Full Catalog"
+              >
+                <span className="pill_spark">⚡</span>
+                <span>{isAutoAdjustActive ? "Auto-Adjust: Flagships (8)" : "Auto-Adjust: All 50+ Synced"}</span>
+              </button>
 
-                {/* Multi-Segment Stack Bar */}
-                <div className="stack_segment_progress mb-3">
-                  <div className="segment_slice slice_ts" style={{ width: "45%" }} title="TypeScript / Next.js (45%)"></div>
-                  <div className="segment_slice slice_py" style={{ width: "35%" }} title="Python / AI-ML (35%)"></div>
-                  <div className="segment_slice slice_sys" style={{ width: "12%" }} title="C++ / Systems (12%)"></div>
-                  <div className="segment_slice slice_canvas" style={{ width: "8%" }} title="WebGL / Canvas (8%)"></div>
-                </div>
+              {/* Collapsible Velocity & Stack Analytics Drawer Toggle */}
+              <button
+                type="button"
+                className={`hud_action_pill ${showVelocityDrawer ? "is_active" : ""}`}
+                onClick={() => setShowVelocityDrawer(!showVelocityDrawer)}
+                title="Toggle Weekly Commit Velocity & Stack Analytics"
+              >
+                <span>📊 Velocity &amp; Analytics</span>
+                <i className={`fa ${showVelocityDrawer ? "fa-chevron-up" : "fa-chevron-down"} ml-1`}></i>
+              </button>
+            </div>
+          </div>
 
-                {/* Legend */}
-                <div className="d-flex flex-wrap gap-2 mb-3 stack_legend_row">
-                  <span className="legend_item"><span className="legend_dot dot_ts"></span> TypeScript 45%</span>
-                  <span className="legend_item"><span className="legend_dot dot_py"></span> Python 35%</span>
-                  <span className="legend_item"><span className="legend_dot dot_sys"></span> C++ 12%</span>
-                  <span className="legend_item"><span className="legend_dot dot_canvas"></span> WebGL 8%</span>
-                </div>
-
-                {/* Mathematical Probability & SLA Matrix */}
-                <div className="probability_matrix_grid">
-                  <div className="prob_stat_tile">
-                    <span className="prob_label">CI/CD Uptime SLA</span>
-                    <strong className="prob_value">99.98%</strong>
-                    <span className="prob_math">P(Uptime) &gt; 0.999</span>
-                  </div>
-                  <div className="prob_stat_tile">
-                    <span className="prob_label">Inference Latency</span>
-                    <strong className="prob_value">&lt; 14.8ms</strong>
-                    <span className="prob_math">&sigma; = 1.2ms (Zero Drift)</span>
-                  </div>
-                </div>
-              </div>
+          {/* Compact Inline Search Bar */}
+          <div className="hud_search_row mt-2">
+            <div className="projects_search_wrapper">
+              <i className="fa fa-search search_icon"></i>
+              <input
+                type="text"
+                placeholder="Search 50+ repos by tech (PyTorch, Next.js, FastAPI, Transformers...), name, or keyword..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="projects_search_input"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="search_clear_btn"
+                  title="Clear Search"
+                >
+                  &times;
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Auto-Adjust Category Intelligence Bar */}
-        <div className="repo_auto_adjust_bar mb-3">
-          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div className="d-flex align-items-center gap-2">
-              <span className="auto_adjust_beacon">⚡</span>
-              <span className="auto_adjust_text">
-                <strong>Auto-Adjust Architecture:</strong> {isAutoAdjustActive ? "Highlighting Top Working Flagships" : "Displaying All Synced Repositories"} &bull; 50+ Repos authored by @CodeSage4D
+        {/* Collapsible Real-Time Contribution Velocity & Codebase Telemetry Board */}
+        {showVelocityDrawer && (
+          <div className="contribution_analytics_board mb-4 animate_fade_in">
+            <div className="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom border-secondary">
+              <span className="text-white font-weight-bold" style={{ fontSize: "0.88rem" }}>
+                📊 GitHub @CodeSage4D Telemetry &amp; Velocity Radar
               </span>
+              <button
+                type="button"
+                className="btn_close_drawer_mini"
+                onClick={() => setShowVelocityDrawer(false)}
+                title="Close Analytics"
+              >
+                <i className="fa fa-times mr-1"></i> Close
+              </button>
             </div>
-            <button
-              type="button"
-              className="btn_toggle_autoadjust"
-              onClick={() => setIsAutoAdjustActive(!isAutoAdjustActive)}
-            >
-              {isAutoAdjustActive ? "Show All 50+ Repositories ▼" : "Show Top Flagships Only ▲"}
-            </button>
-          </div>
-        </div>
+            <div className="row align-items-center">
+              {/* Weekly Git Contribution Bar Chart */}
+              <div className="col-lg-7 mb-4 mb-lg-0">
+                <div className="velocity_chart_wrapper">
+                  <div className="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="live_chart_sparkle">📊</span>
+                      <h5 className="mb-0 text-white font-weight-bold" style={{ fontSize: "1rem" }}>
+                        Weekly Code Velocity &amp; Contribution Intensity
+                      </h5>
+                    </div>
+                    <span className="chart_status_tag">
+                      <span className="radar_ping_tiny"></span> 239 Commits / 7 Days
+                    </span>
+                  </div>
 
-        {/* Filter Navigation & Search Bar */}
-        <div className="projects_controls_bar">
-          <div className="filter_pills_container">
-            {filterTabs.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                className={`filter_pill_btn ${activeTab === tab.id ? "active" : ""}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span>{tab.label}</span>
-                <span className="pill_count_badge">{tab.count}</span>
-              </button>
-            ))}
-          </div>
+                  {/* SVG/CSS Bar Chart with Tooltips */}
+                  <div className="velocity_bars_container">
+                    {weeklyCommitVelocity.map((item, idx) => (
+                      <div
+                        key={item.day}
+                        className={`velocity_bar_col ${activeBarHover === idx ? "bar_active" : ""}`}
+                        onMouseEnter={() => setActiveBarHover(idx)}
+                        onMouseLeave={() => setActiveBarHover(null)}
+                      >
+                        <div className="velocity_bar_track">
+                          <div
+                            className="velocity_bar_fill"
+                            style={{ height: item.height }}
+                          >
+                            {activeBarHover === idx && (
+                              <div className="velocity_tooltip">
+                                <strong>{item.commits} Commits</strong>
+                                <span className="tooltip_sub">{item.label}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <span className="velocity_day_label">{item.day}</span>
+                        <span className="velocity_val_label">{item.commits}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-          <div className="projects_search_wrapper">
-            <i className="fa fa-search search_icon"></i>
-            <input
-              type="text"
-              placeholder="Search by tech, keyword, or repo..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="projects_search_input"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery("")}
-                className="search_clear_btn"
-                title="Clear Search"
-              >
-                &times;
-              </button>
-            )}
-        </div>
+              {/* Language Distribution & Probability Reliability Stats */}
+              <div className="col-lg-5">
+                <div className="code_telemetry_card">
+                  <div className="d-flex align-items-center justify-content-between mb-2">
+                    <span className="telemetry_section_title">Repository Stack Distribution</span>
+                    <span className="telemetry_highlight">47+ Active Repos</span>
+                  </div>
+
+                  {/* Multi-Segment Stack Bar */}
+                  <div className="stack_segment_progress mb-3">
+                    <div className="segment_slice slice_ts" style={{ width: "45%" }} title="TypeScript / Next.js (45%)"></div>
+                    <div className="segment_slice slice_py" style={{ width: "35%" }} title="Python / AI-ML (35%)"></div>
+                    <div className="segment_slice slice_sys" style={{ width: "12%" }} title="C++ / Systems (12%)"></div>
+                    <div className="segment_slice slice_canvas" style={{ width: "8%" }} title="WebGL / Canvas (8%)"></div>
+                  </div>
+
+                  {/* Legend */}
+                  <div className="d-flex flex-wrap gap-2 mb-3 stack_legend_row">
+                    <span className="legend_item"><span className="legend_dot dot_ts"></span> TypeScript 45%</span>
+                    <span className="legend_item"><span className="legend_dot dot_py"></span> Python 35%</span>
+                    <span className="legend_item"><span className="legend_dot dot_sys"></span> C++ 12%</span>
+                    <span className="legend_item"><span className="legend_dot dot_canvas"></span> WebGL 8%</span>
+                  </div>
+
+                  {/* Mathematical Probability & SLA Matrix */}
+                  <div className="probability_matrix_grid">
+                    <div className="prob_stat_tile">
+                      <span className="prob_label">CI/CD Uptime SLA</span>
+                      <strong className="prob_value">99.98%</strong>
+                      <span className="prob_math">P(Uptime) &gt; 0.999</span>
+                    </div>
+                    <div className="prob_stat_tile">
+                      <span className="prob_label">Inference Latency</span>
+                      <strong className="prob_value">&lt; 14.8ms</strong>
+                      <span className="prob_math">&sigma; = 1.2ms (Zero Drift)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Projects Grid with Borderless Modern Cards */}
+        <div className="row projects_grid_row">
           {filteredProjects.map((project) => (
             <div key={project.id} className="col-lg-4 col-md-6 mb-4">
               <div className="modern_project_card">
@@ -943,31 +973,123 @@ export const ModernProjectsSection: React.FC = () => {
           color: #94a3b8;
         }
 
-        /* Controls Bar: Filter Navigation & Search */
-        .projects_controls_bar {
+        /* Unified Space-Efficient Control HUD */
+        .projects_unified_hud {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(226, 232, 240, 0.95);
+          border-radius: 20px;
+          padding: 12px 16px;
+          box-shadow: 0 8px 30px -10px rgba(15, 23, 42, 0.08);
+          transition: all 0.3s ease;
+        }
+
+        .dark .projects_unified_hud {
+          background: rgba(10, 15, 28, 0.75);
+          border-color: rgba(56, 189, 248, 0.22);
+          box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 15px rgba(56, 189, 248, 0.08);
+        }
+
+        .hud_top_row {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 16px;
           flex-wrap: wrap;
-          margin-bottom: 35px;
+          gap: 12px;
+        }
+
+        .hud_actions_suite {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .hud_action_pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 6px 14px;
+          border-radius: 50px;
+          background: rgba(15, 23, 42, 0.05);
+          border: 1px solid rgba(148, 163, 184, 0.3);
+          font-size: 0.8rem;
+          font-weight: 750;
+          color: #475569;
+          cursor: pointer;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark .hud_action_pill {
+          background: rgba(255, 255, 255, 0.06);
+          border-color: rgba(255, 255, 255, 0.12);
+          color: #cbd5e1;
+        }
+
+        .hud_action_pill:hover {
+          background: rgba(2, 132, 199, 0.1);
+          border-color: #0284c7;
+          color: #0284c7;
+          transform: translateY(-1px);
+        }
+
+        .dark .hud_action_pill:hover {
+          background: rgba(56, 189, 248, 0.15);
+          border-color: #38bdf8;
+          color: #38bdf8;
+          box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .hud_action_pill.is_active {
+          background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(56, 189, 248, 0.25));
+          border-color: #0284c7;
+          color: #0284c7;
+        }
+
+        .dark .hud_action_pill.is_active {
+          background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.25));
+          border-color: #38bdf8;
+          color: #38bdf8;
+          box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn_close_drawer_mini {
+          background: rgba(239, 68, 68, 0.12);
+          border: none;
+          color: #ef4444;
+          font-size: 0.76rem;
+          font-weight: 750;
+          padding: 4px 10px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .btn_close_drawer_mini:hover {
+          background: #ef4444;
+          color: #ffffff;
+        }
+
+        .hud_search_row {
+          width: 100%;
         }
 
         .filter_pills_container {
           display: inline-flex;
           flex-wrap: wrap;
-          gap: 8px;
-          background: #ffffff;
-          padding: 6px;
+          gap: 6px;
+          background: rgba(255, 255, 255, 0.6);
+          padding: 4px;
           border-radius: 50px;
-          box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+          box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
           border: none !important;
           outline: none !important;
         }
 
         .dark .filter_pills_container {
-          background: rgba(15, 23, 42, 0.8);
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+          background: rgba(15, 23, 42, 0.6);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .filter_pill_btn {
@@ -975,9 +1097,9 @@ export const ModernProjectsSection: React.FC = () => {
           border: none !important;
           outline: none !important;
           color: #64748b;
-          font-size: 0.86rem;
+          font-size: 0.82rem;
           font-weight: 700;
-          padding: 8px 18px;
+          padding: 6px 14px;
           border-radius: 50px;
           cursor: pointer;
           transition: all 0.25s ease;
@@ -1010,9 +1132,7 @@ export const ModernProjectsSection: React.FC = () => {
         /* Search Input */
         .projects_search_wrapper {
           position: relative;
-          min-width: 260px;
-          flex-grow: 1;
-          max-width: 380px;
+          width: 100%;
         }
 
         .search_icon {
