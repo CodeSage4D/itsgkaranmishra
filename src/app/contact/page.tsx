@@ -112,8 +112,8 @@ export default function ContactPage() {
               <div className="contact_info">
                 <div className="info_item">
                   <i className="lnr lnr-home"></i>
-                  <h6>Sikandar Bag Colony, Killa Maidan</h6>
-                  <p>VIP Road, Indore, MP, India - 452006</p>
+                  <h6>ASIA, India, MP, Indore</h6>
+                  <p>Killa Maidan VIP Road, and AHQ Postal Code: 452006</p>
                 </div>
                 <div className="info_item">
                   <i className="lnr lnr-phone-handset"></i>
@@ -138,7 +138,7 @@ export default function ContactPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Aurxon Technologies &amp; AI
+                      Aurxon &bull; Next Gen AI Solutions
                     </a>
                   </p>
                 </div>

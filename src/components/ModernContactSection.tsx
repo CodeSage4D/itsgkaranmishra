@@ -95,7 +95,7 @@ export const ModernContactSection: React.FC = () => {
           <div className="col-lg-9 text-center">
             <div className="main_title mb-5">
               <span className="contact_section_badge heartbeat_fluctuate">
-                <span className="live_status_dot"></span> Direct Collaboration &bull; Aurxon
+                <span className="live_status_dot"></span> Direct Collaboration &bull; Aurxon &bull; Next Gen AI Solutions
               </span>
               <h2 className="mt-3">Let&apos;s Build Something Intelligent Together</h2>
               <p>
@@ -158,8 +158,8 @@ export const ModernContactSection: React.FC = () => {
                     <i className="fa fa-map-marker"></i>
                   </div>
                   <div className="channel_content">
-                    <span className="channel_title">Headquarters</span>
-                    <span className="channel_val">Smart City Indore, Madhya Pradesh, India</span>
+                    <span className="channel_title">Headquarters Address</span>
+                    <span className="channel_val">ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006</span>
                   </div>
                 </div>
               </div>

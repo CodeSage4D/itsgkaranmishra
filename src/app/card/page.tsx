@@ -3,12 +3,17 @@
 import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { generateAndDownloadBusinessCard } from "@/lib/card-canvas";
+import {
+  generateAndDownloadBusinessCard,
+  downloadVCardContact,
+  CardTheme,
+} from "@/lib/card-canvas";
 
 function CardContent() {
   const searchParams = useSearchParams();
   const autoDownloadParam = searchParams.get("autodownload");
 
+  const [selectedTheme, setSelectedTheme] = useState<CardTheme>("glacier");
   const [copied, setCopied] = useState(false);
   const [downloadingFormat, setDownloadingFormat] = useState<string | null>(null);
   const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
@@ -16,36 +21,41 @@ function CardContent() {
   const portfolioUrl = "https://itsgkaranmishra.web.app";
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
     portfolioUrl
-  )}&color=0f172a&bgcolor=ffffff&qzone=1`;
+  )}&color=082f49&bgcolor=ffffff&qzone=1`;
 
-  // Auto-download on mount if requested or by default
+  // Auto-download both PNG business card and phone contact on mount
   useEffect(() => {
     if (autoDownloadParam === "false") return;
 
-    const timer = setTimeout(async () => {
-      try {
-        setDownloadingFormat("png");
-        setDownloadStatus("Auto-generating and downloading high-res Business Card (PNG)...");
-        await generateAndDownloadBusinessCard("png");
-        setDownloadStatus("Business card (PNG) downloaded successfully!");
-        setTimeout(() => setDownloadStatus(null), 4000);
-      } catch (err) {
-        console.error("Auto-download error:", err);
-      } finally {
-        setDownloadingFormat(null);
-      }
-    }, 1200);
+    const hasDownloaded = sessionStorage.getItem("axn_card_auto_downloaded_v3");
+    if (!hasDownloaded) {
+      sessionStorage.setItem("axn_card_auto_downloaded_v3", "true");
+      const timer = setTimeout(async () => {
+        try {
+          setDownloadingFormat("bundle");
+          setDownloadStatus("Auto-saving Karan Mishra's Official Card (PNG) & Phone Contact (.VCF)...");
+          await generateAndDownloadBusinessCard("png", selectedTheme);
+          downloadVCardContact();
+          setDownloadStatus("✓ Crystal-HD Card and Phone Contact (.vcf) saved to your device!");
+          setTimeout(() => setDownloadStatus(null), 5000);
+        } catch (err) {
+          console.error("Auto-download error:", err);
+        } finally {
+          setDownloadingFormat(null);
+        }
+      }, 1200);
 
-    return () => clearTimeout(timer);
-  }, [autoDownloadParam]);
+      return () => clearTimeout(timer);
+    }
+  }, [autoDownloadParam, selectedTheme]);
 
   const handleDownloadImage = async (format: "png" | "jpeg") => {
     try {
       setDownloadingFormat(format);
-      setDownloadStatus(`Rendering ultra-HD business card in ${format.toUpperCase()} format...`);
-      await generateAndDownloadBusinessCard(format);
-      setDownloadStatus(`Card downloaded as ${format.toUpperCase()}!`);
-      setTimeout(() => setDownloadStatus(null), 3000);
+      setDownloadStatus(`Rendering crystal-HD business card in ${format.toUpperCase()} (${selectedTheme.toUpperCase()})...`);
+      await generateAndDownloadBusinessCard(format, selectedTheme);
+      setDownloadStatus(`✓ Card downloaded in high-res ${format.toUpperCase()}!`);
+      setTimeout(() => setDownloadStatus(null), 3500);
     } catch (err) {
       alert("Error generating card image. Please try again.");
     } finally {
@@ -53,44 +63,30 @@ function CardContent() {
     }
   };
 
-  const downloadVCard = () => {
-    const vCardData = [
-      "BEGIN:VCARD",
-      "VERSION:3.0",
-      "FN:Karan Mishra",
-      "N:Mishra;Karan;;;",
-      "ORG:Aurxon",
-      "TITLE:Founder & AI Engineer",
-      "TEL;TYPE=CELL,VOICE,WHATSAPP:+917804895074",
-      "EMAIL;TYPE=WORK,INTERNET:karannmishra136@gmail.com",
-      "URL:https://itsgkaranmishra.web.app",
-      "URL;TYPE=GitHub:https://github.com/CodeSage4D",
-      "URL;TYPE=LinkedIn:https://linkedin.com/in/itsgkaranmishra4",
-      "URL;TYPE=Instagram:https://instagram.com/itsgkaranmishra",
-      "ADR;TYPE=WORK:;;Sikandar Bag Colony, VIP Road;Indore;Madhya Pradesh;452006;India",
-      "NOTE:Founder at Aurxon - Building FCOS factory intelligence, ALAMS agentic AI, and Neural ERP systems.",
-      "END:VCARD",
-    ].join("\n");
-
-    const blob = new Blob([vCardData], { type: "text/vcard;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "Karan_Mishra_Aurxon.vcf");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const handleDownloadBundle = async () => {
+    try {
+      setDownloadingFormat("bundle");
+      setDownloadStatus("Packaging High-Res Card Image + Smartphone Contact (.VCF)...");
+      await generateAndDownloadBusinessCard("png", selectedTheme);
+      downloadVCardContact();
+      setDownloadStatus("✓ Both Card & Phone Contact (.vcf) saved! Open the .vcf file to add to contacts.");
+      setTimeout(() => setDownloadStatus(null), 4500);
+    } catch {
+      alert("Error generating bundle download.");
+    } finally {
+      setDownloadingFormat(null);
+    }
   };
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Karan Mishra | Founder, Aurxon - Digital Smart Business Card",
+          title: "Karan Mishra | Founder, Aurxon - Executive Smart Card",
           text: "Connect with Karan Mishra - Founder at Aurxon, AI & Machine Learning Engineer.",
           url: window.location.href,
         });
-      } catch (err) {
+      } catch {
         // user cancelled
       }
     } else {
@@ -101,7 +97,7 @@ function CardContent() {
   };
 
   return (
-    <div className="card_page_container">
+    <div className={`card_page_container theme_${selectedTheme}`}>
       {/* Status Notification Banner */}
       {downloadStatus && (
         <div className="download_status_banner animate_slide_down">
@@ -110,18 +106,52 @@ function CardContent() {
         </div>
       )}
 
+      {/* Top Header & Mood / Design Selector */}
+      <div className="card_header_control_panel">
+        <div className="control_panel_top">
+          <span className="badge_mood_title">Choose Executive Card Mood &amp; Design:</span>
+          <div className="theme_selector_pills">
+            <button
+              onClick={() => setSelectedTheme("glacier")}
+              className={`mood_pill ${selectedTheme === "glacier" ? "is_active" : ""}`}
+            >
+              🌊 Atlantic Glacier Blue (Pure Light)
+            </button>
+            <button
+              onClick={() => setSelectedTheme("titanium")}
+              className={`mood_pill ${selectedTheme === "titanium" ? "is_active" : ""}`}
+            >
+              💎 Titanium Luxe (Clean Platinum)
+            </button>
+            <button
+              onClick={() => setSelectedTheme("cyber")}
+              className={`mood_pill ${selectedTheme === "cyber" ? "is_active" : ""}`}
+            >
+              🌌 Cyber Neon (Tech Obsidian)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* 9:16 Portrait Digital Smart Business Card */}
-      <div className="portrait_business_card">
-        {/* Holographic Border Glow */}
+      <div className={`portrait_business_card card_theme_${selectedTheme}`}>
         <div className="card_inner">
-          {/* Top Brand Banner */}
+          {/* Top Brand Banner: Aurxon + SUAS Indore Affiliation */}
           <div className="card_top_brand">
             <div className="brand_logo_circle">
-              <img src="/img/png/logo-no-background.png" alt="Aurxon Logo" />
+              <img
+                src="/img/png/logo-color.png"
+                alt="Aurxon Logo"
+                className="brand_logo_img"
+              />
             </div>
             <div className="brand_text_block">
-              <span className="brand_super_label">AURXON TECHNOLOGIES</span>
-              <span className="brand_sub_tag">Next-Gen Autonomous Intelligence</span>
+              <div className="d-flex align-items-center justify-content-between">
+                <span className="brand_super_label">AURXON</span>
+                <span className="verified_micro_pill">✓ VERIFIED</span>
+              </div>
+              <span className="brand_sub_tag">Aurxon - Next Gen AI Solutions</span>
+              <span className="brand_affiliation_sub">Where Intelligence Meets Innovation</span>
             </div>
           </div>
 
@@ -129,10 +159,10 @@ function CardContent() {
           <div className="profile_identity_section">
             <h1 className="profile_full_name">Karan Mishra</h1>
             <p className="profile_designation">Founder &bull; Aurxon</p>
-            <div className="specialty_pill">Machine Learning &amp; Python Architect</div>
+            <div className="specialty_pill">MACHINE LEARNING &amp; PYTHON ARCHITECT</div>
           </div>
 
-          {/* Auto-Generated Live QR Code */}
+          {/* Auto-Generated Live QR Code Box */}
           <div className="card_qr_container">
             <div className="qr_code_frame">
               <img
@@ -143,8 +173,9 @@ function CardContent() {
             </div>
             <div className="qr_scan_instruction">
               <span className="camera_scan_icon">📷</span>
-              <span>Scan to open live portfolio &amp; AI models</span>
+              <span>Scan to open live portfolio &amp; AI architectures</span>
             </div>
+            <div className="qr_url_label">https://itsgkaranmishra.web.app</div>
           </div>
 
           {/* Contact Details & All Profile URLs */}
@@ -157,7 +188,7 @@ function CardContent() {
             >
               <div className="strip_icon">🌐</div>
               <div className="strip_info">
-                <span className="strip_title">Live Portfolio &bull; Company</span>
+                <span className="strip_title">Company &amp; Live Portfolio</span>
                 <span className="strip_val">itsgkaranmishra.web.app</span>
               </div>
             </a>
@@ -170,8 +201,8 @@ function CardContent() {
             >
               <div className="strip_icon">💻</div>
               <div className="strip_info">
-                <span className="strip_title">GitHub Repositories (47+)</span>
-                <span className="strip_val">github.com/CodeSage4D</span>
+                <span className="strip_title">GitHub Repositories</span>
+                <span className="strip_val">github.com/CodeSage4D (47+ Repos)</span>
               </div>
             </a>
 
@@ -216,48 +247,70 @@ function CardContent() {
                 <span className="strip_val">+91 7804895074</span>
               </div>
             </a>
+
+            <div className="contact_strip_item">
+              <div className="strip_icon">📍</div>
+              <div className="strip_info">
+                <span className="strip_title">Headquarters Address</span>
+                <span className="strip_val">
+                  ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006
+                </span>
+              </div>
+            </div>
           </div>
 
-          {/* Interactive Action Buttons: PNG, JPG, vCard, Share */}
+          {/* All-in-One Download & Auto-Save Actions */}
           <div className="card_download_format_group">
-            <span className="download_group_label">DOWNLOAD BUSINESS CARD TEMPLATE</span>
+            <button
+              onClick={handleDownloadBundle}
+              disabled={downloadingFormat !== null}
+              className="btn_bundle_download"
+              title="Download high-res card and phone contact .vcf simultaneously"
+            >
+              <span>⚡ Auto-Save Bundle (Card PNG + Phone Contact)</span>
+            </button>
+
             <div className="format_btn_grid">
               <button
                 onClick={() => handleDownloadImage("png")}
                 disabled={downloadingFormat !== null}
                 className="btn_format btn_png"
               >
-                {downloadingFormat === "png" ? "⏳ Rendering..." : "📥 Download PNG"}
+                {downloadingFormat === "png" ? "⏳ Rendering..." : "📥 Download Card (PNG)"}
               </button>
               <button
-                onClick={() => handleDownloadImage("jpeg")}
-                disabled={downloadingFormat !== null}
-                className="btn_format btn_jpg"
+                onClick={downloadVCardContact}
+                className="btn_format btn_vcard_direct"
+                title="Directly save Karan Mishra into smartphone contacts"
               >
-                {downloadingFormat === "jpeg" ? "⏳ Rendering..." : "📥 Download JPG"}
+                👤 Save Contact (.VCF)
               </button>
             </div>
           </div>
 
           <div className="card_actions_row">
-            <button onClick={downloadVCard} className="btn_card_action btn_vcard">
-              <span>📲 Save Contact (vCard)</span>
+            <button
+              onClick={() => handleDownloadImage("jpeg")}
+              disabled={downloadingFormat !== null}
+              className="btn_card_action"
+            >
+              <span>🖼️ Download JPG</span>
             </button>
             <button onClick={handleShare} className="btn_card_action btn_share">
-              <span>{copied ? "✓ Copied!" : "🔗 Share Card"}</span>
+              <span>{copied ? "✓ Copied Link!" : "🔗 Share Smart Card"}</span>
             </button>
           </div>
 
           {/* Footer Back Link */}
           <div className="card_bottom_footer">
             <Link href="/" className="back_portfolio_link">
-              &larr; Open Full Interactive Portfolio
+              &larr; Return to Live Founder Portfolio
             </Link>
           </div>
         </div>
       </div>
 
-      {/* Scoped CSS for 9:16 Portrait Business Card */}
+      {/* Scoped CSS for Modern 9:16 Portrait Business Card */}
       <style dangerouslySetInnerHTML={{ __html: `
         .card_page_container {
           min-height: 100vh;
@@ -265,10 +318,22 @@ function CardContent() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #06080e 100%);
-          padding: 30px 16px;
+          padding: 40px 16px;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           position: relative;
+          transition: background 0.4s ease;
+        }
+
+        .card_page_container.theme_glacier {
+          background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+        }
+
+        .card_page_container.theme_titanium {
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+        }
+
+        .card_page_container.theme_cyber {
+          background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #06080e 100%);
         }
 
         .download_status_banner {
@@ -278,13 +343,13 @@ function CardContent() {
           display: flex;
           align-items: center;
           gap: 10px;
-          background: rgba(16, 185, 129, 0.95);
+          background: #0284c7;
           color: #ffffff;
-          padding: 10px 20px;
+          padding: 12px 24px;
           border-radius: 999px;
-          font-size: 0.88rem;
+          font-size: 0.92rem;
           font-weight: 700;
-          box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+          box-shadow: 0 12px 35px rgba(2, 132, 199, 0.4);
           backdrop-filter: blur(10px);
           animation: slideDown 0.3s ease-out;
         }
@@ -308,308 +373,480 @@ function CardContent() {
           50% { opacity: 0.5; transform: scale(0.8); }
         }
 
-        /* Standard 9:16 Portrait Ratio Card */
-        .portrait_business_card {
+        /* Control Panel */
+        .card_header_control_panel {
           width: 100%;
-          max-width: 440px;
-          background: linear-gradient(145deg, rgba(30, 27, 75, 0.92) 0%, rgba(15, 23, 42, 0.96) 100%);
-          backdrop-filter: blur(28px);
-          -webkit-backdrop-filter: blur(28px);
-          border: 1px solid rgba(129, 140, 248, 0.4);
-          border-radius: 28px;
-          box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 45px rgba(99, 102, 241, 0.25);
-          overflow: hidden;
-          position: relative;
-          color: #ffffff;
-          display: flex;
-          flex-direction: column;
+          max-width: 520px;
+          margin-bottom: 24px;
+          text-align: center;
         }
 
+        .badge_mood_title {
+          font-size: 0.85rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #0369a1;
+          display: block;
+          margin-bottom: 10px;
+        }
+
+        .theme_cyber .badge_mood_title {
+          color: #38bdf8;
+        }
+
+        .theme_selector_pills {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .mood_pill {
+          padding: 8px 16px;
+          border-radius: 50px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          border: 1px solid rgba(2, 132, 199, 0.25);
+          background: #ffffff;
+          color: #0f172a;
+          cursor: pointer;
+          transition: all 0.25s ease;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .theme_cyber .mood_pill {
+          background: rgba(15, 23, 42, 0.85);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+        }
+
+        .mood_pill:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(2, 132, 199, 0.2);
+        }
+
+        .mood_pill.is_active {
+          background: #0284c7;
+          color: #ffffff;
+          border-color: #0284c7;
+          box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+
+        /* Business Card Base */
+        .portrait_business_card {
+          width: 100%;
+          max-width: 460px;
+          border-radius: 32px;
+          overflow: hidden;
+          position: relative;
+          box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.2), 0 0 30px rgba(56, 189, 248, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        /* THEME 1: GLACIER BLUE (LIGHT) */
+        .card_theme_glacier {
+          background: linear-gradient(165deg, #ffffff 0%, #f0f9ff 35%, #e0f2fe 75%, #bae6fd 100%);
+          border: 2px solid rgba(2, 132, 199, 0.4);
+          color: #082f49;
+        }
+
+        .card_theme_glacier .card_top_brand {
+          border-bottom: 1px solid rgba(2, 132, 199, 0.2);
+          padding-bottom: 12px;
+        }
+
+        .card_theme_glacier .brand_super_label {
+          color: #0c4a6e;
+          font-weight: 900;
+          font-size: 0.95rem;
+          letter-spacing: 0.05em;
+        }
+
+        .card_theme_glacier .brand_sub_tag {
+          color: #0284c7;
+          font-weight: 700;
+          font-size: 0.76rem;
+        }
+
+        .card_theme_glacier .brand_affiliation_sub {
+          color: #0369a1;
+          font-weight: 600;
+          font-size: 0.72rem;
+        }
+
+        .card_theme_glacier .profile_full_name {
+          color: #082f49;
+          font-size: 2.2rem;
+          font-weight: 900;
+          margin-bottom: 2px;
+        }
+
+        .card_theme_glacier .profile_designation {
+          color: #0284c7;
+          font-size: 1.15rem;
+          font-weight: 800;
+          margin-bottom: 8px;
+        }
+
+        .card_theme_glacier .specialty_pill {
+          background: #ffffff;
+          border: 1.5px solid #38bdf8;
+          color: #0369a1;
+          font-weight: 800;
+          font-size: 0.76rem;
+          padding: 6px 14px;
+          border-radius: 50px;
+          display: inline-block;
+          box-shadow: 0 4px 12px rgba(2, 132, 199, 0.12);
+        }
+
+        .card_theme_glacier .qr_code_frame {
+          background: #ffffff;
+          border: 2px solid rgba(2, 132, 199, 0.25);
+          box-shadow: 0 10px 25px rgba(2, 132, 199, 0.18);
+        }
+
+        .card_theme_glacier .qr_scan_instruction {
+          color: #0c4a6e;
+          font-weight: 800;
+        }
+
+        .card_theme_glacier .qr_url_label {
+          color: #0284c7;
+          font-weight: 700;
+        }
+
+        .card_theme_glacier .contact_strip_item {
+          background: #ffffff;
+          border: 1px solid rgba(186, 230, 253, 0.9);
+          box-shadow: 0 4px 12px rgba(2, 132, 199, 0.06);
+        }
+
+        .card_theme_glacier .strip_icon {
+          background: #e0f2fe;
+          color: #0284c7;
+        }
+
+        .card_theme_glacier .strip_title {
+          color: #0284c7;
+          font-weight: 800;
+        }
+
+        .card_theme_glacier .strip_val {
+          color: #0f172a; /* Deep Slate Navy for 100% crisp readability */
+          font-weight: 700;
+        }
+
+        /* THEME 2: TITANIUM LUXE */
+        .card_theme_titanium {
+          background: linear-gradient(165deg, #ffffff 0%, #f8fafc 40%, #f1f5f9 100%);
+          border: 2px solid #cbd5e1;
+          color: #0f172a;
+        }
+
+        .card_theme_titanium .brand_super_label { color: #0f172a; font-weight: 900; }
+        .card_theme_titanium .brand_sub_tag { color: #64748b; font-weight: 700; font-size: 0.76rem; }
+        .card_theme_titanium .profile_full_name { color: #0f172a; font-size: 2.2rem; font-weight: 900; }
+        .card_theme_titanium .profile_designation { color: #2563eb; font-weight: 800; }
+        .card_theme_titanium .specialty_pill {
+          background: #f1f5f9;
+          border: 1px solid #94a3b8;
+          color: #1e293b;
+          font-weight: 800;
+          font-size: 0.76rem;
+          padding: 6px 14px;
+          border-radius: 50px;
+        }
+        .card_theme_titanium .contact_strip_item {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+        }
+        .card_theme_titanium .strip_icon { background: #f1f5f9; color: #0f172a; }
+        .card_theme_titanium .strip_title { color: #64748b; font-weight: 800; }
+        .card_theme_titanium .strip_val { color: #0f172a; font-weight: 700; }
+
+        /* THEME 3: CYBER NEON */
+        .card_theme_cyber {
+          background: linear-gradient(165deg, rgba(30, 27, 75, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+          border: 2px solid rgba(56, 189, 248, 0.5);
+          box-shadow: 0 25px 60px -15px rgba(0,0,0,0.9), 0 0 35px rgba(56, 189, 248, 0.3);
+          color: #ffffff;
+        }
+
+        .card_theme_cyber .brand_super_label { color: #ffffff; font-weight: 900; }
+        .card_theme_cyber .brand_sub_tag { color: #38bdf8; font-weight: 700; font-size: 0.76rem; }
+        .card_theme_cyber .brand_affiliation_sub { color: #c084fc; font-weight: 600; font-size: 0.72rem; }
+        .card_theme_cyber .profile_full_name { color: #ffffff; font-size: 2.2rem; font-weight: 900; }
+        .card_theme_cyber .profile_designation { color: #a855f7; font-weight: 800; }
+        .card_theme_cyber .specialty_pill {
+          background: rgba(56, 189, 248, 0.15);
+          border: 1.5px solid #38bdf8;
+          color: #7dd3fc;
+          font-weight: 800;
+          font-size: 0.76rem;
+          padding: 6px 14px;
+          border-radius: 50px;
+        }
+        .card_theme_cyber .contact_strip_item {
+          background: rgba(15, 23, 42, 0.85);
+          border: 1px solid rgba(56, 189, 248, 0.25);
+        }
+        .card_theme_cyber .strip_icon { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+        .card_theme_cyber .strip_title { color: #94a3b8; font-weight: 800; }
+        .card_theme_cyber .strip_val { color: #f8fafc; font-weight: 700; }
+
+        /* Shared Card Details */
         .card_inner {
           padding: 28px 24px;
           display: flex;
           flex-direction: column;
-          gap: 14px;
-          position: relative;
-          z-index: 2;
+          gap: 16px;
         }
 
         .card_top_brand {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 14px;
         }
 
         .brand_logo_circle {
-          width: 44px;
-          height: 44px;
-          border-radius: 12px;
+          width: 48px;
+          height: 48px;
+          border-radius: 14px;
           background: #ffffff;
           padding: 6px;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+          border: 1px solid rgba(2, 132, 199, 0.3);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          flex-shrink: 0;
         }
 
-        .brand_logo_circle img {
-          max-width: 100%;
-          max-height: 100%;
+        .brand_logo_img {
+          width: 100%;
+          height: 100%;
           object-fit: contain;
         }
 
         .brand_text_block {
           display: flex;
           flex-direction: column;
+          gap: 2px;
+          flex: 1;
         }
 
-        .brand_super_label {
-          font-size: 0.85rem;
-          font-weight: 800;
-          letter-spacing: 0.08em;
-          color: #f8fafc;
-        }
-
-        .brand_sub_tag {
+        .verified_micro_pill {
           font-size: 0.68rem;
-          color: #94a3b8;
+          font-weight: 800;
+          color: #059669;
+          background: #d1fae5;
+          padding: 2px 8px;
+          border-radius: 20px;
         }
 
         .profile_identity_section {
           text-align: center;
-          margin: 4px 0;
         }
 
-        .profile_full_name {
-          font-size: 1.95rem;
-          font-weight: 900;
-          margin: 0;
-          color: #ffffff;
-          letter-spacing: -0.02em;
-        }
-
-        .profile_designation {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: #818cf8;
-          margin: 2px 0 6px 0;
-        }
-
-        .specialty_pill {
-          display: inline-block;
-          font-size: 0.72rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.04em;
-          background: rgba(99, 102, 241, 0.2);
-          color: #c7d2fe;
-          border: 1px solid rgba(99, 102, 241, 0.35);
-          padding: 4px 12px;
-          border-radius: 50px;
-        }
-
+        /* QR Frame */
         .card_qr_container {
           display: flex;
           flex-direction: column;
           align-items: center;
-          margin: 6px 0;
+          gap: 8px;
+          padding: 14px 0;
         }
 
         .qr_code_frame {
-          width: 140px;
-          height: 140px;
-          background: #ffffff;
-          border-radius: 16px;
+          width: 170px;
+          height: 170px;
+          border-radius: 20px;
           padding: 10px;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(99, 102, 241, 0.3);
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: transform 0.25s ease;
-        }
-
-        .qr_code_frame:hover {
-          transform: scale(1.05);
         }
 
         .qr_image {
           width: 100%;
           height: 100%;
-          object-fit: contain;
-          border-radius: 8px;
+          border-radius: 12px;
         }
 
         .qr_scan_instruction {
           display: flex;
           align-items: center;
           gap: 6px;
-          font-size: 0.74rem;
-          color: #cbd5e1;
-          margin-top: 8px;
-          font-weight: 600;
+          font-size: 0.82rem;
         }
 
+        .qr_url_label {
+          font-size: 0.78rem;
+          font-family: monospace;
+        }
+
+        /* Contact Strips */
         .contact_strip_list {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 10px;
         }
 
         .contact_strip_item {
           display: flex;
           align-items: center;
           gap: 12px;
-          background: rgba(30, 41, 59, 0.65);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 12px;
-          padding: 8px 12px;
-          text-decoration: none !important;
-          color: #ffffff;
+          padding: 10px 14px;
+          border-radius: 14px;
+          text-decoration: none;
           transition: all 0.2s ease;
         }
 
         .contact_strip_item:hover {
-          background: rgba(99, 102, 241, 0.25);
-          border-color: #818cf8;
-          transform: translateX(3px);
+          transform: translateX(4px);
         }
 
         .strip_icon {
-          font-size: 1.1rem;
+          width: 38px;
+          height: 38px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.15rem;
+          flex-shrink: 0;
         }
 
         .strip_info {
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          gap: 2px;
+          min-width: 0;
         }
 
         .strip_title {
-          font-size: 0.66rem;
-          font-weight: 700;
+          font-size: 0.72rem;
           text-transform: uppercase;
-          color: #94a3b8;
+          letter-spacing: 0.05em;
         }
 
         .strip_val {
-          font-size: 0.82rem;
-          font-weight: 600;
-          color: #f1f5f9;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          font-size: 0.88rem;
+          white-space: normal;
+          word-break: break-word;
+          line-height: 1.35;
         }
 
+        /* Buttons & Actions */
         .card_download_format_group {
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px dashed rgba(129, 140, 248, 0.35);
-          border-radius: 14px;
-          padding: 10px 12px;
-          text-align: center;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-top: 10px;
         }
 
-        .download_group_label {
-          display: block;
-          font-size: 0.66rem;
+        .btn_bundle_download {
+          width: 100%;
+          padding: 14px;
+          border-radius: 14px;
+          background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+          color: #ffffff;
           font-weight: 800;
-          letter-spacing: 0.08em;
-          color: #a5b4fc;
-          margin-bottom: 8px;
+          font-size: 0.95rem;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
+          transition: all 0.25s ease;
+        }
+
+        .btn_bundle_download:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 12px 30px rgba(2, 132, 199, 0.55);
         }
 
         .format_btn_grid {
-          display: flex;
-          gap: 8px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
         }
 
         .btn_format {
-          flex: 1;
-          padding: 10px 8px;
-          border-radius: 10px;
-          font-size: 0.8rem;
+          padding: 12px 14px;
+          border-radius: 12px;
           font-weight: 750;
-          border: none;
+          font-size: 0.85rem;
+          border: 1px solid rgba(2, 132, 199, 0.3);
+          background: #ffffff;
+          color: #0369a1;
           cursor: pointer;
           transition: all 0.2s ease;
-        }
-
-        .btn_png {
-          background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-          color: #ffffff;
-          box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-        }
-
-        .btn_png:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(79, 70, 229, 0.6);
-        }
-
-        .btn_jpg {
-          background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
-          color: #ffffff;
-          box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
-        }
-
-        .btn_jpg:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
-        }
-
-        .card_actions_row {
-          display: flex;
-          gap: 8px;
-        }
-
-        .btn_card_action {
-          flex: 1;
-          padding: 10px;
-          border-radius: 12px;
-          font-size: 0.82rem;
-          font-weight: 700;
-          border: none;
-          cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
+          gap: 6px;
+        }
+
+        .theme_cyber .btn_format {
+          background: rgba(15, 23, 42, 0.8);
+          border-color: rgba(56, 189, 248, 0.4);
+          color: #38bdf8;
+        }
+
+        .btn_format:hover {
+          background: #0284c7;
+          color: #ffffff;
+          border-color: #0284c7;
+        }
+
+        .card_actions_row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+        }
+
+        .btn_card_action {
+          padding: 10px;
+          border-radius: 10px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          border: 1px solid #cbd5e1;
+          background: #ffffff;
+          color: #334155;
+          cursor: pointer;
           transition: all 0.2s ease;
         }
 
-        .btn_vcard {
-          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-          color: #ffffff;
-          box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        .theme_cyber .btn_card_action {
+          background: rgba(15, 23, 42, 0.6);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: #e2e8f0;
         }
 
-        .btn_vcard:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(16, 185, 129, 0.5);
-        }
-
-        .btn_share {
-          background: rgba(99, 102, 241, 0.2);
-          color: #c7d2fe;
-          border: 1px solid rgba(99, 102, 241, 0.4);
-        }
-
-        .btn_share:hover {
-          background: rgba(99, 102, 241, 0.35);
+        .btn_card_action:hover {
+          border-color: #0284c7;
+          color: #0284c7;
         }
 
         .card_bottom_footer {
           text-align: center;
-          margin-top: 4px;
+          padding-top: 8px;
         }
 
         .back_portfolio_link {
-          font-size: 0.78rem;
-          color: #94a3b8;
+          font-size: 0.85rem;
+          font-weight: 750;
+          color: #0284c7;
           text-decoration: none;
-          font-weight: 600;
-          transition: color 0.2s;
+          transition: color 0.2s ease;
+        }
+
+        .theme_cyber .back_portfolio_link {
+          color: #38bdf8;
         }
 
         .back_portfolio_link:hover {
-          color: #818cf8;
           text-decoration: underline;
         }
       `}} />
@@ -617,12 +854,12 @@ function CardContent() {
   );
 }
 
-export default function BusinessCardPage() {
+export default function SmartCardPage() {
   return (
     <Suspense
       fallback={
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#06080e", color: "#ffffff" }}>
-          Generating Executive Card...
+        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span>Loading Executive Smart Card...</span>
         </div>
       }
     >

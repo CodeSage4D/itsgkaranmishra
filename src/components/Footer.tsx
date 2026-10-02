@@ -363,7 +363,7 @@ export const Footer: React.FC = () => {
                 </div>
                 <div className="footer_subrow_item">
                   <i className="fa fa-map-marker text-indigo"></i>
-                  <span>Indore, Madhya Pradesh, India</span>
+                  <span>ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006</span>
                 </div>
               </div>
             </div>
@@ -374,9 +374,8 @@ export const Footer: React.FC = () => {
         <div className="footer_bottom_row">
           <div className="footer_copy_col">
             <p className="footer_copy_text">
-              &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; Crafted with{" "}
-              <i className="fa fa-heart heartbeat_fluctuate" style={{ color: "#ef4444", margin: "0 4px" }}></i>
-              for <span className="text-white font-weight-bold">Aurxon</span>. All rights reserved.
+              &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; Founder &amp; Chief AI Architect,{" "}
+              <span className="text-white font-weight-bold">Aurxon</span> &bull; Next Gen AI Solutions &bull; Where Intelligence Meets Innovation. All rights reserved.
             </p>
           </div>
           <div className="footer_top_btn_col">
