@@ -17,23 +17,22 @@ const dynamicRoles = [
 ];
 
 export default function Home() {
-  const [showCardPrompt, setShowCardPrompt] = useState<boolean>(false);
-  const [cardSaveStatus, setCardSaveStatus] = useState<string | null>(null);
   const [currentRoleIndex, setCurrentRoleIndex] = useState<number>(0);
   const [isDossierUnlocked, setIsDossierUnlocked] = useState<boolean>(false);
   const [activeDossierTab, setActiveDossierTab] = useState<string>("neural-code");
   const [activeServiceDrawer, setActiveServiceDrawer] = useState<"ml" | "web" | "analytics" | "automation" | null>("ml");
 
-  // Region and Live Clock Auto-Detection
+  // Region, Date and Live Clock Auto-Detection
   const [liveClock, setLiveClock] = useState<string>("");
+  const [liveDate, setLiveDate] = useState<string>("");
   const [visitorRegion, setVisitorRegion] = useState<{
     isIndia: boolean;
     label: string;
     timezone: string;
   }>({
     isIndia: true,
-    label: "🇮🇳 India Registered Hub (Indore HQ)",
-    timezone: "Asia/Kolkata (IST)",
+    label: "🇮🇳 India Registered Hub (Indore Central Central)",
+    timezone: "Asia/Kolkata (IST • UTC+5:30)",
   });
 
   // Dynamic changing of words every 2.4s
@@ -44,11 +43,12 @@ export default function Home() {
     return () => clearInterval(roleInterval);
   }, []);
 
-  // Time & Region Auto-Detection Engine
+  // Time, Date & Region Auto-Detection Engine
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
       setLiveClock(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+      setLiveDate(now.toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }));
     };
     updateTime();
     const clockInterval = setInterval(updateTime, 1000);
@@ -77,85 +77,8 @@ export default function Home() {
     return () => clearInterval(clockInterval);
   }, []);
 
-  // One-per-device non-blocking card notification: DOES NOT auto-download files to device
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const hasPrompted = localStorage.getItem("karan_card_prompt_shown");
-    if (!hasPrompted) {
-      const timer = setTimeout(() => {
-        setShowCardPrompt(true);
-      }, 2500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const handleManualCardDownload = async (format: "png" | "vcard") => {
-    try {
-      setCardSaveStatus("Generating secure asset...");
-      if (format === "png") {
-        await generateAndDownloadBusinessCard("png", "glacier");
-      } else {
-        downloadVCardContact();
-      }
-      localStorage.setItem("karan_card_prompt_shown", "true");
-      setCardSaveStatus(format === "png" ? "✓ HD PNG Saved to Device" : "✓ vCard Saved to Contacts");
-      setTimeout(() => {
-        setCardSaveStatus(null);
-        setShowCardPrompt(false);
-      }, 3500);
-    } catch (err) {
-      setCardSaveStatus("Download initiated. View card page for options.");
-    }
-  };
-
   return (
     <>
-      {/* Discrete Luxury Executive Card Hub (Manual Click-To-Download, Never Auto-Saves) */}
-      {showCardPrompt && (
-        <div className="card_auto_download_toast">
-          <div className="toast_inner">
-            <span className="toast_pulse_dot"></span>
-            <div className="toast_text_col">
-              <strong className="toast_heading">Executive Smart Card</strong>
-              <span className="toast_desc">
-                {cardSaveStatus || "9:16 Portrait Glacier Edition available for this device."}
-              </span>
-            </div>
-            <div className="d-flex align-items-center gap-2">
-              <button
-                type="button"
-                className="btn_toast_action btn_toast_png"
-                onClick={() => handleManualCardDownload("png")}
-                title="Download 9:16 PNG Card"
-              >
-                <i className="fa fa-download mr-1"></i> PNG
-              </button>
-              <button
-                type="button"
-                className="btn_toast_action btn_toast_vcard"
-                onClick={() => handleManualCardDownload("vcard")}
-                title="Save Direct to Device Contacts"
-              >
-                <i className="fa fa-address-card mr-1"></i> vCard
-              </button>
-              <Link href="/card" className="toast_action_link">
-                View HD &rarr;
-              </Link>
-            </div>
-            <button
-              onClick={() => {
-                setShowCardPrompt(false);
-                localStorage.setItem("karan_card_prompt_shown", "true");
-              }}
-              className="toast_close_btn"
-              aria-label="Dismiss Notification"
-            >
-              &times;
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* ================ Start Home Banner Area (Cinematic & Founder Dedicated) ================= */}
       <section className="home_banner_area" id="home">
         <div className="banner_inner">
@@ -368,14 +291,32 @@ export default function Home() {
 
                       {activeDossierTab === "suas-fellowship" && (
                         <div>
-                          <div className="d-flex align-items-center gap-3 mb-2">
+                          <div className="d-flex align-items-center gap-3 mb-2 flex-wrap">
                             <img src="/img/logos/suas-logo.png" alt="SUAS Indore" style={{ height: "26px" }} />
-                            <h5 className="mb-0">Symbiosis Applied AI Fellowship</h5>
+                            <div>
+                              <h5 className="mb-0">Trainer – Applied AI &amp; Systems (SCSIT, Symbiosis)</h5>
+                              <small className="text-muted">
+                                Symbiosis University of Applied Sciences &bull; Full-time &bull; Sep 2025 - Present &bull; 1 yr 2 mos &bull; Indore, MP (On-site)
+                              </small>
+                            </div>
                           </div>
-                          <p>
-                            Spearheading applied artificial intelligence initiatives at SUAS Indore. Benchmarking neural architectures, conducting technical workshops, and mentoring student developers on production-aligned deployment patterns.
+                          <p className="mt-2 mb-2 font-weight-500">
+                            Supporting academic and applied research activities at the School of Computer Science and IT (SCSIT).
                           </p>
-                          <a href="https://www.suas.ac.in" target="_blank" rel="noopener noreferrer" className="dossier_link">
+                          <ul className="dossier_bullet_list">
+                            <li>Worked closely with faculty on academic and technical projects related to software development and applied AI.</li>
+                            <li>Assisted students with Python, machine learning, and NLP concepts through hands-on guidance and debugging support.</li>
+                            <li>Helped review, test, and refine student-built applications and early research prototypes.</li>
+                            <li>Contributed to the development and testing of AI-based modules and data-driven solutions used in academic settings.</li>
+                          </ul>
+                          <div className="d-flex gap-2 flex-wrap mt-2">
+                            <span className="code_tag">#Python Programming</span>
+                            <span className="code_tag">#Machine Learning</span>
+                            <span className="code_tag">#Applied AI &amp; Systems</span>
+                            <span className="code_tag">#Natural Language Processing</span>
+                            <span className="code_tag">#System Architecture</span>
+                          </div>
+                          <a href="https://www.suas.ac.in" target="_blank" rel="noopener noreferrer" className="dossier_link mt-3 d-inline-block">
                             Visit SUAS Indore Portal &rarr;
                           </a>
                         </div>
@@ -471,7 +412,7 @@ export default function Home() {
                 <div className="d-inline-flex align-items-center gap-3 regional_time_box">
                   <span className="clock_icon">⏱️</span>
                   <span className="live_digital_clock font-mono">{liveClock || "00:00:00"}</span>
-                  <span className="date_indicator font-mono">03 Oct 2026</span>
+                  <span className="date_indicator font-mono">{liveDate || "03 Oct 2026"}</span>
                 </div>
               </div>
             </div>

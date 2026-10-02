@@ -303,8 +303,10 @@ export const ModernProjectsSection: React.FC = () => {
     fetchGitHubRepos();
   }, []);
 
+  const [isAutoAdjustActive, setIsAutoAdjustActive] = useState<boolean>(true);
+
   // Filter projects by category and search term
-  const filteredProjects = projects.filter((p) => {
+  const allFilteredProjects = projects.filter((p) => {
     const matchesTab = activeTab === "all" || p.category === activeTab;
     const matchesSearch =
       searchQuery === "" ||
@@ -314,12 +316,15 @@ export const ModernProjectsSection: React.FC = () => {
     return matchesTab && matchesSearch;
   });
 
+  // Auto-adjust display: shows top working flagships unless user toggles all 50+
+  const filteredProjects = isAutoAdjustActive ? allFilteredProjects.slice(0, 8) : allFilteredProjects;
+
   const filterTabs = [
-    { id: "all", label: "All Repos & Systems" },
-    { id: "ai-ml", label: "AI & Machine Learning" },
-    { id: "saas", label: "Enterprise SaaS & ERP" },
-    { id: "web", label: "Full-Stack Web" },
-    { id: "analytics", label: "Data Analytics" },
+    { id: "all", label: "All Repos & Systems", count: "50+" },
+    { id: "ai-ml", label: "AI & Machine Learning", count: "18" },
+    { id: "saas", label: "Enterprise SaaS & ERP", count: "14" },
+    { id: "web", label: "Full-Stack Web", count: "12" },
+    { id: "analytics", label: "Data Analytics", count: "8" },
   ];
 
   // Copy CLI command to clipboard
@@ -498,6 +503,25 @@ export const ModernProjectsSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Auto-Adjust Category Intelligence Bar */}
+        <div className="repo_auto_adjust_bar mb-3">
+          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div className="d-flex align-items-center gap-2">
+              <span className="auto_adjust_beacon">⚡</span>
+              <span className="auto_adjust_text">
+                <strong>Auto-Adjust Architecture:</strong> {isAutoAdjustActive ? "Highlighting Top Working Flagships" : "Displaying All Synced Repositories"} &bull; 50+ Repos authored by @CodeSage4D
+              </span>
+            </div>
+            <button
+              type="button"
+              className="btn_toggle_autoadjust"
+              onClick={() => setIsAutoAdjustActive(!isAutoAdjustActive)}
+            >
+              {isAutoAdjustActive ? "Show All 50+ Repositories ▼" : "Show Top Flagships Only ▲"}
+            </button>
+          </div>
+        </div>
+
         {/* Filter Navigation & Search Bar */}
         <div className="projects_controls_bar">
           <div className="filter_pills_container">
@@ -508,7 +532,8 @@ export const ModernProjectsSection: React.FC = () => {
                 className={`filter_pill_btn ${activeTab === tab.id ? "active" : ""}`}
                 onClick={() => setActiveTab(tab.id)}
               >
-                {tab.label}
+                <span>{tab.label}</span>
+                <span className="pill_count_badge">{tab.count}</span>
               </button>
             ))}
           </div>
@@ -532,11 +557,9 @@ export const ModernProjectsSection: React.FC = () => {
                 &times;
               </button>
             )}
-          </div>
         </div>
 
         {/* Projects Grid with Borderless Modern Cards */}
-        <div className="row g-4 mt-3 justify-content-center">
           {filteredProjects.map((project) => (
             <div key={project.id} className="col-lg-4 col-md-6 mb-4">
               <div className="modern_project_card">
@@ -692,6 +715,21 @@ export const ModernProjectsSection: React.FC = () => {
             </div>
           )}
         </div>
+
+        {/* Load More / Expand Toggle for 50+ Repositories */}
+        {allFilteredProjects.length > 8 && (
+          <div className="text-center mt-4">
+            <button
+              type="button"
+              className="btn_load_more_repos"
+              onClick={() => setIsAutoAdjustActive(!isAutoAdjustActive)}
+            >
+              {isAutoAdjustActive
+                ? `⚡ Auto-Adjust: Explore All ${allFilteredProjects.length} Repositories &rarr;`
+                : "▲ Show Curated Flagships Only"}
+            </button>
+          </div>
+        )}
 
         {/* GitHub Direct Profile Exploration Banner */}
         <div className="github_explore_banner text-center mt-5">
@@ -1730,6 +1768,79 @@ export const ModernProjectsSection: React.FC = () => {
           font-size: 0.65rem;
           color: #73C4BF;
           font-family: monospace;
+        }
+
+        /* Auto-Adjust Category Intelligence Bar */
+        .repo_auto_adjust_bar {
+          background: rgba(9, 23, 31, 0.65);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          padding: 10px 18px;
+          border-radius: 50px;
+          border: none !important;
+          outline: none !important;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        .auto_adjust_beacon {
+          color: #CEA17A;
+          font-size: 0.9rem;
+        }
+
+        .auto_adjust_text {
+          font-size: 0.82rem;
+          color: #cbd5e1;
+        }
+
+        .btn_toggle_autoadjust {
+          background: rgba(206, 161, 122, 0.15);
+          color: #CEA17A;
+          border: none;
+          font-size: 0.76rem;
+          font-weight: 700;
+          padding: 5px 14px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .btn_toggle_autoadjust:hover {
+          background: #CEA17A;
+          color: #09171F;
+        }
+
+        .pill_count_badge {
+          background: rgba(255, 255, 255, 0.1);
+          color: #73C4BF;
+          font-size: 0.68rem;
+          font-family: monospace;
+          padding: 2px 7px;
+          border-radius: 50px;
+          margin-left: 6px;
+        }
+
+        .filter_pill_btn.active .pill_count_badge {
+          background: #09171F;
+          color: #CEA17A;
+        }
+
+        .btn_load_more_repos {
+          background: linear-gradient(135deg, rgba(206, 161, 122, 0.2) 0%, rgba(6, 36, 86, 0.4) 100%);
+          color: #ffffff;
+          border: none !important;
+          padding: 12px 28px;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          cursor: pointer;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+          transition: all 0.3s ease;
+        }
+
+        .btn_load_more_repos:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 14px 30px rgba(206, 161, 122, 0.25);
+          color: #CEA17A;
         }
       `}} />
     </section>
