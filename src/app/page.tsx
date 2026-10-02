@@ -6,7 +6,6 @@ import { RoadTimelineExperience } from "@/components/RoadTimelineExperience";
 import { ModernContactSection } from "@/components/ModernContactSection";
 import { ModernProjectsSection } from "@/components/ModernProjectsSection";
 import { RealBlogsAndFeedback } from "@/components/RealBlogsAndFeedback";
-import { generateAndDownloadBusinessCard, downloadVCardContact } from "@/lib/card-canvas";
 
 const dynamicRoles = [
   "Architecting Autonomous Realities",
