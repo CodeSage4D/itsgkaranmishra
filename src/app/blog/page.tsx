@@ -182,7 +182,7 @@ export default function BlogPage() {
                       <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer" className="social_circle">
                         <i className="fa fa-github"></i>
                       </a>
-                      <a href="https://www.linkedin.com/in/itsgkaranmishra4" target="_blank" rel="noopener noreferrer" className="social_circle">
+                      <a href="https://www.linkedin.com/in/karannmishra136" target="_blank" rel="noopener noreferrer" className="social_circle" title="LinkedIn: @karannmishra136">
                         <i className="fa fa-linkedin"></i>
                       </a>
                       <a href="mailto:karannmishra136@gmail.com" className="social_circle">
