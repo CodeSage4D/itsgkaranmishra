@@ -37,8 +37,10 @@ export async function POST(request: NextRequest) {
     }
 
     const recipient = process.env.CONTACT_RECEIVER || "karannmishra136@gmail.com";
-    const smtpUser = process.env.SMTP_USER || "karannmishra136@gmail.com";
-    const smtpPass = process.env.SMTP_PASS || "NowFuture$136";
+    const smtpUser = process.env.GMAIL_USER || process.env.SMTP_USER || "karannmishra136@gmail.com";
+    const rawPass = process.env.GMAIL_PASS || process.env.SMTP_PASS || "zfqt rbib zgfu mvjt";
+    // Sanitize app password by stripping spaces for Gmail SMTP compliance
+    const smtpPass = rawPass.trim().replace(/\s+/g, "");
 
     console.log("------------------------------------------");
     console.log("📨 NEW DIRECT CONTACT MESSAGE FOR KARAN MISHRA (AURXON):");
@@ -55,7 +57,9 @@ export async function POST(request: NextRequest) {
 
     try {
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
         auth: {
           user: smtpUser,
           pass: smtpPass,

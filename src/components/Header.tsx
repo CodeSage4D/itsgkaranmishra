@@ -244,10 +244,16 @@ export const Header: React.FC = () => {
             <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer">
               <i className="fa fa-github"></i>
             </a>
-            <a href="https://linkedin.com/in/itsgkaranmishra4" target="_blank" rel="noopener noreferrer">
+            <a href="https://linkedin.com/in/karannmishra136" target="_blank" rel="noopener noreferrer" title="LinkedIn: @karannmishra136">
               <i className="fa fa-linkedin"></i>
             </a>
-            <a href="mailto:karannmishra136@gmail.com">
+            <a href="https://instagram.com/karannmishra136" target="_blank" rel="noopener noreferrer" title="Founder Instagram: @karannmishra136">
+              <i className="fa fa-instagram"></i>
+            </a>
+            <a href="https://instagram.com/buildwithaurxon" target="_blank" rel="noopener noreferrer" title="Aurxon Official: @buildwithaurxon">
+              <i className="fa fa-instagram" style={{ color: "#ec4899" }}></i>
+            </a>
+            <a href="mailto:karannmishra136@gmail.com" title="Direct Email">
               <i className="fa fa-envelope"></i>
             </a>
             <a href="tel:+917804895074">

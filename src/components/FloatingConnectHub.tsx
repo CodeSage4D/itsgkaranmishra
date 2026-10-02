@@ -92,13 +92,31 @@ export const FloatingConnectHub: React.FC = () => {
               <i className="fa fa-envelope"></i>
             </a>
             <a
-              href="https://www.linkedin.com/in/itsgkaranmishra4"
+              href="https://www.linkedin.com/in/karannmishra136"
               target="_blank"
               rel="noopener noreferrer"
               className="quick_tray_item"
-              title="Connect on LinkedIn"
+              title="Connect on LinkedIn (@karannmishra136)"
             >
               <i className="fa fa-linkedin"></i>
+            </a>
+            <a
+              href="https://www.instagram.com/karannmishra136"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quick_tray_item"
+              title="Founder Instagram (@karannmishra136)"
+            >
+              <i className="fa fa-instagram"></i>
+            </a>
+            <a
+              href="https://www.instagram.com/buildwithaurxon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="quick_tray_item"
+              title="Aurxon Instagram (@buildwithaurxon)"
+            >
+              <i className="fa fa-instagram" style={{ color: "#ec4899" }}></i>
             </a>
             <a
               href="https://github.com/CodeSage4D"

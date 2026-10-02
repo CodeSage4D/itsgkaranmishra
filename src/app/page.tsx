@@ -7,25 +7,45 @@ import { ModernContactSection } from "@/components/ModernContactSection";
 import { ModernProjectsSection } from "@/components/ModernProjectsSection";
 import { generateAndDownloadBusinessCard } from "@/lib/card-canvas";
 
+const dynamicRoles = [
+  "Architecting Autonomous Realities",
+  "Synthesizing Neural Intelligence",
+  "Deciphering Cognitive Algorithms",
+  "Engineering Enterprise Horizons",
+  "Building Scalable Machine Minds",
+];
+
 export default function Home() {
   const [cardToast, setCardToast] = useState<string | null>(null);
+  const [currentRoleIndex, setCurrentRoleIndex] = useState<number>(0);
+  const [isDossierUnlocked, setIsDossierUnlocked] = useState<boolean>(false);
+  const [activeDossierTab, setActiveDossierTab] = useState<string>("neural-code");
 
-  // Auto-download Digital Business Card on first landing page visit
+  // Dynamic changing of words every 2.4s
   useEffect(() => {
-    const hasDownloaded = sessionStorage.getItem("karan_card_auto_downloaded");
-    if (!hasDownloaded) {
-      sessionStorage.setItem("karan_card_auto_downloaded", "true");
+    const roleInterval = setInterval(() => {
+      setCurrentRoleIndex((prev) => (prev + 1) % dynamicRoles.length);
+    }, 2400);
+    return () => clearInterval(roleInterval);
+  }, []);
+
+  // One-time auto-download on device: if downloaded once, NEVER auto-download again
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hasDownloadedOnce = localStorage.getItem("karan_card_downloaded_once");
+    if (!hasDownloadedOnce) {
+      localStorage.setItem("karan_card_downloaded_once", "true");
       const timer = setTimeout(async () => {
         try {
           await generateAndDownloadBusinessCard("png", "glacier");
-          setCardToast("Digital Business Card automatically generated & saved.");
+          setCardToast("Digital Business Card saved to device. Further downloads available on-demand.");
           setTimeout(() => {
             setCardToast(null);
           }, 8000);
         } catch (err) {
-          console.error("Auto card download:", err);
+          console.error("Auto card download notice:", err);
         }
-      }, 1800);
+      }, 2200);
       return () => clearTimeout(timer);
     }
   }, []);
@@ -52,13 +72,14 @@ export default function Home() {
         </div>
       )}
 
-      {/* ================ Start Home Banner Area (Founder Dedicated with Authentic Graphic) ================= */}
+      {/* ================ Start Home Banner Area (Cinematic & Founder Dedicated) ================= */}
       <section className="home_banner_area" id="home">
         <div className="banner_inner">
           <div className="container">
             <div className="row align-items-center">
               <div className="col-lg-7">
                 <div className="banner_content">
+                  {/* Official Aurxon Branding Badge */}
                   <div className="d-flex align-items-center gap-2 mb-3 flex-wrap">
                     <a
                       href="https://aurxon.com"
@@ -67,17 +88,23 @@ export default function Home() {
                       className="aurxon_header_badge"
                       title="Visit Aurxon Official Website (aurxon.com)"
                     >
-                      <img src="/img/png/logo-color.png" alt="Aurxon Logo" className="aurxon_mini_logo" />
-                      <span>FOUNDER &bull; AURXON</span>
+                      <img src="/img/logo/aurxon-logo-official.png" alt="Aurxon Official Logo" className="aurxon_header_logo_img" />
+                      <span className="badge_divider">|</span>
+                      <span>FOUNDER &bull; CHIEF AI ARCHITECT</span>
                     </a>
                     <span className="tagline_mini_pill">Next Gen AI Solutions</span>
                   </div>
 
                   <h3 className="text-uppercase hero_greeting">Hello, I Am</h3>
                   <h1 className="text-uppercase hero_name">Karan Mishra</h1>
-                  <h5 className="text-uppercase hero_title">
-                    Founder &bull; Aurxon &bull; AI &amp; Machine Learning Engineer
-                  </h5>
+                  
+                  {/* Dynamic Changing Words Rotating Banner */}
+                  <div className="dynamic_role_cycler_box">
+                    <span className="role_cycler_spark">⚡</span>
+                    <span className="role_cycler_text" key={currentRoleIndex}>
+                      {dynamicRoles[currentRoleIndex]}
+                    </span>
+                  </div>
 
                   <p className="banner_bio_text">
                     Architecting production-grade enterprise AI platforms, autonomous neural systems, and institutional software. Leading <strong>Aurxon</strong> with 47+ open-source GitHub repositories and cutting-edge applied AI research.
@@ -120,13 +147,22 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+
               <div className="col-lg-5">
-                <div className="home_right_img text-center">
+                <div className="home_right_img_wrapper text-center">
+                  <div className="hero_img_aurora_glow"></div>
                   <img
-                    className="img-fluid"
+                    className="img-fluid hero_main_graphic"
                     src="/img/banner/home-right.png"
                     alt="Karan Mishra - Founder Aurxon"
                   />
+                  <div className="hero_floating_badge heartbeat_soft">
+                    <img src="/img/logo/aurxon-logo-official.png" alt="Aurxon" className="badge_logo_mini" />
+                    <div className="text-left ml-2">
+                      <div className="badge_lead">Where Intelligence</div>
+                      <div className="badge_sub">Meets Innovation</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -135,36 +171,135 @@ export default function Home() {
       </section>
       {/* ================ End Home Banner Area ================= */}
 
-      {/* ================ Start About Us Area (Founder Narrative & Authentic Graphic) ================= */}
+      {/* ================ Start About Us Area (Mysterious, Heavy & Interactive Founder Dossier) ================= */}
       <section className="about_area section_gap" id="about-section">
         <div className="container">
           <div className="row justify-content-start align-items-center">
             <div className="col-lg-5">
-              <div className="about_img text-center">
+              <div className="about_visual_stack">
+                <div className="about_card_glass_backdrop"></div>
                 <img
-                  className="img-fluid"
+                  className="img-fluid about_primary_portrait"
                   src="/img/about-us.png"
-                  alt="Karan Mishra - About Us"
+                  alt="Karan Mishra - Founder Dossier"
                 />
+                <div className="about_classified_badge">
+                  <span className="radar_ping"></span>
+                  <span>DOSSIER STATUS: LEVEL 4 CLEARED</span>
+                </div>
+                {/* Secondary Vector Artwork */}
+                <div className="vector_accent_bubble">
+                  <img src="/img/vectors/vector-enterprising-man.jpeg" alt="Enterprise Engineering" className="vector_img_mini" />
+                </div>
               </div>
             </div>
 
             <div className="offset-lg-1 col-lg-6">
               <div className="main_title text-left">
-                <h2>
-                  let’s <br />
-                  Introduce about <br />
-                  myself
+                <span className="about_eyebrow">
+                  <i className="fa fa-fingerprint mr-2"></i> THE ARCHITECT'S CODEX &bull; ORIGINS
+                </span>
+                <h2 className="mt-2 font-weight-bold">
+                  Deciphering The <br />
+                  Mind Behind Aurxon
                 </h2>
-                <p>
-                  Hey there! I'm Karan Mishra, a tech innovator and machine learning engineer with a passion for turning complex computational models into practical, scalable enterprise platforms.
+
+                <p className="about_lead_philosophy">
+                  "Most see algorithms as code. I see them as living cognitive scaffolds—autonomous architectures engineered to liberate human capacity from institutional inertia."
                 </p>
-                <p>
-                  As the founder of <strong>Aurxon</strong> (<em>Where Intelligence Meets Innovation</em>), I direct our neural model benchmarking and distributed software engineering. Our platforms automate workflows for educational institutions, healthcare facilities, and fast-growing organizations.
+
+                <p className="about_story_body">
+                  Operating at the intersection of production machine learning, neural model benchmarking, and distributed software systems, I founded <strong>Aurxon</strong> to build technological infrastructure that transforms complex enterprises into agile, intelligent engines.
                 </p>
-                <p>
-                  Concurrently serving as an Applied AI Researcher at <strong>SUAS Indore</strong>, I bridge academic deep learning research with production-grade startup engineering, publishing 47+ open-source GitHub codebases.
-                </p>
+
+                {/* Interactive Dossier Toggle */}
+                <div className="mt-4">
+                  <button
+                    type="button"
+                    onClick={() => setIsDossierUnlocked(!isDossierUnlocked)}
+                    className="btn_unlock_dossier"
+                  >
+                    <span>{isDossierUnlocked ? "🔒 Minimize Dossier Archive" : "🔓 Decrypt Classified Founder Dossier & Intelligence"}</span>
+                    <i className={`fa ${isDossierUnlocked ? "fa-chevron-up" : "fa-shield"} ml-2`}></i>
+                  </button>
+                </div>
+
+                {/* Collapsible Decrypted Deep Dossier */}
+                {isDossierUnlocked && (
+                  <div className="decrypted_dossier_box mt-4">
+                    <div className="dossier_tabs_bar">
+                      <button
+                        type="button"
+                        className={`dossier_tab_btn ${activeDossierTab === "neural-code" ? "active" : ""}`}
+                        onClick={() => setActiveDossierTab("neural-code")}
+                      >
+                        ⚡ Cognitive Blueprint
+                      </button>
+                      <button
+                        type="button"
+                        className={`dossier_tab_btn ${activeDossierTab === "aurxon-odyssey" ? "active" : ""}`}
+                        onClick={() => setActiveDossierTab("aurxon-odyssey")}
+                      >
+                        🚀 The Aurxon Odyssey
+                      </button>
+                      <button
+                        type="button"
+                        className={`dossier_tab_btn ${activeDossierTab === "suas-fellowship" ? "active" : ""}`}
+                        onClick={() => setActiveDossierTab("suas-fellowship")}
+                      >
+                        🏛️ SUAS Fellowship
+                      </button>
+                    </div>
+
+                    <div className="dossier_tab_content">
+                      {activeDossierTab === "neural-code" && (
+                        <div>
+                          <h5>Vector Embeddings &amp; High-Frequency Inference</h5>
+                          <p>
+                            Engineered <strong>Cognivex</strong>, utilizing fine-tuned transformer layers to map technical competencies into dense vector spaces, achieving 98.4% contextual semantic alignment. Built <strong>HemoAI</strong> to forecast critical blood inventory shortages with predictive regression curves.
+                          </p>
+                          <div className="d-flex gap-2 flex-wrap mt-2">
+                            <span className="code_tag">#SentenceTransformers</span>
+                            <span className="code_tag">#VectorSearch</span>
+                            <span className="code_tag">#FastAPI</span>
+                            <span className="code_tag">#PyTorch</span>
+                          </div>
+                        </div>
+                      )}
+
+                      {activeDossierTab === "aurxon-odyssey" && (
+                        <div>
+                          <div className="d-flex align-items-center gap-3 mb-2">
+                            <img src="/img/logo/aurxon-logo-official.png" alt="Aurxon" style={{ height: "24px" }} />
+                            <h5 className="mb-0">Zero-to-One Venture Engineering</h5>
+                          </div>
+                          <p>
+                            Founded Aurxon (<em>Where Intelligence Meets Innovation</em>) to provide modular AI and institutional SaaS engines like <strong>Aurxon ERP Lite</strong>. Deployed across regional institutions to manage records, multi-tenant billing, and high-volume student telemetry.
+                          </p>
+                          <a href="https://aurxon.com" target="_blank" rel="noopener noreferrer" className="dossier_link">
+                            Explore Aurxon Official Platform &rarr;
+                          </a>
+                        </div>
+                      )}
+
+                      {activeDossierTab === "suas-fellowship" && (
+                        <div>
+                          <div className="d-flex align-items-center gap-3 mb-2">
+                            <img src="/img/logos/suas-logo.png" alt="SUAS Indore" style={{ height: "26px" }} />
+                            <h5 className="mb-0">Symbiosis Applied AI Fellowship</h5>
+                          </div>
+                          <p>
+                            Spearheading applied artificial intelligence initiatives at SUAS Indore. Benchmarking neural architectures, conducting technical workshops, and mentoring student developers on production-aligned deployment patterns.
+                          </p>
+                          <a href="https://www.suas.ac.in" target="_blank" rel="noopener noreferrer" className="dossier_link">
+                            Visit SUAS Indore Portal &rarr;
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="d-flex align-items-center gap-3 flex-wrap mt-4">
                   <a
                     className="primary_btn"
@@ -291,6 +426,28 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          {/* New Vector Feature Spotlights */}
+          <div className="row mt-4 align-items-center justify-content-center">
+            <div className="col-lg-6 col-md-6 mb-3">
+              <div className="vector_spotlight_card d-flex align-items-center gap-3">
+                <img src="/img/vectors/vector-scalable-solutions.jpeg" alt="Scalable Solutions" className="spotlight_vector_thumb" />
+                <div>
+                  <h5 className="mb-1 font-weight-bold">Scalable Enterprise Engineering</h5>
+                  <p className="small text-muted mb-0">Production deployments built for high transaction volume and zero downtime.</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-6 col-md-6 mb-3">
+              <div className="vector_spotlight_card d-flex align-items-center gap-3">
+                <img src="/img/vectors/vector-hybrid-apps.jpeg" alt="Hybrid App Systems" className="spotlight_vector_thumb" />
+                <div>
+                  <h5 className="mb-1 font-weight-bold">Cross-Platform &amp; Edge Integration</h5>
+                  <p className="small text-muted mb-0">Native sensor plugins and low-latency mobile inference runtimes.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       {/* ================ End Services Area ================= */}
@@ -359,17 +516,23 @@ export default function Home() {
           to { transform: translateY(0); opacity: 1; }
         }
 
+        /* Glassmorphism Section Transitions */
+        .home_banner_area, .about_area, .brand_area, .features_area {
+          background: transparent !important;
+          position: relative;
+        }
+
         /* Hero Banner */
         .home_banner_area {
           position: relative;
-          padding: 140px 0 80px;
+          padding: 130px 0 75px;
         }
 
         .aurxon_header_badge {
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 6px 14px;
+          gap: 10px;
+          padding: 6px 16px;
           background: rgba(2, 132, 199, 0.1);
           color: #0284c7;
           border-radius: 50px;
@@ -385,19 +548,24 @@ export default function Home() {
           color: #38bdf8;
         }
 
-        .aurxon_mini_logo {
-          width: 18px;
-          height: 18px;
+        .aurxon_header_logo_img {
+          height: 20px;
+          width: auto;
           object-fit: contain;
+        }
+
+        .badge_divider {
+          color: rgba(2, 132, 199, 0.4);
         }
 
         .tagline_mini_pill {
           font-size: 0.76rem;
           font-weight: 750;
           color: #64748b;
-          background: #f1f5f9;
+          background: rgba(241, 245, 249, 0.8);
           padding: 4px 10px;
           border-radius: 50px;
+          backdrop-filter: blur(8px);
         }
 
         .dark .tagline_mini_pill {
@@ -426,16 +594,47 @@ export default function Home() {
           color: #ffffff;
         }
 
-        .hero_title {
-          font-size: 1rem;
-          font-weight: 750;
-          color: #0284c7;
-          letter-spacing: 0.05em;
+        /* Dynamic Changing Words Box */
+        .dynamic_role_cycler_box {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(2, 132, 199, 0.08);
+          padding: 8px 18px;
+          border-radius: 50px;
           margin-bottom: 18px;
+          animation: glowPulse 3s infinite alternate;
         }
 
-        .dark .hero_title {
+        .dark .dynamic_role_cycler_box {
+          background: rgba(56, 189, 248, 0.12);
+        }
+
+        .role_cycler_spark {
+          font-size: 1rem;
+          color: #f59e0b;
+        }
+
+        .role_cycler_text {
+          font-size: 1.02rem;
+          font-weight: 800;
+          color: #0284c7;
+          letter-spacing: 0.02em;
+          animation: fadeInSlide 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark .role_cycler_text {
           color: #38bdf8;
+        }
+
+        @keyframes fadeInSlide {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glowPulse {
+          from { box-shadow: 0 0 10px rgba(2, 132, 199, 0.1); }
+          to { box-shadow: 0 0 20px rgba(2, 132, 199, 0.25); }
         }
 
         .banner_bio_text {
@@ -450,15 +649,297 @@ export default function Home() {
           color: #94a3b8;
         }
 
-        .banner_btn_row {
-          margin-top: 10px;
+        /* Hero Right Graphic & Floating Glass Badge */
+        .home_right_img_wrapper {
+          position: relative;
+        }
+
+        .hero_img_aurora_glow {
+          position: absolute;
+          inset: 10%;
+          background: radial-gradient(circle, rgba(2, 132, 199, 0.25) 0%, rgba(168, 85, 247, 0.18) 50%, transparent 75%);
+          filter: blur(40px);
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .hero_main_graphic {
+          position: relative;
+          z-index: 1;
+        }
+
+        .hero_floating_badge {
+          position: absolute;
+          bottom: 20px;
+          left: 10px;
+          z-index: 2;
+          background: rgba(255, 255, 255, 0.88);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          padding: 8px 14px;
+          border-radius: 14px;
+          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+          display: flex;
+          align-items: center;
+        }
+
+        .dark .hero_floating_badge {
+          background: rgba(15, 23, 42, 0.88);
+          box-shadow: 0 14px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .badge_logo_mini {
+          height: 22px;
+          width: auto;
+          object-fit: contain;
+        }
+
+        .badge_lead {
+          font-size: 0.74rem;
+          font-weight: 800;
+          color: #0284c7;
+          line-height: 1.1;
+        }
+
+        .dark .badge_lead {
+          color: #38bdf8;
+        }
+
+        .badge_sub {
+          font-size: 0.68rem;
+          color: #64748b;
+        }
+
+        /* About Section: Mysterious & Unique Visual Stack */
+        .about_visual_stack {
+          position: relative;
+          text-align: center;
+        }
+
+        .about_card_glass_backdrop {
+          position: absolute;
+          inset: 5%;
+          background: radial-gradient(circle, rgba(2, 132, 199, 0.15) 0%, rgba(133, 79, 238, 0.12) 60%, transparent 80%);
+          filter: blur(35px);
+          z-index: 0;
+        }
+
+        .about_primary_portrait {
+          position: relative;
+          z-index: 1;
+        }
+
+        .about_classified_badge {
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          z-index: 2;
+          background: rgba(15, 23, 42, 0.85);
+          color: #38bdf8;
+          font-family: monospace;
+          font-size: 0.74rem;
+          font-weight: 800;
+          letter-spacing: 0.06em;
+          padding: 6px 12px;
+          border-radius: 50px;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .radar_ping {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #38bdf8;
+          box-shadow: 0 0 8px #38bdf8;
+        }
+
+        .vector_accent_bubble {
+          position: absolute;
+          bottom: 10px;
+          right: 10px;
+          z-index: 2;
+          width: 80px;
+          height: 80px;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+        }
+
+        .vector_img_mini {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .about_eyebrow {
+          font-size: 0.82rem;
+          font-weight: 800;
+          letter-spacing: 0.08em;
+          color: #0284c7;
+          text-transform: uppercase;
+        }
+
+        .dark .about_eyebrow {
+          color: #38bdf8;
+        }
+
+        .about_lead_philosophy {
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: #0f172a;
+          line-height: 1.6;
+          margin: 14px 0 12px;
+          font-style: italic;
+        }
+
+        .dark .about_lead_philosophy {
+          color: #f1f5f9;
+        }
+
+        .about_story_body {
+          font-size: 1rem;
+          line-height: 1.7;
+          color: #475569;
+        }
+
+        .dark .about_story_body {
+          color: #94a3b8;
+        }
+
+        .btn_unlock_dossier {
+          background: rgba(2, 132, 199, 0.1);
+          border: none !important;
+          outline: none !important;
+          color: #0284c7;
+          font-weight: 800;
+          font-size: 0.88rem;
+          padding: 10px 20px;
+          border-radius: 50px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          transition: all 0.25s ease;
+        }
+
+        .dark .btn_unlock_dossier {
+          background: rgba(56, 189, 248, 0.15);
+          color: #38bdf8;
+        }
+
+        .btn_unlock_dossier:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(2, 132, 199, 0.25);
+        }
+
+        /* Decrypted Classified Dossier Card */
+        .decrypted_dossier_box {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          border: none !important;
+          outline: none !important;
+          border-radius: 20px;
+          padding: 22px;
+          box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+          animation: fadeInSlide 0.4s ease-out;
+        }
+
+        .dark .decrypted_dossier_box {
+          background: rgba(15, 23, 42, 0.9);
+          box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        .dossier_tabs_bar {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          margin-bottom: 16px;
+        }
+
+        .dossier_tab_btn {
+          background: transparent;
+          border: none !important;
+          outline: none !important;
+          font-size: 0.82rem;
+          font-weight: 750;
+          color: #64748b;
+          padding: 6px 14px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .dark .dossier_tab_btn {
+          color: #94a3b8;
+        }
+
+        .dossier_tab_btn.active {
+          background: #0284c7;
+          color: #ffffff;
+        }
+
+        .dark .dossier_tab_btn.active {
+          background: #38bdf8;
+          color: #090d16;
+        }
+
+        .dossier_tab_content h5 {
+          font-size: 1.08rem;
+          font-weight: 800;
+          margin-bottom: 8px;
+          color: #0f172a;
+        }
+
+        .dark .dossier_tab_content h5 {
+          color: #ffffff;
+        }
+
+        .dossier_tab_content p {
+          font-size: 0.92rem;
+          line-height: 1.6;
+          color: #475569;
+          margin-bottom: 10px;
+        }
+
+        .dark .dossier_tab_content p {
+          color: #cbd5e1;
+        }
+
+        .code_tag {
+          font-family: monospace;
+          font-size: 0.78rem;
+          background: rgba(2, 132, 199, 0.08);
+          color: #0284c7;
+          padding: 3px 8px;
+          border-radius: 6px;
+        }
+
+        .dark .code_tag {
+          background: rgba(56, 189, 248, 0.12);
+          color: #7dd3fc;
+        }
+
+        .dossier_link {
+          font-size: 0.84rem;
+          font-weight: 750;
+          color: #0284c7;
+          text-decoration: none;
+        }
+
+        .dark .dossier_link {
+          color: #38bdf8;
         }
 
         /* BORDERLESS Brand & Feature items */
         .single-brand-item {
           width: 100%;
           height: 100px;
-          background: #ffffff;
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           border: none !important;
           outline: none !important;
           border-radius: 16px;
@@ -467,7 +948,7 @@ export default function Home() {
         }
 
         .dark .single-brand-item {
-          background: rgba(15, 23, 42, 0.7);
+          background: rgba(15, 23, 42, 0.75);
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
 
@@ -490,7 +971,9 @@ export default function Home() {
         }
 
         .client-info {
-          background: #ffffff;
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
           border: none !important;
           outline: none !important;
           border-radius: 24px;
@@ -516,7 +999,9 @@ export default function Home() {
 
         /* BORDERLESS Service Feature Items */
         .feature_item {
-          background: #ffffff;
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
           border: none !important;
           outline: none !important;
           border-radius: 22px;
@@ -560,6 +1045,29 @@ export default function Home() {
 
         .dark .feature_item p {
           color: #94a3b8;
+        }
+
+        /* Vector Spotlight Cards */
+        .vector_spotlight_card {
+          background: rgba(255, 255, 255, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-radius: 18px;
+          padding: 16px 20px;
+          box-shadow: 0 6px 25px rgba(15, 23, 42, 0.04);
+        }
+
+        .dark .vector_spotlight_card {
+          background: rgba(15, 23, 42, 0.8);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .spotlight_vector_thumb {
+          width: 58px;
+          height: 58px;
+          border-radius: 14px;
+          object-fit: cover;
+          flex-shrink: 0;
         }
       `}} />
     </>

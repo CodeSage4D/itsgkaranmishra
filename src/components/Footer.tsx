@@ -137,31 +137,34 @@ export const Footer: React.FC = () => {
                   <i className="fa fa-github"></i>
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/itsgkaranmishra4"
+                  href="https://www.linkedin.com/in/karannmishra136"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="LinkedIn Profile"
+                  aria-label="Founder LinkedIn: @karannmishra136"
+                  title="LinkedIn: @karannmishra136"
                   className="footer_social_btn"
                 >
                   <i className="fa fa-linkedin"></i>
                 </a>
                 <a
-                  href="https://www.instagram.com/itsgkaranmishra"
+                  href="https://www.instagram.com/karannmishra136"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Instagram Profile"
+                  aria-label="Founder Instagram: @karannmishra136"
+                  title="Founder Instagram: @karannmishra136"
                   className="footer_social_btn"
                 >
                   <i className="fa fa-instagram"></i>
                 </a>
                 <a
-                  href="https://www.facebook.com"
+                  href="https://www.instagram.com/buildwithaurxon"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Facebook Profile"
+                  aria-label="Aurxon Official Instagram: @buildwithaurxon"
+                  title="Aurxon Official Instagram: @buildwithaurxon"
                   className="footer_social_btn"
                 >
-                  <i className="fa fa-facebook"></i>
+                  <i className="fa fa-instagram" style={{ color: "#ec4899" }}></i>
                 </a>
                 <a
                   href="https://www.behance.net"

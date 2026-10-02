@@ -220,7 +220,7 @@ function CardContent() {
             </a>
 
             <a
-              href="https://linkedin.com/in/itsgkaranmishra4"
+              href="https://linkedin.com/in/karannmishra136"
               target="_blank"
               rel="noopener noreferrer"
               className="contact_strip_item"
@@ -228,20 +228,33 @@ function CardContent() {
               <div className="strip_icon">💼</div>
               <div className="strip_info">
                 <span className="strip_title">LinkedIn Executive Profile</span>
-                <span className="strip_val">linkedin.com/in/itsgkaranmishra4</span>
+                <span className="strip_val">linkedin.com/in/karannmishra136</span>
               </div>
             </a>
 
             <a
-              href="https://instagram.com/itsgkaranmishra"
+              href="https://instagram.com/karannmishra136"
               target="_blank"
               rel="noopener noreferrer"
               className="contact_strip_item"
             >
               <div className="strip_icon">📸</div>
               <div className="strip_info">
-                <span className="strip_title">Instagram Personal Network</span>
-                <span className="strip_val">@itsgkaranmishra</span>
+                <span className="strip_title">Founder Instagram</span>
+                <span className="strip_val">@karannmishra136</span>
+              </div>
+            </a>
+
+            <a
+              href="https://instagram.com/buildwithaurxon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact_strip_item"
+            >
+              <div className="strip_icon">🏢</div>
+              <div className="strip_info">
+                <span className="strip_title">Aurxon Official Instagram</span>
+                <span className="strip_val">@buildwithaurxon</span>
               </div>
             </a>
 

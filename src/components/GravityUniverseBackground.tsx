@@ -65,9 +65,10 @@ export const GravityUniverseBackground: React.FC = () => {
     ];
 
     const lightStarColors = [
-      "rgba(68, 88, 220, 0.35)",
-      "rgba(133, 79, 238, 0.35)",
-      "rgba(16, 185, 129, 0.35)",
+      "rgba(2, 132, 199, 0.65)",
+      "rgba(99, 102, 241, 0.6)",
+      "rgba(168, 85, 247, 0.55)",
+      "rgba(16, 185, 129, 0.6)",
     ];
 
     const starColors = isDark ? darkStarColors : lightStarColors;
@@ -98,9 +99,9 @@ export const GravityUniverseBackground: React.FC = () => {
         y: (height / 2) + (Math.random() - 0.5) * 250,
         vx: (Math.random() - 0.5) * 0.25,
         vy: (Math.random() - 0.5) * 0.25,
-        radius: isDark ? 4.5 : 3.5,
+        radius: isDark ? 4.5 : 4.0,
         pulse: Math.random() * Math.PI,
-        color: isDark ? "rgba(56, 189, 248, 0.9)" : "rgba(68, 88, 220, 0.5)",
+        color: isDark ? "rgba(56, 189, 248, 0.9)" : "rgba(2, 132, 199, 0.7)",
       });
     }
 
@@ -136,20 +137,33 @@ export const GravityUniverseBackground: React.FC = () => {
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // In dark mode: paint subtle cosmic atmospheric nebula dust
+      // Ambient atmospheric nebula dust in both dark and light modes
       if (isDark) {
         // Deep ambient glow 1 (Cyan/Blue)
         const radGrad1 = ctx.createRadialGradient(width * 0.2, height * 0.25, 0, width * 0.2, height * 0.25, width * 0.45);
-        radGrad1.addColorStop(0, "rgba(14, 165, 233, 0.04)");
+        radGrad1.addColorStop(0, "rgba(14, 165, 233, 0.05)");
         radGrad1.addColorStop(1, "transparent");
         ctx.fillStyle = radGrad1;
         ctx.fillRect(0, 0, width, height);
 
         // Deep ambient glow 2 (Violet/Indigo)
         const radGrad2 = ctx.createRadialGradient(width * 0.8, height * 0.7, 0, width * 0.8, height * 0.7, width * 0.5);
-        radGrad2.addColorStop(0, "rgba(168, 85, 247, 0.04)");
+        radGrad2.addColorStop(0, "rgba(168, 85, 247, 0.05)");
         radGrad2.addColorStop(1, "transparent");
         ctx.fillStyle = radGrad2;
+        ctx.fillRect(0, 0, width, height);
+      } else {
+        // Light mode oceanic glacier ambient glows
+        const lightGrad1 = ctx.createRadialGradient(width * 0.15, height * 0.2, 0, width * 0.15, height * 0.2, width * 0.5);
+        lightGrad1.addColorStop(0, "rgba(2, 132, 199, 0.08)");
+        lightGrad1.addColorStop(1, "transparent");
+        ctx.fillStyle = lightGrad1;
+        ctx.fillRect(0, 0, width, height);
+
+        const lightGrad2 = ctx.createRadialGradient(width * 0.85, height * 0.65, 0, width * 0.85, height * 0.65, width * 0.5);
+        lightGrad2.addColorStop(0, "rgba(168, 85, 247, 0.07)");
+        lightGrad2.addColorStop(1, "transparent");
+        ctx.fillStyle = lightGrad2;
         ctx.fillRect(0, 0, width, height);
       }
 
@@ -164,30 +178,28 @@ export const GravityUniverseBackground: React.FC = () => {
         if (node.x < 50 || node.x > width - 50) node.vx *= -1;
         if (node.y < 50 || node.y > height - 50) node.vy *= -1;
 
-        if (isDark) {
-          // Draw orbital ring around gravity anchor
-          const ringRadius = node.radius * 5 + Math.sin(node.pulse) * 4;
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, ringRadius, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(56, 189, 248, 0.12)";
-          ctx.lineWidth = 1;
-          ctx.stroke();
+        // Draw orbital ring around gravity anchor in both modes
+        const ringRadius = node.radius * 5 + Math.sin(node.pulse) * 4;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, ringRadius, 0, Math.PI * 2);
+        ctx.strokeStyle = isDark ? "rgba(56, 189, 248, 0.15)" : "rgba(2, 132, 199, 0.2)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
 
-          // Outer glowing aura
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, node.radius * 2.8, 0, Math.PI * 2);
-          ctx.fillStyle = "rgba(129, 140, 248, 0.25)";
-          ctx.fill();
+        // Outer glowing aura
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius * 2.8, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? "rgba(129, 140, 248, 0.25)" : "rgba(99, 102, 241, 0.18)";
+        ctx.fill();
 
-          // Core node
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "#38bdf8";
-          ctx.shadowColor = "#38bdf8";
-          ctx.shadowBlur = 12;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
+        // Core node
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? "#38bdf8" : "#0284c7";
+        ctx.shadowColor = isDark ? "#38bdf8" : "#0284c7";
+        ctx.shadowBlur = isDark ? 12 : 6;
+        ctx.fill();
+        ctx.shadowBlur = 0;
       }
 
       // Process star particles
@@ -255,14 +267,14 @@ export const GravityUniverseBackground: React.FC = () => {
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist < maxConnectionDist) {
-            const alpha = (1 - dist / maxConnectionDist) * (isDark ? 0.22 : 0.09);
+            const alpha = (1 - dist / maxConnectionDist) * (isDark ? 0.28 : 0.24);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = isDark
               ? `rgba(99, 102, 241, ${alpha})`
-              : `rgba(68, 88, 220, ${alpha})`;
-            ctx.lineWidth = 0.85;
+              : `rgba(2, 132, 199, ${alpha})`;
+            ctx.lineWidth = 0.95;
             ctx.stroke();
           }
         }
@@ -279,7 +291,10 @@ export const GravityUniverseBackground: React.FC = () => {
           ctx.fill();
           ctx.shadowBlur = 0;
         } else {
+          ctx.shadowColor = "rgba(2, 132, 199, 0.4)";
+          ctx.shadowBlur = 4;
           ctx.fill();
+          ctx.shadowBlur = 0;
         }
       }
 
@@ -310,7 +325,7 @@ export const GravityUniverseBackground: React.FC = () => {
         pointerEvents: "none",
         zIndex: 0,
         overflow: "hidden",
-        opacity: theme === "dark" ? 0.95 : 0.35,
+        opacity: theme === "dark" ? 0.95 : 0.88,
         transition: "opacity 0.5s ease",
       }}
     >

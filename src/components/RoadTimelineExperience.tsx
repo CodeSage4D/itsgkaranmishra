@@ -31,7 +31,7 @@ const milestones: Milestone[] = [
     location: "AURXON Headquarters, Killa Maidan, VIP Road, Indore, MP – 452006, India",
     badge: "Active Flagship Venture",
     badgeColor: "#0284c7",
-    logoUrl: "/img/png/logo-color.png",
+    logoUrl: "/img/logo/aurxon-logo-official.png",
     websiteUrl: "https://aurxon.com",
     icon: "fa-rocket",
     summary:

@@ -190,11 +190,14 @@ export const ModernContactSection: React.FC = () => {
                   <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                     <i className="fa fa-github"></i>
                   </a>
-                  <a href="https://www.linkedin.com/in/itsgkaranmishra4" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <a href="https://www.linkedin.com/in/karannmishra136" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn @karannmishra136" title="LinkedIn: @karannmishra136">
                     <i className="fa fa-linkedin"></i>
                   </a>
-                  <a href="https://www.instagram.com/itsgkaranmishra" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <a href="https://www.instagram.com/karannmishra136" target="_blank" rel="noopener noreferrer" aria-label="Founder Instagram @karannmishra136" title="Founder Instagram: @karannmishra136">
                     <i className="fa fa-instagram"></i>
+                  </a>
+                  <a href="https://www.instagram.com/buildwithaurxon" target="_blank" rel="noopener noreferrer" aria-label="Company Instagram @buildwithaurxon" title="Aurxon Instagram: @buildwithaurxon">
+                    <i className="fa fa-instagram" style={{ color: "#ec4899" }}></i>
                   </a>
                 </div>
               </div>
