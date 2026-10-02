@@ -19,17 +19,20 @@
 }
 
 html.dark {
-  --bg-page: #06080e;
-  --bg-surface: rgba(13, 18, 30, 0.75);
-  --bg-card: rgba(17, 24, 39, 0.75);
-  --bg-subtle: rgba(30, 41, 59, 0.6);
-  --text-main: #ffffff;
-  --text-body: #e2e8f0;
+  --bg-page: #070c14;
+  --bg-surface: rgba(9, 23, 31, 0.85);
+  --bg-card: rgba(11, 23, 35, 0.88);
+  --bg-subtle: rgba(18, 35, 45, 0.65);
+  --text-main: #f8fafc;
+  --text-body: #cbd5e1;
   --text-muted: #94a3b8;
-  --border-light: rgba(255, 255, 255, 0.08);
-  --primary-accent: #38bdf8;
-  --secondary-accent: #a855f7;
+  --border-light: rgba(206, 161, 122, 0.18);
+  --primary-accent: #CEA17A; /* Noguchi Champagne Gold */
+  --secondary-accent: #73C4BF; /* Noguchi Arctic Opal */
   --emerald-accent: #34d399;
+  --gold-metallic: #CEA17A;
+  --gold-foil: linear-gradient(135deg, #CEA17A 0%, #E6C29E 50%, #906451 100%);
+  --sapphire-luxury: #062456;
 }
 
 html {

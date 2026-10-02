@@ -5,83 +5,6 @@ import Link from "next/link";
 import { recordLead } from "@/lib/analytics-client";
 
 export const Footer: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "Direct Portfolio Inquiry",
-    message: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setFeedback({
-        type: "error",
-        message: "Please fill in all fields before sending.",
-      });
-      return;
-    }
-
-    setLoading(true);
-    setFeedback(null);
-
-    // Save lead in CRM database
-    try {
-      recordLead({
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-        source: "Footer Messenger",
-      });
-    } catch {}
-
-    try {
-      const res = await fetch("https://formsubmit.co/ajax/karannmishra136@gmail.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          _subject: `[Portfolio Direct Message] from ${formData.name}`,
-          subject: formData.subject,
-          message: formData.message,
-          timestamp: new Date().toISOString(),
-        }),
-      });
-
-      if (res.ok) {
-        setFeedback({
-          type: "success",
-          message: "Message sent directly to Karan's inbox! Thank you.",
-        });
-        setFormData({
-          name: "",
-          email: "",
-          subject: "Direct Portfolio Inquiry",
-          message: "",
-        });
-      } else {
-        setFeedback({
-          type: "success",
-          message: `Inquiry recorded for ${formData.name}! We will reply to ${formData.email} promptly.`,
-        });
-      }
-    } catch {
-      setFeedback({
-        type: "success",
-        message: `Inquiry recorded for ${formData.name}! We will reply to ${formData.email} promptly.`,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -277,85 +200,30 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 4: Direct In-Portfolio Email Messenger */}
+          {/* Column 4: Executive Headquarters & Enterprise Presence (No email form) */}
           <div className="col-lg-4 col-md-6">
             <div className="footer_direct_contact_card">
-              <h5 className="footer_section_heading">
-                <i className="fa fa-paper-plane mr-2" style={{ color: "#818cf8" }}></i>
-                Direct Email to Karan
+              <div className="d-flex align-items-center gap-2 mb-3">
+                <img
+                  src="/img/logo/aurxon-logo-official.png"
+                  alt="Aurxon Official"
+                  style={{ height: "24px", width: "auto" }}
+                />
+                <span className="badge_hq_verified">OFFICIAL HQ</span>
+              </div>
+              <h5 className="footer_section_heading mb-2">
+                Executive Headquarters
               </h5>
-              <p className="footer_direct_hint">
-                Send a message directly from here — no email client or third-party app needed.
+              <p className="footer_direct_hint mb-3">
+                Directing production enterprise AI platforms, neural research at SUAS Indore, and autonomous software platforms.
               </p>
-
-              <form onSubmit={handleSubmit} className="footer_direct_form">
-                <div className="mb-2">
-                  <input
-                    type="text"
-                    className="footer_input_field"
-                    placeholder="Your Name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <input
-                    type="email"
-                    className="footer_input_field"
-                    placeholder="Your Email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                  />
-                </div>
-                <div className="mb-2">
-                  <textarea
-                    rows={2}
-                    className="footer_input_field footer_textarea"
-                    placeholder="Type your message..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
-                  ></textarea>
-                </div>
-
-                {feedback && (
-                  <div
-                    className={`footer_feedback_alert ${
-                      feedback.type === "success" ? "alert_success" : "alert_error"
-                    }`}
-                  >
-                    <i
-                      className={`fa ${
-                        feedback.type === "success"
-                          ? "fa-check-circle"
-                          : "fa-exclamation-triangle"
-                      } mr-1`}
-                    ></i>{" "}
-                    {feedback.message}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="footer_submit_btn"
-                >
-                  {loading ? (
-                    <span>
-                      <i className="fa fa-circle-o-notch fa-spin mr-2"></i> Sending...
-                    </span>
-                  ) : (
-                    <span>
-                      <i className="fa fa-send mr-2"></i> Send Directly to Inbox
-                    </span>
-                  )}
-                </button>
-              </form>
 
               {/* Direct Info Footnote */}
               <div className="footer_contact_subrows">
+                <div className="footer_subrow_item">
+                  <i className="fa fa-map-marker text-indigo"></i>
+                  <span>AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India</span>
+                </div>
                 <div className="footer_subrow_item">
                   <i className="fa fa-envelope text-indigo"></i>
                   <a href="mailto:karannmishra136@gmail.com">karannmishra136@gmail.com</a>
@@ -365,9 +233,20 @@ export const Footer: React.FC = () => {
                   <a href="tel:+917804895074">+91 7804895074</a>
                 </div>
                 <div className="footer_subrow_item">
-                  <i className="fa fa-map-marker text-indigo"></i>
-                  <span>AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India</span>
+                  <i className="fa fa-globe text-indigo"></i>
+                  <a href="https://aurxon.com" target="_blank" rel="noopener noreferrer">https://aurxon.com</a>
                 </div>
+              </div>
+
+              <div className="mt-3">
+                <a
+                  href="https://aurxon.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn_footer_portal"
+                >
+                  <i className="fa fa-external-link mr-2"></i> Visit Aurxon Corporate &rarr;
+                </a>
               </div>
             </div>
           </div>
@@ -634,10 +513,33 @@ export const Footer: React.FC = () => {
           color: #34d399;
         }
 
-        .alert_error {
-          background: rgba(239, 68, 68, 0.15);
-          border: 1px solid rgba(239, 68, 68, 0.4);
-          color: #f87171;
+        .badge_hq_verified {
+          font-size: 0.7rem;
+          font-weight: 800;
+          color: #CEA17A;
+          background: rgba(206, 161, 122, 0.15);
+          padding: 3px 8px;
+          border-radius: 50px;
+          letter-spacing: 0.05em;
+        }
+
+        .btn_footer_portal {
+          display: inline-flex;
+          align-items: center;
+          background: linear-gradient(135deg, rgba(206, 161, 122, 0.2) 0%, rgba(9, 23, 31, 0.8) 100%);
+          color: #CEA17A;
+          font-size: 0.84rem;
+          font-weight: 750;
+          padding: 8px 16px;
+          border-radius: 8px;
+          text-decoration: none !important;
+          transition: all 0.25s ease;
+        }
+
+        .btn_footer_portal:hover {
+          background: #CEA17A;
+          color: #09171F;
+          transform: translateY(-2px);
         }
 
         .footer_contact_subrows {
