@@ -112,8 +112,8 @@ export default function ContactPage() {
               <div className="contact_info">
                 <div className="info_item">
                   <i className="lnr lnr-home"></i>
-                  <h6>ASIA, India, MP, Indore</h6>
-                  <p>Killa Maidan VIP Road, and AHQ Postal Code: 452006</p>
+                  <h6>AURXON Headquarters</h6>
+                  <p>Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India</p>
                 </div>
                 <div className="info_item">
                   <i className="lnr lnr-phone-handset"></i>
@@ -131,14 +131,14 @@ export default function ContactPage() {
                 </div>
                 <div className="info_item">
                   <i className="lnr lnr-briefcase"></i>
-                  <h6>Enterprise &bull; Aurxon</h6>
+                  <h6>Aurxon &bull; Official Platform</h6>
                   <p>
                     <a
-                      href="https://github.com/CodeSage4D"
+                      href="https://aurxon.com"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Aurxon &bull; Next Gen AI Solutions
+                      aurxon.com &bull; Next Gen AI Solutions
                     </a>
                   </p>
                 </div>

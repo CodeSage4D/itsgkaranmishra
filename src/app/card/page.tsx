@@ -181,6 +181,19 @@ function CardContent() {
           {/* Contact Details & All Profile URLs */}
           <div className="contact_strip_list">
             <a
+              href="https://aurxon.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact_strip_item"
+            >
+              <div className="strip_icon">⚡</div>
+              <div className="strip_info">
+                <span className="strip_title">Official Company Website</span>
+                <span className="strip_val">aurxon.com &bull; Next Gen AI Solutions</span>
+              </div>
+            </a>
+
+            <a
               href="https://itsgkaranmishra.web.app"
               target="_blank"
               rel="noopener noreferrer"
@@ -188,7 +201,7 @@ function CardContent() {
             >
               <div className="strip_icon">🌐</div>
               <div className="strip_info">
-                <span className="strip_title">Company &amp; Live Portfolio</span>
+                <span className="strip_title">Founder Live Portfolio</span>
                 <span className="strip_val">itsgkaranmishra.web.app</span>
               </div>
             </a>
@@ -253,7 +266,7 @@ function CardContent() {
               <div className="strip_info">
                 <span className="strip_title">Headquarters Address</span>
                 <span className="strip_val">
-                  ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006
+                  AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India
                 </span>
               </div>
             </div>

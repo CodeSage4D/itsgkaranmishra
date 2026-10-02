@@ -238,7 +238,7 @@ export const Header: React.FC = () => {
 
         <div className="mobile_drawer_footer">
           <div className="drawer_address_text">
-            📍 ASIA, India, MP, Indore, Killa Maidan VIP Road, 452006
+            📍 AURXON Headquarters, Killa Maidan, VIP Road, Indore, MP – 452006, India
           </div>
           <div className="drawer_social_icons">
             <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer">

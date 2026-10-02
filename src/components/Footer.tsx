@@ -363,7 +363,7 @@ export const Footer: React.FC = () => {
                 </div>
                 <div className="footer_subrow_item">
                   <i className="fa fa-map-marker text-indigo"></i>
-                  <span>ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006</span>
+                  <span>AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India</span>
                 </div>
               </div>
             </div>

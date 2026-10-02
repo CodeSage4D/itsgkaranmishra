@@ -28,45 +28,46 @@ const milestones: Milestone[] = [
     role: "Founder & Chief AI Architect",
     organization: "Aurxon",
     tagline: "Aurxon - Next Gen AI Solutions • Where Intelligence Meets Innovation",
-    location: "Smart City Indore, MP, India",
-    badge: "Active Venture",
-    badgeColor: "#38bdf8",
+    location: "AURXON Headquarters, Killa Maidan, VIP Road, Indore, MP – 452006, India",
+    badge: "Active Flagship Venture",
+    badgeColor: "#0284c7",
     logoUrl: "/img/png/logo-color.png",
-    websiteUrl: "https://itsgkaranmishra.web.app",
+    websiteUrl: "https://aurxon.com",
     icon: "fa-rocket",
     summary:
       "Founded Aurxon to engineer production-grade enterprise AI platforms, autonomous neural systems, and institutional solutions. Next Gen AI Solutions — Where Intelligence Meets Innovation.",
     story:
-      "Directing overall venture vision, neural model benchmarking, and full-stack system architecture. Architected Aurxon ERP Lite for institutional automation, Cognivex for semantic AI career intelligence using deep sentence transformers, and HemoAI for predictive medical blood prioritization.",
+      "Directing overarching venture vision, neural model benchmarking, and full-stack system architecture at Aurxon (aurxon.com). Architected Aurxon ERP Lite for institutional automation and records, Cognivex for semantic AI career intelligence utilizing deep sentence transformers, FCOS for factory machine edge telemetry, and HemoAI for predictive medical blood prioritization.",
     founderImpact: [
+      "Founded Aurxon (aurxon.com) and engineered autonomous enterprise AI solutions & multi-tenant platforms",
       "Designed full multi-tenant architecture for Aurxon ERP deployed in regional institutions",
-      "Engineered Cognivex semantic matching engine with 93% accuracy on resume-job alignment",
-      "Leading open-source & enterprise AI innovation, currently syndicating strategic collaborations",
+      "Engineered Cognivex semantic matching engine with 98.4% accuracy on sentence transformer embeddings",
+      "Leading open-source & enterprise AI innovation with 47+ public codebases on GitHub",
     ],
-    technologies: ["Python", "FastAPI", "PyTorch", "Next.js", "Enterprise ERP", "Transformer Embeddings", "System Architecture"],
+    technologies: ["Python", "FastAPI", "PyTorch", "Next.js", "Enterprise ERP", "Transformer Embeddings", "System Architecture", "Edge AI"],
     isCurrent: true,
   },
   {
     id: "suas-indore",
     period: "2024 - Present",
-    role: "Applied AI Research Collaborator & Skill Fellow",
+    role: "Applied AI Researcher & Technology Innovation Fellow",
     organization: "Symbiosis University of Applied Sciences (SUAS)",
-    location: "Indore, MP, India",
-    badge: "University Affiliation",
+    location: "Indore, Madhya Pradesh, India",
+    badge: "University Research & Fellowship",
     badgeColor: "#e11d48",
     logoUrl: "/img/logos/suas-logo.png",
     websiteUrl: "https://www.suas.ac.in",
     icon: "fa-university",
     summary:
-      "Collaborating on high-impact applied AI initiatives, neural architecture benchmarking, and skill-based technical engineering research at SUAS Indore.",
+      "Leading applied artificial intelligence initiatives, neural architecture benchmarking, and skill-based technical engineering research at SUAS Indore.",
     story:
-      "Engaged in technical research exploring applied deep learning models, cross-modal neural representations, and skill-centric computing workflows. Mentoring aspiring student engineers and bridging the gap between academia and production-grade startup engineering.",
+      "Engaged in technical research exploring applied deep learning models, cross-modal neural representations, and skill-centric computing workflows. Mentoring aspiring student engineers, driving Smart India Hackathon prototypes, and bridging the gap between academia and production-grade startup engineering.",
     founderImpact: [
-      "Collaborative research on practical machine learning pipelines & data processing",
-      "Advocating hands-on industry-aligned AI development workflows in Central India",
-      "Fostering entrepreneurship and tech ecosystem partnerships in Smart City Indore",
+      "Authored applied research on practical machine learning pipelines & data processing models",
+      "Mentored students and junior developers on industry-aligned AI development workflows in Central India",
+      "Fostered entrepreneurship and university-startup ecosystem partnerships in Smart City Indore",
     ],
-    technologies: ["Applied AI", "Deep Learning", "Research Methodology", "Neural Networks", "Industry Collaboration"],
+    technologies: ["Applied AI", "Deep Learning", "Neural Networks", "Research Methodology", "Academic-Industry Innovation"],
     isCurrent: true,
   },
   {
@@ -201,13 +202,18 @@ export const RoadTimelineExperience: React.FC = () => {
           <div className="dynamic_road_track_container">
             <div
               className="dynamic_drawn_line"
-              style={{ height: `${Math.max(scrollProgress * 100, 4)}%` }}
+              style={{
+                height: `${scrollProgress * 100}%`,
+                opacity: scrollProgress > 0.01 ? 1 : 0,
+              }}
             >
               {/* Glowing neon tracer head moving down with the line */}
-              <div className="traveling_neon_head">
-                <div className="tracer_head_core"></div>
-                <div className="tracer_head_pulse"></div>
-              </div>
+              {scrollProgress > 0.01 && (
+                <div className="traveling_neon_head">
+                  <div className="tracer_head_core"></div>
+                  <div className="tracer_head_pulse"></div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -470,7 +476,7 @@ export const RoadTimelineExperience: React.FC = () => {
           padding: 40px 0;
         }
 
-        /* Dynamic Drawing Scroll Track (NOT a permanent static line) */
+        /* Dynamic Drawing Scroll Track (NO permanent static line) */
         .dynamic_road_track_container {
           position: absolute;
           top: 30px;
@@ -478,13 +484,13 @@ export const RoadTimelineExperience: React.FC = () => {
           left: 50%;
           width: 6px;
           transform: translateX(-50%);
-          background: rgba(226, 232, 240, 0.3);
+          background: transparent !important;
           border-radius: 6px;
           z-index: 1;
         }
 
         .dark .dynamic_road_track_container {
-          background: rgba(255, 255, 255, 0.05);
+          background: transparent !important;
         }
 
         .dynamic_drawn_line {
@@ -544,18 +550,25 @@ export const RoadTimelineExperience: React.FC = () => {
           align-items: flex-start;
           position: relative;
           width: 100%;
-          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .milestone_row.is_hidden {
-          opacity: 0.15;
-          transform: translateY(35px) scale(0.96);
+          opacity: 0;
           pointer-events: none;
+        }
+
+        .milestone_row.row_left.is_hidden {
+          transform: translateX(-60px) scale(0.95);
+        }
+
+        .milestone_row.row_right.is_hidden {
+          transform: translateX(60px) scale(0.95);
         }
 
         .milestone_row.is_reached {
           opacity: 1;
-          transform: translateY(0) scale(1);
+          transform: translateX(0) scale(1);
           pointer-events: auto;
         }
 
@@ -584,23 +597,27 @@ export const RoadTimelineExperience: React.FC = () => {
           height: 48px;
           border-radius: 50%;
           background: #ffffff;
-          border: 3px solid #94a3b8;
+          border: 3px solid #cbd5e1;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #64748b;
+          color: #94a3b8;
           font-size: 1.15rem;
-          transition: all 0.35s ease;
+          opacity: 0.2;
+          transform: scale(0.75);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .road_marker_pin {
           background: #0f172a;
-          color: #94a3b8;
+          color: #64748b;
+          border-color: #334155;
         }
 
         .road_marker_pin.pin_active {
-          color: #0f172a;
+          opacity: 1;
           transform: scale(1.08);
+          color: #0f172a;
         }
 
         .dark .road_marker_pin.pin_active {
@@ -638,23 +655,23 @@ export const RoadTimelineExperience: React.FC = () => {
         }
 
         .dark .milestone_story_card {
-          background: rgba(15, 23, 42, 0.65);
+          background: rgba(15, 23, 42, 0.85);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border-color: rgba(255, 255, 255, 0.08);
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
         }
 
-        /* Hover Neon Petal Glow */
+        /* Hover Elevation without Blue Outline */
         .milestone_story_card:hover {
           transform: translateY(-4px);
-          border-color: rgba(56, 189, 248, 0.55);
-          box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12), 0 0 25px rgba(56, 189, 248, 0.25);
+          border-color: rgba(2, 132, 199, 0.3);
+          box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
         }
 
         .dark .milestone_story_card:hover {
-          border-color: rgba(56, 189, 248, 0.65);
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.35), inset 0 0 12px rgba(192, 132, 252, 0.15);
+          border-color: rgba(255, 255, 255, 0.12) !important;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
         }
 
         .card_current_highlight {

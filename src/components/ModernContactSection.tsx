@@ -159,14 +159,34 @@ export const ModernContactSection: React.FC = () => {
                   </div>
                   <div className="channel_content">
                     <span className="channel_title">Headquarters Address</span>
-                    <span className="channel_val">ASIA, India, MP, Indore, Killa Maidan VIP Road, and AHQ Postal Code: 452006</span>
+                    <span className="channel_val">
+                      AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India
+                    </span>
                   </div>
                 </div>
+
+                <a
+                  href="https://aurxon.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="direct_channel_item"
+                >
+                  <div className="channel_icon icon_globe">
+                    <i className="fa fa-globe"></i>
+                  </div>
+                  <div className="channel_content">
+                    <span className="channel_title">Official Company Portal</span>
+                    <span className="channel_val">aurxon.com &bull; Next Gen AI Solutions</span>
+                  </div>
+                </a>
               </div>
 
               <div className="social_quick_strip">
                 <span className="quick_strip_label">Connect on:</span>
                 <div className="quick_strip_icons">
+                  <a href="https://aurxon.com" target="_blank" rel="noopener noreferrer" aria-label="Aurxon Official" title="Aurxon Website">
+                    <i className="fa fa-globe"></i>
+                  </a>
                   <a href="https://github.com/CodeSage4D" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                     <i className="fa fa-github"></i>
                   </a>

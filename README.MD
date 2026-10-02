@@ -132,16 +132,17 @@ Every commit pushed to the `main` branch automatically triggers the GitHub Actio
 
 ## 📬 Contact &amp; Connect
 
-* **Founder:** Karan Mishra
-* **Company:** Aurxon Technologies
+* **Founder &amp; Chief AI Architect:** Karan Mishra
+* **Company:** Aurxon (Next Gen AI Solutions &bull; Where Intelligence Meets Innovation)
+* **Official Website:** [aurxon.com](https://aurxon.com)
 * **Direct Email:** [karannmishra136@gmail.com](mailto:karannmishra136@gmail.com)
 * **Phone / WhatsApp:** [+91 7804895074](tel:+917804895074) / [Chat on WhatsApp](https://wa.me/917804895074)
 * **GitHub:** [@CodeSage4D](https://github.com/CodeSage4D)
 * **LinkedIn:** [linkedin.com/in/itsgkaranmishra4](https://www.linkedin.com/in/itsgkaranmishra4)
-* **Headquarters:** Sikandar Bag Colony, VIP Road, Indore, Madhya Pradesh, India - 452006
+* **Headquarters:** AURXON Headquarters, Killa Maidan, VIP Road, Indore, Madhya Pradesh – 452006, India
 
 ---
 
 <div align="center">
-  <sub>Designed &amp; Engineered by Karan Mishra &bull; &copy; 2026 Aurxon Technologies. All rights reserved.</sub>
+  <sub>Designed &amp; Engineered by Karan Mishra &bull; &copy; 2026 Aurxon. All rights reserved.</sub>
 </div>

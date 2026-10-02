@@ -64,11 +64,23 @@ export default function Home() {
               {/* Left Column: Founder Manifesto & Core Identity */}
               <div className="col-lg-6 col-xl-7 hero_left_col">
                 <div className="banner_content">
-                  {/* Founder Status Strip */}
+                  {/* Founder Status Strip with Official Aurxon Logo & aurxon.com link */}
                   <div className="founder_intro_strip mb-3">
-                    <span className="founder_chip">
-                      <span className="neon_beacon_dot"></span> FOUNDER &bull; AURXON
-                    </span>
+                    <a
+                      href="https://aurxon.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="founder_brand_chip"
+                      title="Visit Aurxon Official Website (aurxon.com)"
+                    >
+                      <img
+                        src="/img/png/logo-color.png"
+                        alt="Aurxon Official Logo"
+                        className="founder_chip_logo"
+                      />
+                      <span className="founder_chip_text">Founder &amp; Chief AI Architect &bull; Aurxon</span>
+                      <i className="fa fa-external-link ml-1"></i>
+                    </a>
                     <span className="tagline_chip">
                       Next Gen AI Solutions
                     </span>
@@ -102,6 +114,15 @@ export default function Home() {
                     >
                       <span><i className="fa fa-handshake-o mr-2"></i>Collaborate with Founder</span>
                     </a>
+                    <a
+                      className="primary_btn tr-bg aurxon_brand_cta"
+                      href="https://aurxon.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Visit Aurxon Official Website (aurxon.com)"
+                    >
+                      <span><i className="fa fa-globe mr-2"></i>Aurxon.com &rarr;</span>
+                    </a>
                     <Link className="primary_btn tr-bg" href="/card" title="9:16 Portrait Smart Business Card">
                       <span><i className="fa fa-id-card-o mr-2"></i>Smart Card</span>
                     </Link>
@@ -124,24 +145,36 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right Column: Interactive Founder Command Card & Tech Dashboard */}
+              {/* Right Column: Executive Founder Command Deck (Clean, No Speech Bubble Notch) */}
               <div className="col-lg-6 col-xl-5 hero_right_col">
                 <div className="hero_command_card">
                   {/* Top Status Bar */}
                   <div className="command_card_header">
-                    <div className="d-flex align-items-center gap-2">
-                      <span className="status_led_green"></span>
-                      <span className="command_header_title">AURXON &bull; FOUNDER COMMAND DECK</span>
-                    </div>
-                    <span className="engine_badge">AI ENGINE LIVE</span>
+                    <a
+                      href="https://aurxon.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="d-flex align-items-center gap-2 text-decoration-none"
+                      title="Visit aurxon.com"
+                    >
+                      <img
+                        src="/img/png/logo-color.png"
+                        alt="Aurxon Logo"
+                        style={{ height: "26px", width: "auto" }}
+                      />
+                      <span className="command_header_title">AURXON COMMAND CONSOLE</span>
+                    </a>
+                    <span className="engine_badge">
+                      <span className="status_led_green mr-1"></span> AI ENGINE LIVE
+                    </span>
                   </div>
 
                   {/* Founder Visual Frame with Orbiting Badges */}
                   <div className="command_avatar_area">
                     <img
                       className="img-fluid hero_person_image"
-                      src="/img/banner/home-right.png"
-                      alt="Karan Mishra - Founder Aurxon"
+                      src="/img/about-us.png"
+                      alt="Karan Mishra - Founder & Chief AI Architect, Aurxon"
                     />
 
                     {/* Floating Holographic Telemetry Cards */}
@@ -170,15 +203,36 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Micro Footer inside Command Deck */}
+                  {/* Micro Live Architectural Telemetry Bar */}
+                  <div className="command_telemetry_grid mt-3">
+                    <div className="telemetry_mini_cell">
+                      <span className="telemetry_mini_kicker">PLATFORM</span>
+                      <span className="telemetry_mini_title">Aurxon ERP Lite</span>
+                    </div>
+                    <div className="telemetry_mini_cell">
+                      <span className="telemetry_mini_kicker">EDGE MODEL</span>
+                      <span className="telemetry_mini_title">FCOS Sub-12ms</span>
+                    </div>
+                    <div className="telemetry_mini_cell">
+                      <span className="telemetry_mini_kicker">SEMANTIC NLP</span>
+                      <span className="telemetry_mini_title">98.4% IoU Accuracy</span>
+                    </div>
+                  </div>
+
+                  {/* Micro Footer inside Command Deck with Official Headquarters Address */}
                   <div className="command_card_footer">
                     <div className="footer_micro_stat">
                       <span className="stat_dot"></span>
-                      <span>Next Gen AI Solutions</span>
+                      <span>AURXON Headquarters, Killa Maidan, VIP Road, Indore, MP – 452006, India</span>
                     </div>
-                    <div className="footer_motto_text">
-                      Where Intelligence Meets Innovation
-                    </div>
+                    <a
+                      href="https://aurxon.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="footer_website_link"
+                    >
+                      aurxon.com &rarr;
+                    </a>
                   </div>
                 </div>
               </div>
@@ -209,8 +263,10 @@ export default function Home() {
                 </div>
                 <div className="col-6 col-lg-3 mb-3">
                   <div className="hero_stat_card stat_brand_card">
-                    <div className="stat_number brand_highlight_text">AURXON</div>
-                    <div className="stat_label">Next Gen AI Solutions</div>
+                    <a href="https://aurxon.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+                      <div className="stat_number brand_highlight_text">AURXON</div>
+                      <div className="stat_label">aurxon.com &bull; Next Gen AI</div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -356,51 +412,47 @@ export default function Home() {
           </div>
           <div className="row feature_inner">
             <div className="col-lg-3 col-md-6 mb-4">
-              <div className="feature_item feature_glass_card">
-                <div className="feature_icon_frame icon_brain">
-                  <i className="fa fa-code-fork"></i>
+              <div className="feature_item">
+                <div className="icon" style={{ fontSize: "3.2rem", color: "#007FFF", marginBottom: "20px" }}>
+                  <i className="fas fa-brain"></i>
                 </div>
-                <h4>Machine Learning &amp; NLP</h4>
+                <h4>Machine Learning Development</h4>
                 <p>
-                  Fine-tuning deep neural networks, transformer embeddings, and predictive classifiers for real-time production inference.
+                  Building intelligent systems with advanced machine learning algorithms, sentence transformers, and real-time production inference pipelines.
                 </p>
-                <span className="neon_petal_accent"></span>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 mb-4">
-              <div className="feature_item feature_glass_card">
-                <div className="feature_icon_frame icon_code">
-                  <i className="fa fa-laptop"></i>
+              <div className="feature_item">
+                <div className="icon" style={{ fontSize: "3.2rem", color: "#FF5733", marginBottom: "20px" }}>
+                  <i className="fas fa-laptop-code"></i>
                 </div>
-                <h4>Full-Stack Web Architectures</h4>
+                <h4>Web Application Development</h4>
                 <p>
-                  Engineering resilient Next.js, React, and Python FastAPI platforms with responsive UI, real-time analytics, and high uptime.
+                  Crafting responsive, high-velocity Next.js, React, and Python FastAPI platforms that are aesthetically pleasing and functionally robust.
                 </p>
-                <span className="neon_petal_accent"></span>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 mb-4">
-              <div className="feature_item feature_glass_card">
-                <div className="feature_icon_frame icon_chart">
-                  <i className="fa fa-line-chart"></i>
+              <div className="feature_item">
+                <div className="icon" style={{ fontSize: "3.2rem", color: "#28A745", marginBottom: "20px" }}>
+                  <i className="fas fa-chart-line"></i>
                 </div>
-                <h4>Enterprise ERP &amp; Automation</h4>
+                <h4>Data Analytics &amp; Enterprise ERP</h4>
                 <p>
-                  Developing automated management systems (Aurxon ERP) to eliminate manual workflows and consolidate operational records.
+                  Transforming enterprise operations into automated intelligence (Aurxon ERP) with advanced analytics and visually compelling dashboards.
                 </p>
-                <span className="neon_petal_accent"></span>
               </div>
             </div>
             <div className="col-lg-3 col-md-6 mb-4">
-              <div className="feature_item feature_glass_card">
-                <div className="feature_icon_frame icon_robot">
-                  <i className="fa fa-microchip"></i>
+              <div className="feature_item">
+                <div className="icon" style={{ fontSize: "3.2rem", color: "#FFC107", marginBottom: "20px" }}>
+                  <i className="fas fa-robot"></i>
                 </div>
-                <h4>AI Strategy &amp; Advisory</h4>
+                <h4>AI &amp; Automation Solutions</h4>
                 <p>
-                  Collaborating with founders and enterprise leaders to evaluate feasibility, design technical roadmaps, and deploy AI models.
+                  Implementing autonomous multi-agent networks, FCOS machine telemetry, and strategic AI advisory to eliminate bottlenecks and scale ventures.
                 </p>
-                <span className="neon_petal_accent"></span>
               </div>
             </div>
           </div>
@@ -450,28 +502,62 @@ export default function Home() {
           flex-wrap: wrap;
         }
 
-        .founder_chip {
+        .founder_brand_chip {
           display: inline-flex;
           align-items: center;
-          gap: 6px;
-          padding: 5px 14px;
+          gap: 8px;
+          padding: 6px 16px;
           border-radius: 50px;
-          background: rgba(2, 132, 199, 0.1);
+          background: rgba(2, 132, 199, 0.08);
           color: #0284c7;
-          border: 1px solid rgba(2, 132, 199, 0.3);
-          font-size: 0.8rem;
+          border: 1.5px solid rgba(2, 132, 199, 0.3);
+          font-size: 0.82rem;
           font-weight: 800;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.04em;
+          text-decoration: none;
+          transition: all 0.25s ease;
         }
 
-        .dark .founder_chip {
-          background: rgba(56, 189, 248, 0.15);
+        .founder_brand_chip:hover {
+          background: rgba(2, 132, 199, 0.14);
+          transform: translateY(-2px);
+          color: #0369a1;
+        }
+
+        .dark .founder_brand_chip {
+          background: rgba(255, 255, 255, 0.06);
           color: #38bdf8;
-          border-color: rgba(56, 189, 248, 0.4);
+          border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .dark .founder_brand_chip:hover {
+          background: rgba(56, 189, 248, 0.15);
+          color: #7dd3fc;
+        }
+
+        .founder_chip_logo {
+          height: 18px;
+          width: auto;
+          object-fit: contain;
+        }
+
+        .founder_chip_text {
+          font-weight: 800;
+        }
+
+        .aurxon_brand_cta {
+          border: 2px solid #0284c7 !important;
+          color: #0284c7 !important;
+          font-weight: 750 !important;
+        }
+
+        .dark .aurxon_brand_cta {
+          border-color: #38bdf8 !important;
+          color: #38bdf8 !important;
         }
 
         .tagline_chip {
-          padding: 5px 12px;
+          padding: 6px 14px;
           border-radius: 50px;
           background: rgba(168, 85, 247, 0.1);
           color: #9333ea;
@@ -487,7 +573,7 @@ export default function Home() {
         }
 
         .motto_chip {
-          padding: 5px 12px;
+          padding: 6px 14px;
           border-radius: 50px;
           background: #f1f5f9;
           color: #475569;
@@ -500,14 +586,6 @@ export default function Home() {
           color: #cbd5e1;
         }
 
-        .neon_beacon_dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #10b981;
-          box-shadow: 0 0 10px #10b981;
-        }
-
         .hero_narrative {
           max-width: 620px;
           line-height: 1.8;
@@ -517,20 +595,20 @@ export default function Home() {
         /* Right Column: Founder Command Card */
         .hero_command_card {
           position: relative;
-          background: rgba(255, 255, 255, 0.85);
+          background: #ffffff;
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
-          border: 1.5px solid rgba(226, 232, 240, 0.9);
+          border: 1px solid rgba(226, 232, 240, 0.9);
           border-radius: 28px;
           padding: 24px;
-          box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08), 0 0 30px rgba(56, 189, 248, 0.15);
+          box-shadow: 0 20px 45px rgba(15, 23, 42, 0.07);
           transition: all 0.35s ease;
         }
 
         .dark .hero_command_card {
-          background: rgba(15, 23, 42, 0.7);
-          border-color: rgba(56, 189, 248, 0.3);
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(56, 189, 248, 0.2);
+          background: rgba(15, 23, 42, 0.85);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
         }
 
         .command_card_header {
@@ -543,10 +621,11 @@ export default function Home() {
         }
 
         .dark .command_card_header {
-          border-bottom-color: rgba(255, 255, 255, 0.1);
+          border-bottom-color: rgba(255, 255, 255, 0.08);
         }
 
         .status_led_green {
+          display: inline-block;
           width: 8px;
           height: 8px;
           border-radius: 50%;
@@ -555,7 +634,7 @@ export default function Home() {
         }
 
         .command_header_title {
-          font-size: 0.76rem;
+          font-size: 0.78rem;
           font-weight: 800;
           letter-spacing: 0.08em;
           color: #0284c7;
@@ -566,13 +645,15 @@ export default function Home() {
         }
 
         .engine_badge {
+          display: inline-flex;
+          align-items: center;
           font-size: 0.68rem;
           font-weight: 800;
-          padding: 2px 8px;
+          padding: 3px 10px;
           border-radius: 20px;
-          background: rgba(16, 185, 129, 0.15);
+          background: rgba(16, 185, 129, 0.12);
           color: #059669;
-          border: 1px solid rgba(16, 185, 129, 0.3);
+          border: 1px solid rgba(16, 185, 129, 0.25);
         }
 
         .dark .engine_badge {
@@ -587,15 +668,16 @@ export default function Home() {
         }
 
         .hero_person_image {
-          max-height: 420px;
-          object-fit: contain;
-          filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
+          max-height: 380px;
+          border-radius: 20px;
+          object-fit: cover;
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
         }
 
         /* Floating Holographic Telemetry Cards */
         .holo_tag {
           position: absolute;
-          background: rgba(255, 255, 255, 0.94);
+          background: rgba(255, 255, 255, 0.95);
           backdrop-filter: blur(12px);
           border: 1px solid rgba(226, 232, 240, 0.9);
           border-radius: 14px;
@@ -609,28 +691,27 @@ export default function Home() {
         }
 
         .dark .holo_tag {
-          background: rgba(15, 23, 42, 0.85);
-          border-color: rgba(56, 189, 248, 0.35);
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+          background: rgba(15, 23, 42, 0.9);
+          border-color: rgba(255, 255, 255, 0.06);
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         }
 
         .holo_tag:hover {
-          transform: translateY(-3px) scale(1.03);
-          border-color: #38bdf8;
+          transform: translateY(-3px) scale(1.02);
         }
 
         .tag_top_right {
-          top: 20px;
-          right: -10px;
+          top: 15px;
+          right: -8px;
         }
 
         .tag_bottom_left {
-          bottom: 40px;
-          left: -15px;
+          bottom: 25px;
+          left: -12px;
         }
 
         .tag_bottom_right {
-          bottom: 10px;
+          bottom: 5px;
           right: 5px;
         }
 
@@ -659,6 +740,49 @@ export default function Home() {
           color: #ffffff;
         }
 
+        .command_telemetry_grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+        }
+
+        .telemetry_mini_cell {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 10px;
+          padding: 8px 6px;
+          text-align: center;
+        }
+
+        .dark .telemetry_mini_cell {
+          background: rgba(255, 255, 255, 0.03);
+          border-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .telemetry_mini_kicker {
+          display: block;
+          font-size: 0.62rem;
+          font-weight: 800;
+          color: #0284c7;
+          letter-spacing: 0.04em;
+        }
+
+        .dark .telemetry_mini_kicker {
+          color: #38bdf8;
+        }
+
+        .telemetry_mini_title {
+          display: block;
+          font-size: 0.74rem;
+          font-weight: 750;
+          color: #0f172a;
+          margin-top: 2px;
+        }
+
+        .dark .telemetry_mini_title {
+          color: #f1f5f9;
+        }
+
         .command_card_footer {
           display: flex;
           align-items: center;
@@ -666,41 +790,49 @@ export default function Home() {
           padding-top: 14px;
           border-top: 1px solid rgba(226, 232, 240, 0.8);
           margin-top: 12px;
+          gap: 10px;
         }
 
         .dark .command_card_footer {
-          border-top-color: rgba(255, 255, 255, 0.1);
+          border-top-color: rgba(255, 255, 255, 0.08);
         }
 
         .footer_micro_stat {
           display: flex;
           align-items: center;
           gap: 6px;
-          font-size: 0.76rem;
-          font-weight: 750;
-          color: #0284c7;
+          font-size: 0.72rem;
+          font-weight: 600;
+          color: #64748b;
+          line-height: 1.3;
         }
 
         .dark .footer_micro_stat {
-          color: #38bdf8;
-        }
-
-        .stat_dot {
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background: #0284c7;
-        }
-
-        .footer_motto_text {
-          font-size: 0.74rem;
-          font-weight: 650;
-          color: #64748b;
-        }
-
-        .dark .footer_motto_text {
           color: #94a3b8;
         }
+
+        .footer_website_link {
+          font-size: 0.74rem;
+          font-weight: 800;
+          color: #0284c7;
+          text-decoration: none;
+          padding: 4px 10px;
+          border-radius: 20px;
+          background: rgba(2, 132, 199, 0.08);
+          white-space: nowrap;
+          transition: all 0.2s ease;
+        }
+
+        .footer_website_link:hover {
+          background: rgba(2, 132, 199, 0.16);
+          color: #0369a1;
+        }
+
+        .dark .footer_website_link {
+          color: #38bdf8;
+          background: rgba(56, 189, 248, 0.12);
+        }
+
 
         /* Hero Stat Cards */
         .hero_stat_card {

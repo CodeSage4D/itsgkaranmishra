@@ -23,11 +23,12 @@ export function downloadVCardContact(): void {
     "TITLE:Founder & Chief AI Architect",
     "TEL;TYPE=CELL,VOICE,WHATSAPP:+917804895074",
     "EMAIL;TYPE=WORK,INTERNET:karannmishra136@gmail.com",
-    "URL:https://itsgkaranmishra.web.app",
+    "URL:https://aurxon.com",
+    "URL;TYPE=Portfolio:https://itsgkaranmishra.web.app",
     "URL;TYPE=GitHub:https://github.com/CodeSage4D",
     "URL;TYPE=LinkedIn:https://linkedin.com/in/itsgkaranmishra4",
     "URL;TYPE=Instagram:https://instagram.com/itsgkaranmishra",
-    "ADR;TYPE=WORK:;;Killa Maidan VIP Road;Indore;MP;452006;India",
+    "ADR;TYPE=WORK:;;Killa Maidan, VIP Road;Indore;Madhya Pradesh;452006;India",
     "NOTE:Founder at Aurxon • Next Gen AI Solutions • Where Intelligence Meets Innovation.",
     "REV:" + new Date().toISOString(),
     "END:VCARD",
@@ -261,7 +262,7 @@ export async function generateAndDownloadBusinessCard(
 
     // Contact List (Crystal Clear Atlantic Glass Cards)
     const contactItems = [
-      { icon: "🌐", title: "PORTFOLIO & COMPANY", val: "itsgkaranmishra.web.app" },
+      { icon: "⚡", title: "OFFICIAL COMPANY PORTAL", val: "aurxon.com • itsgkaranmishra.web.app" },
       { icon: "💻", title: "GITHUB REPOSITORIES", val: "github.com/CodeSage4D (47+ Repos)" },
       { icon: "💼", title: "LINKEDIN NETWORK", val: "linkedin.com/in/itsgkaranmishra4" },
       { icon: "📸", title: "INSTAGRAM CONNECT", val: "instagram.com/itsgkaranmishra" },
@@ -269,8 +270,8 @@ export async function generateAndDownloadBusinessCard(
       { icon: "📱", title: "WHATSAPP & PHONE", val: "+91 7804895074" },
       {
         icon: "📍",
-        title: "OFFICIAL ADDRESS",
-        val: "ASIA, India, MP, Indore, Killa Maidan VIP Rd, 452006",
+        title: "HEADQUARTERS ADDRESS",
+        val: "AURXON HQ, Killa Maidan, VIP Rd, Indore, MP – 452006, India",
       },
     ];
 
@@ -460,13 +461,13 @@ export async function generateAndDownloadBusinessCard(
 
     // Contact List
     const contactItems = [
-      { icon: "🌐", title: "PORTFOLIO & VENTURE", val: "itsgkaranmishra.web.app" },
+      { icon: "⚡", title: "OFFICIAL COMPANY PORTAL", val: "aurxon.com • itsgkaranmishra.web.app" },
       { icon: "💻", title: "GITHUB REPOSITORIES", val: "github.com/CodeSage4D" },
       { icon: "💼", title: "LINKEDIN NETWORK", val: "linkedin.com/in/itsgkaranmishra4" },
       { icon: "📸", title: "INSTAGRAM CONNECT", val: "instagram.com/itsgkaranmishra" },
       { icon: "✉️", title: "DIRECT EMAIL INBOX", val: "karannmishra136@gmail.com" },
       { icon: "📱", title: "PHONE & WHATSAPP", val: "+91 7804895074" },
-      { icon: "📍", title: "OFFICIAL ADDRESS", val: "ASIA, India, MP, Indore, Killa Maidan VIP Rd, 452006" },
+      { icon: "📍", title: "HEADQUARTERS ADDRESS", val: "AURXON HQ, Killa Maidan, VIP Rd, Indore, MP – 452006, India" },
     ];
 
     let startItemY = 1045;
@@ -638,13 +639,13 @@ export async function generateAndDownloadBusinessCard(
     ctx.fillText("https://itsgkaranmishra.web.app", 540, qrY + qrBoxSize + 74);
 
     const contactItems = [
-      { icon: "🌐", title: "PORTFOLIO & VENTURE", val: "itsgkaranmishra.web.app" },
+      { icon: "⚡", title: "OFFICIAL COMPANY PORTAL", val: "aurxon.com • itsgkaranmishra.web.app" },
       { icon: "💻", title: "GITHUB REPOSITORIES", val: "github.com/CodeSage4D" },
       { icon: "💼", title: "LINKEDIN NETWORK", val: "linkedin.com/in/itsgkaranmishra4" },
       { icon: "📸", title: "INSTAGRAM CONNECT", val: "instagram.com/itsgkaranmishra" },
       { icon: "✉️", title: "DIRECT EMAIL INBOX", val: "karannmishra136@gmail.com" },
       { icon: "📱", title: "PHONE & WHATSAPP", val: "+91 7804895074" },
-      { icon: "📍", title: "OFFICIAL ADDRESS", val: "ASIA, India, MP, Indore, Killa Maidan VIP Rd, 452006" },
+      { icon: "📍", title: "HEADQUARTERS ADDRESS", val: "AURXON HQ, Killa Maidan, VIP Rd, Indore, MP – 452006, India" },
     ];
 
     let startItemY = 1045;
