@@ -19,7 +19,9 @@ export default function Home() {
   const [currentRoleIndex, setCurrentRoleIndex] = useState<number>(0);
   const [isDossierUnlocked, setIsDossierUnlocked] = useState<boolean>(false);
   const [activeDossierTab, setActiveDossierTab] = useState<string>("neural-code");
-  const [activeServiceDrawer, setActiveServiceDrawer] = useState<"ml" | "web" | "analytics" | "automation" | null>("ml");
+  const [activeServiceDrawer, setActiveServiceDrawer] = useState<"ml" | "web" | "analytics" | "automation" | null>(null);
+  const [pinnedServiceDrawer, setPinnedServiceDrawer] = useState<string | null>(null);
+  const [serviceSearchQuery, setServiceSearchQuery] = useState<string>("");
 
   // Region, Date and Live Clock Auto-Detection
   const [liveClock, setLiveClock] = useState<string>("");
@@ -394,29 +396,6 @@ export default function Home() {
       {/* ================ Start Services & Core Engineering Area ================= */}
       <section className="features_area" id="services-section">
         <div className="container">
-          {/* Real-Time Location & Analytical Timezone Header */}
-          <div className="regional_telemetry_bar mb-4">
-            <div className="row align-items-center">
-              <div className="col-md-7 mb-2 mb-md-0">
-                <div className="d-flex align-items-center gap-2 flex-wrap">
-                  <span className="regional_pulse_beacon"></span>
-                  <span className="regional_label font-weight-bold text-white">
-                    {visitorRegion.label}
-                  </span>
-                  <span className="regional_divider">•</span>
-                  <span className="regional_tz text-muted">{visitorRegion.timezone}</span>
-                </div>
-              </div>
-              <div className="col-md-5 text-md-right">
-                <div className="d-inline-flex align-items-center gap-3 regional_time_box">
-                  <span className="clock_icon">⏱️</span>
-                  <span className="live_digital_clock font-mono">{liveClock || "00:00:00"}</span>
-                  <span className="date_indicator font-mono">{liveDate || "03 Oct 2026"}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div className="row justify-content-center">
             <div className="col-lg-8 text-center">
               <div className="main_title">
@@ -428,237 +407,339 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Interactive Service Grid */}
-          <div className="row feature_inner">
-            {/* 1. Machine Learning Development */}
-            <div className="col-lg-3 col-md-6 mb-4">
-              <div
-                className={`feature_item feature_interactive ${activeServiceDrawer === "ml" ? "active_service" : ""}`}
-                onClick={() => setActiveServiceDrawer(activeServiceDrawer === "ml" ? null : "ml")}
-              >
-                <div className="icon" style={{ fontSize: "3.2rem", color: "#007FFF" }}>
-                  <i className="fas fa-brain"></i>
-                </div>
-                <h4>Machine Learning Development</h4>
-                <p>
-                  Building intelligent systems with advanced machine learning algorithms, sentence transformers, and real-time production inference pipelines.
-                </p>
-                <div className="service_expand_prompt">
-                  <span>{activeServiceDrawer === "ml" ? "Hide Architecture ▲" : "Inspect Stack & Metrics ▼"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Web Application Development */}
-            <div className="col-lg-3 col-md-6 mb-4">
-              <div
-                className={`feature_item feature_interactive ${activeServiceDrawer === "web" ? "active_service" : ""}`}
-                onClick={() => setActiveServiceDrawer(activeServiceDrawer === "web" ? null : "web")}
-              >
-                <div className="icon" style={{ fontSize: "3.2rem", color: "#FF5733" }}>
-                  <i className="fas fa-laptop-code"></i>
-                </div>
-                <h4>Web Application Development</h4>
-                <p>
-                  Crafting responsive, user-friendly web applications that are both aesthetically pleasing and functionally robust, using the latest web technologies.
-                </p>
-                <div className="service_expand_prompt">
-                  <span>{activeServiceDrawer === "web" ? "Hide Architecture ▲" : "Inspect Stack & Metrics ▼"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Data Analytics & Visualization */}
-            <div className="col-lg-3 col-md-6 mb-4">
-              <div
-                className={`feature_item feature_interactive ${activeServiceDrawer === "analytics" ? "active_service" : ""}`}
-                onClick={() => setActiveServiceDrawer(activeServiceDrawer === "analytics" ? null : "analytics")}
-              >
-                <div className="icon" style={{ fontSize: "3.2rem", color: "#28A745" }}>
-                  <i className="fas fa-chart-line"></i>
-                </div>
-                <h4>Data Analytics &amp; Visualization</h4>
-                <p>
-                  Transforming data into actionable insights with advanced analytics and visually compelling dashboards to drive business growth and efficiency.
-                </p>
-                <div className="service_expand_prompt">
-                  <span>{activeServiceDrawer === "analytics" ? "Hide Architecture ▲" : "Inspect Stack & Metrics ▼"}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. AI & Automation Solutions */}
-            <div className="col-lg-3 col-md-6 mb-4">
-              <div
-                className={`feature_item feature_interactive ${activeServiceDrawer === "automation" ? "active_service" : ""}`}
-                onClick={() => setActiveServiceDrawer(activeServiceDrawer === "automation" ? null : "automation")}
-              >
-                <div className="icon" style={{ fontSize: "3.2rem", color: "#FFC107" }}>
-                  <i className="fas fa-robot"></i>
-                </div>
-                <h4>AI &amp; Automation Solutions</h4>
-                <p>
-                  Implementing AI-driven automation to streamline processes, reduce manual effort, and boost productivity across various industries.
-                </p>
-                <div className="service_expand_prompt">
-                  <span>{activeServiceDrawer === "automation" ? "Hide Architecture ▲" : "Inspect Stack & Metrics ▼"}</span>
-                </div>
+          {/* Architecture & Capabilities Quick Global Search */}
+          <div className="row justify-content-center mb-4">
+            <div className="col-lg-7 col-md-9">
+              <div className="global_arch_search_bar">
+                <i className="fa fa-search search_bar_icon"></i>
+                <input
+                  type="text"
+                  className="global_arch_input"
+                  placeholder="Quick search architecture &amp; stack (e.g. PyTorch, Next.js, Transformers, Qdrant, Docker, Redis...)"
+                  value={serviceSearchQuery}
+                  onChange={(e) => {
+                    const q = e.target.value;
+                    setServiceSearchQuery(q);
+                    const lq = q.toLowerCase();
+                    if (!q.trim()) {
+                      if (!pinnedServiceDrawer) setActiveServiceDrawer(null);
+                    } else if (lq.includes("torch") || lq.includes("ml") || lq.includes("neural") || lq.includes("bert") || lq.includes("transform") || lq.includes("qdrant") || lq.includes("cuda")) {
+                      setActiveServiceDrawer("ml");
+                    } else if (lq.includes("web") || lq.includes("react") || lq.includes("next") || lq.includes("postgres") || lq.includes("node") || lq.includes("typescript") || lq.includes("docker")) {
+                      setActiveServiceDrawer("web");
+                    } else if (lq.includes("data") || lq.includes("analytic") || lq.includes("python") || lq.includes("pandas") || lq.includes("arrow") || lq.includes("plotly") || lq.includes("redis")) {
+                      setActiveServiceDrawer("analytics");
+                    } else if (lq.includes("ai") || lq.includes("agent") || lq.includes("langchain") || lq.includes("celery") || lq.includes("broker") || lq.includes("autom")) {
+                      setActiveServiceDrawer("automation");
+                    }
+                  }}
+                />
+                {serviceSearchQuery && (
+                  <button
+                    type="button"
+                    className="search_clear_pill"
+                    onClick={() => {
+                      setServiceSearchQuery("");
+                      if (!pinnedServiceDrawer) setActiveServiceDrawer(null);
+                    }}
+                    title="Clear search"
+                  >
+                    <i className="fa fa-times mr-1"></i> Clear
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Dynamic Interactive Drawer Showing Deep Tech Stack & Probability Specs */}
-          {activeServiceDrawer && (
-            <div className="service_deep_specs_drawer mt-3 mb-4">
-              <div className="drawer_inner">
-                {activeServiceDrawer === "ml" && (
-                  <div className="row align-items-center">
-                    <div className="col-lg-8">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="specs_badge">TRANSFORMERS &amp; EMBEDDINGS</span>
-                        <h4 className="specs_title mb-0">Production Neural Architectures</h4>
-                      </div>
-                      <p className="specs_desc">
-                        Custom fine-tuning of miniLM and BERT checkpoints with FP16 quantization for GPU-accelerated low-latency vector indexing. Built with high-throughput FastAPI microservices and sub-15ms semantic matching pipelines.
-                      </p>
-                      <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
-                        <span className="tech_pill"><i className="fas fa-fire mr-1 text-danger"></i> PyTorch</span>
-                        <span className="tech_pill"><i className="fas fa-brain mr-1 text-primary"></i> SentenceTransformers</span>
-                        <span className="tech_pill"><i className="fas fa-bolt mr-1 text-warning"></i> FastAPI</span>
-                        <span className="tech_pill"><i className="fas fa-microchip mr-1 text-info"></i> TensorRT / CUDA</span>
-                        <span className="tech_pill"><i className="fas fa-database mr-1 text-success"></i> Qdrant Vector DB</span>
-                      </div>
-                    </div>
-                    <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
-                      <div className="metrics_telemetry_box">
-                        <div className="metric_stat">
-                          <span className="m_label">Inference Latency:</span>
-                          <span className="m_val text-success">14.2ms</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Cosine Accuracy:</span>
-                          <span className="m_val text-info">98.4%</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Uptime Probability:</span>
-                          <span className="m_val text-warning">P(SLA) &gt; 0.999</span>
-                        </div>
-                      </div>
-                    </div>
+          <div
+            className="services_interactive_dock"
+            onMouseLeave={() => {
+              if (!pinnedServiceDrawer) {
+                setActiveServiceDrawer(null);
+              }
+            }}
+          >
+            {/* Interactive Service Grid */}
+            <div className="row feature_inner">
+              {/* 1. Machine Learning Development */}
+              <div className="col-lg-3 col-md-6 mb-4">
+                <div
+                  className={`feature_item feature_interactive ${activeServiceDrawer === "ml" ? "active_service" : ""}`}
+                  onMouseEnter={() => setActiveServiceDrawer("ml")}
+                  onClick={() => {
+                    if (pinnedServiceDrawer === "ml") {
+                      setPinnedServiceDrawer(null);
+                      setActiveServiceDrawer(null);
+                    } else {
+                      setPinnedServiceDrawer("ml");
+                      setActiveServiceDrawer("ml");
+                    }
+                  }}
+                >
+                  <div className="icon" style={{ fontSize: "3.2rem", color: "#007FFF" }}>
+                    <i className="fas fa-brain"></i>
                   </div>
-                )}
+                  <h4>Machine Learning Development</h4>
+                  <p>
+                    Building intelligent systems with advanced machine learning algorithms, sentence transformers, and real-time production inference pipelines.
+                  </p>
+                  <div className="service_expand_prompt">
+                    <span>{activeServiceDrawer === "ml" ? (pinnedServiceDrawer === "ml" ? "Pinned (Click to Unpin) ▲" : "Architecture Active ▲") : "Hover to Inspect ▼"}</span>
+                  </div>
+                </div>
+              </div>
 
-                {activeServiceDrawer === "web" && (
-                  <div className="row align-items-center">
-                    <div className="col-lg-8">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="specs_badge">DISTRIBUTED FULL-STACK</span>
-                        <h4 className="specs_title mb-0">Enterprise Next.js &amp; Edge Platforms</h4>
-                      </div>
-                      <p className="specs_desc">
-                        Full-stack architectures featuring React Server Components, TypeScript type-safety, and edge caching for sub-100ms first contentful paint (FCP). Scalable to millions of requests with PostgreSQL and Prisma connection pooling.
-                      </p>
-                      <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
-                        <span className="tech_pill"><i className="fab fa-react mr-1 text-info"></i> Next.js 15</span>
-                        <span className="tech_pill"><i className="fab fa-js mr-1 text-primary"></i> TypeScript</span>
-                        <span className="tech_pill"><i className="fas fa-server mr-1 text-success"></i> PostgreSQL / Prisma</span>
-                        <span className="tech_pill"><i className="fab fa-node mr-1 text-warning"></i> Node.js Edge</span>
-                        <span className="tech_pill"><i className="fab fa-docker mr-1 text-info"></i> Dockerized</span>
-                      </div>
-                    </div>
-                    <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
-                      <div className="metrics_telemetry_box">
-                        <div className="metric_stat">
-                          <span className="m_label">Lighthouse Performance:</span>
-                          <span className="m_val text-success">99 / 100</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">First Contentful Paint:</span>
-                          <span className="m_val text-info">&lt; 0.4s</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Throughput Capacity:</span>
-                          <span className="m_val text-warning">1,400+ Req/s</span>
-                        </div>
-                      </div>
-                    </div>
+              {/* 2. Web Application Development */}
+              <div className="col-lg-3 col-md-6 mb-4">
+                <div
+                  className={`feature_item feature_interactive ${activeServiceDrawer === "web" ? "active_service" : ""}`}
+                  onMouseEnter={() => setActiveServiceDrawer("web")}
+                  onClick={() => {
+                    if (pinnedServiceDrawer === "web") {
+                      setPinnedServiceDrawer(null);
+                      setActiveServiceDrawer(null);
+                    } else {
+                      setPinnedServiceDrawer("web");
+                      setActiveServiceDrawer("web");
+                    }
+                  }}
+                >
+                  <div className="icon" style={{ fontSize: "3.2rem", color: "#FF5733" }}>
+                    <i className="fas fa-laptop-code"></i>
                   </div>
-                )}
+                  <h4>Web Application Development</h4>
+                  <p>
+                    Crafting responsive, user-friendly web applications that are both aesthetically pleasing and functionally robust, using the latest web technologies.
+                  </p>
+                  <div className="service_expand_prompt">
+                    <span>{activeServiceDrawer === "web" ? (pinnedServiceDrawer === "web" ? "Pinned (Click to Unpin) ▲" : "Architecture Active ▲") : "Hover to Inspect ▼"}</span>
+                  </div>
+                </div>
+              </div>
 
-                {activeServiceDrawer === "analytics" && (
-                  <div className="row align-items-center">
-                    <div className="col-lg-8">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="specs_badge">TIME-SERIES &amp; HEURISTICS</span>
-                        <h4 className="specs_title mb-0">Visual Data Telemetry &amp; Forecasting</h4>
-                      </div>
-                      <p className="specs_desc">
-                        Transforming high-frequency telemetry streams into actionable mathematical graphs. Integrated with Python Pandas, Plotly dynamic charting, and Apache Arrow for instantaneous batch analytics.
-                      </p>
-                      <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
-                        <span className="tech_pill"><i className="fab fa-python mr-1 text-warning"></i> Python Pandas</span>
-                        <span className="tech_pill"><i className="fas fa-chart-pie mr-1 text-primary"></i> Plotly / D3</span>
-                        <span className="tech_pill"><i className="fas fa-stream mr-1 text-success"></i> Apache Arrow</span>
-                        <span className="tech_pill"><i className="fas fa-memory mr-1 text-danger"></i> Redis In-Memory</span>
-                      </div>
-                    </div>
-                    <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
-                      <div className="metrics_telemetry_box">
-                        <div className="metric_stat">
-                          <span className="m_label">Stream Processing:</span>
-                          <span className="m_val text-success">50k records/s</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Anomaly Sensitivity:</span>
-                          <span className="m_val text-info">99.7%</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Cache Hit Ratio:</span>
-                          <span className="m_val text-warning">96.8%</span>
-                        </div>
-                      </div>
-                    </div>
+              {/* 3. Data Analytics & Visualization */}
+              <div className="col-lg-3 col-md-6 mb-4">
+                <div
+                  className={`feature_item feature_interactive ${activeServiceDrawer === "analytics" ? "active_service" : ""}`}
+                  onMouseEnter={() => setActiveServiceDrawer("analytics")}
+                  onClick={() => {
+                    if (pinnedServiceDrawer === "analytics") {
+                      setPinnedServiceDrawer(null);
+                      setActiveServiceDrawer(null);
+                    } else {
+                      setPinnedServiceDrawer("analytics");
+                      setActiveServiceDrawer("analytics");
+                    }
+                  }}
+                >
+                  <div className="icon" style={{ fontSize: "3.2rem", color: "#28A745" }}>
+                    <i className="fas fa-chart-line"></i>
                   </div>
-                )}
+                  <h4>Data Analytics &amp; Visualization</h4>
+                  <p>
+                    Transforming data into actionable insights with advanced analytics and visually compelling dashboards to drive business growth and efficiency.
+                  </p>
+                  <div className="service_expand_prompt">
+                    <span>{activeServiceDrawer === "analytics" ? (pinnedServiceDrawer === "analytics" ? "Pinned (Click to Unpin) ▲" : "Architecture Active ▲") : "Hover to Inspect ▼"}</span>
+                  </div>
+                </div>
+              </div>
 
-                {activeServiceDrawer === "automation" && (
-                  <div className="row align-items-center">
-                    <div className="col-lg-8">
-                      <div className="d-flex align-items-center gap-2 mb-2">
-                        <span className="specs_badge">AUTONOMOUS WORKFLOWS</span>
-                        <h4 className="specs_title mb-0">AI Agent Orchestration &amp; Workers</h4>
-                      </div>
-                      <p className="specs_desc">
-                        Multi-agent task distribution with LangChain, Celery asynchronous queue workers, and self-healing task schedulers. Eliminates operational bottlenecks with deterministic event triggers and audit logging.
-                      </p>
-                      <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
-                        <span className="tech_pill"><i className="fas fa-robot mr-1 text-warning"></i> LangChain Agents</span>
-                        <span className="tech_pill"><i className="fas fa-tasks mr-1 text-info"></i> Celery Workers</span>
-                        <span className="tech_pill"><i className="fas fa-network-wired mr-1 text-primary"></i> Redis Event Broker</span>
-                        <span className="tech_pill"><i className="fas fa-shield-alt mr-1 text-success"></i> Automated Failover</span>
-                      </div>
-                    </div>
-                    <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
-                      <div className="metrics_telemetry_box">
-                        <div className="metric_stat">
-                          <span className="m_label">Task Reliability:</span>
-                          <span className="m_val text-success">99.99%</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Queue Latency:</span>
-                          <span className="m_val text-info">&lt; 5ms</span>
-                        </div>
-                        <div className="metric_stat">
-                          <span className="m_label">Automation ROI:</span>
-                          <span className="m_val text-warning">10x Speed</span>
-                        </div>
-                      </div>
-                    </div>
+              {/* 4. AI & Automation Solutions */}
+              <div className="col-lg-3 col-md-6 mb-4">
+                <div
+                  className={`feature_item feature_interactive ${activeServiceDrawer === "automation" ? "active_service" : ""}`}
+                  onMouseEnter={() => setActiveServiceDrawer("automation")}
+                  onClick={() => {
+                    if (pinnedServiceDrawer === "automation") {
+                      setPinnedServiceDrawer(null);
+                      setActiveServiceDrawer(null);
+                    } else {
+                      setPinnedServiceDrawer("automation");
+                      setActiveServiceDrawer("automation");
+                    }
+                  }}
+                >
+                  <div className="icon" style={{ fontSize: "3.2rem", color: "#FFC107" }}>
+                    <i className="fas fa-robot"></i>
                   </div>
-                )}
+                  <h4>AI &amp; Automation Solutions</h4>
+                  <p>
+                    Implementing AI-driven automation to streamline processes, reduce manual effort, and boost productivity across various industries.
+                  </p>
+                  <div className="service_expand_prompt">
+                    <span>{activeServiceDrawer === "automation" ? (pinnedServiceDrawer === "automation" ? "Pinned (Click to Unpin) ▲" : "Architecture Active ▲") : "Hover to Inspect ▼"}</span>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+
+            {/* Dynamic Interactive Drawer Showing Deep Tech Stack & Probability Specs */}
+            {activeServiceDrawer && (
+              <div className="service_deep_specs_drawer mt-2 mb-4 animate_fade_in">
+                <div className="d-flex justify-content-end mb-2">
+                  <button
+                    type="button"
+                    className="drawer_dismiss_btn"
+                    onClick={() => {
+                      setPinnedServiceDrawer(null);
+                      setActiveServiceDrawer(null);
+                    }}
+                    title="Dismiss Architecture Drawer"
+                  >
+                    <i className="fa fa-times mr-1"></i> Close Drawer
+                  </button>
+                </div>
+                <div className="drawer_inner">
+                  {activeServiceDrawer === "ml" && (
+                    <div className="row align-items-center">
+                      <div className="col-lg-8">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                          <span className="specs_badge">TRANSFORMERS &amp; EMBEDDINGS</span>
+                          <h4 className="specs_title mb-0">Production Neural Architectures</h4>
+                        </div>
+                        <p className="specs_desc">
+                          Custom fine-tuning of miniLM and BERT checkpoints with FP16 quantization for GPU-accelerated low-latency vector indexing. Built with high-throughput FastAPI microservices and sub-15ms semantic matching pipelines.
+                        </p>
+                        <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
+                          <span className="tech_pill"><i className="fas fa-fire mr-1 text-danger"></i> PyTorch</span>
+                          <span className="tech_pill"><i className="fas fa-brain mr-1 text-primary"></i> SentenceTransformers</span>
+                          <span className="tech_pill"><i className="fas fa-bolt mr-1 text-warning"></i> FastAPI</span>
+                          <span className="tech_pill"><i className="fas fa-microchip mr-1 text-info"></i> TensorRT / CUDA</span>
+                          <span className="tech_pill"><i className="fas fa-database mr-1 text-success"></i> Qdrant Vector DB</span>
+                        </div>
+                      </div>
+                      <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
+                        <div className="metrics_telemetry_box">
+                          <div className="metric_stat">
+                            <span className="m_label">Inference Latency:</span>
+                            <span className="m_val text-success">14.2ms</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Cosine Accuracy:</span>
+                            <span className="m_val text-info">98.4%</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Uptime Probability:</span>
+                            <span className="m_val text-warning">P(SLA) &gt; 0.999</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeServiceDrawer === "web" && (
+                    <div className="row align-items-center">
+                      <div className="col-lg-8">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                          <span className="specs_badge">DISTRIBUTED FULL-STACK</span>
+                          <h4 className="specs_title mb-0">Enterprise Next.js &amp; Edge Platforms</h4>
+                        </div>
+                        <p className="specs_desc">
+                          Full-stack architectures featuring React Server Components, TypeScript type-safety, and edge caching for sub-100ms first contentful paint (FCP). Scalable to millions of requests with PostgreSQL and Prisma connection pooling.
+                        </p>
+                        <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
+                          <span className="tech_pill"><i className="fab fa-react mr-1 text-info"></i> Next.js 15</span>
+                          <span className="tech_pill"><i className="fab fa-js mr-1 text-primary"></i> TypeScript</span>
+                          <span className="tech_pill"><i className="fas fa-server mr-1 text-success"></i> PostgreSQL / Prisma</span>
+                          <span className="tech_pill"><i className="fab fa-node mr-1 text-warning"></i> Node.js Edge</span>
+                          <span className="tech_pill"><i className="fab fa-docker mr-1 text-info"></i> Dockerized</span>
+                        </div>
+                      </div>
+                      <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
+                        <div className="metrics_telemetry_box">
+                          <div className="metric_stat">
+                            <span className="m_label">Lighthouse Performance:</span>
+                            <span className="m_val text-success">99 / 100</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">First Contentful Paint:</span>
+                            <span className="m_val text-info">&lt; 0.4s</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Throughput Capacity:</span>
+                            <span className="m_val text-warning">1,400+ Req/s</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeServiceDrawer === "analytics" && (
+                    <div className="row align-items-center">
+                      <div className="col-lg-8">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                          <span className="specs_badge">TIME-SERIES &amp; HEURISTICS</span>
+                          <h4 className="specs_title mb-0">Visual Data Telemetry &amp; Forecasting</h4>
+                        </div>
+                        <p className="specs_desc">
+                          Transforming high-frequency telemetry streams into actionable mathematical graphs. Integrated with Python Pandas, Plotly dynamic charting, and Apache Arrow for instantaneous batch analytics.
+                        </p>
+                        <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
+                          <span className="tech_pill"><i className="fab fa-python mr-1 text-warning"></i> Python Pandas</span>
+                          <span className="tech_pill"><i className="fas fa-chart-pie mr-1 text-primary"></i> Plotly / D3</span>
+                          <span className="tech_pill"><i className="fas fa-stream mr-1 text-success"></i> Apache Arrow</span>
+                          <span className="tech_pill"><i className="fas fa-memory mr-1 text-danger"></i> Redis In-Memory</span>
+                        </div>
+                      </div>
+                      <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
+                        <div className="metrics_telemetry_box">
+                          <div className="metric_stat">
+                            <span className="m_label">Stream Processing:</span>
+                            <span className="m_val text-success">50k records/s</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Anomaly Sensitivity:</span>
+                            <span className="m_val text-info">99.7%</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Cache Hit Ratio:</span>
+                            <span className="m_val text-warning">96.8%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {activeServiceDrawer === "automation" && (
+                    <div className="row align-items-center">
+                      <div className="col-lg-8">
+                        <div className="d-flex align-items-center gap-2 mb-2">
+                          <span className="specs_badge">AUTONOMOUS WORKFLOWS</span>
+                          <h4 className="specs_title mb-0">AI Agent Orchestration &amp; Workers</h4>
+                        </div>
+                        <p className="specs_desc">
+                          Multi-agent task distribution with LangChain, Celery asynchronous queue workers, and self-healing task schedulers. Eliminates operational bottlenecks with deterministic event triggers and audit logging.
+                        </p>
+                        <div className="d-flex gap-2 flex-wrap mt-2 tech_stack_icons_row">
+                          <span className="tech_pill"><i className="fas fa-robot mr-1 text-warning"></i> LangChain Agents</span>
+                          <span className="tech_pill"><i className="fas fa-tasks mr-1 text-info"></i> Celery Workers</span>
+                          <span className="tech_pill"><i className="fas fa-network-wired mr-1 text-primary"></i> Redis Event Broker</span>
+                          <span className="tech_pill"><i className="fas fa-shield-alt mr-1 text-success"></i> Automated Failover</span>
+                        </div>
+                      </div>
+                      <div className="col-lg-4 mt-3 mt-lg-0 text-lg-right">
+                        <div className="metrics_telemetry_box">
+                          <div className="metric_stat">
+                            <span className="m_label">Task Reliability:</span>
+                            <span className="m_val text-success">99.99%</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Queue Latency:</span>
+                            <span className="m_val text-info">&lt; 5ms</span>
+                          </div>
+                          <div className="metric_stat">
+                            <span className="m_label">Automation ROI:</span>
+                            <span className="m_val text-warning">10x Speed</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Vector Feature Spotlights */}
           <div className="row mt-4 align-items-center justify-content-center">

@@ -135,7 +135,7 @@ const milestones: Milestone[] = [
 ];
 
 export const RoadTimelineExperience: React.FC = () => {
-  const [expandedId, setExpandedId] = useState<string | null>("aurxon");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [activeNodes, setActiveNodes] = useState<Set<number>>(new Set([0]));
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -313,12 +313,39 @@ export const RoadTimelineExperience: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Summary Narrative */}
-                      <p className="milestone_summary_text">{item.summary}</p>
+                      {/* Mysterious Level Classified Teaser Hook */}
+                      {!isExpanded && (
+                        <div className="milestone_mysterious_hook mb-3">
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            <span className="classified_pill">
+                              <i className="fa fa-lock mr-1"></i> CLASSIFIED DOSSIER
+                            </span>
+                            <span className="classified_subtext">
+                              Click Decrypt below to inspect verified deliverables &amp; architecture
+                            </span>
+                          </div>
+                          <p className="milestone_summary_text mb-0 text-muted">
+                            {item.summary.length > 115 ? `${item.summary.slice(0, 115)}...` : item.summary}
+                          </p>
+                        </div>
+                      )}
 
-                      {/* Interactive Expandable Detailed Dossier */}
+                      {/* Interactive Expandable Detailed Dossier (Decrypted on User Interest) */}
                       {isExpanded && (
-                        <div className="milestone_expanded_details animate_fade_in">
+                        <div className="milestone_expanded_details animate_fade_in mb-3">
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            <span className="classified_unlocked_pill">
+                              <i className="fa fa-unlock mr-1 text-success"></i> DECRYPTED ARCHIVE
+                            </span>
+                            <span className="classified_subtext text-info">
+                              Verified milestone narrative &amp; systems specifications
+                            </span>
+                          </div>
+
+                          <p className="milestone_summary_text font-weight-bold mb-3">
+                            {item.summary}
+                          </p>
+
                           <div className="detailed_story_paragraph">
                             <p>{item.story}</p>
                           </div>
@@ -333,17 +360,17 @@ export const RoadTimelineExperience: React.FC = () => {
                               ))}
                             </ul>
                           </div>
+
+                          {/* Technologies Stack Tags */}
+                          <div className="milestone_tech_stack mt-3">
+                            {item.technologies.map((tech) => (
+                              <span key={tech} className="tech_pill_item">
+                                #{tech}
+                              </span>
+                            ))}
+                          </div>
                         </div>
                       )}
-
-                      {/* Technologies Stack Tags */}
-                      <div className="milestone_tech_stack">
-                        {item.technologies.map((tech) => (
-                          <span key={tech} className="tech_pill_item">
-                            #{tech}
-                          </span>
-                        ))}
-                      </div>
 
                       {/* Action Bar: Website Button + Expand Toggle */}
                       <div className="milestone_action_bar">
@@ -367,8 +394,7 @@ export const RoadTimelineExperience: React.FC = () => {
                           onClick={() => toggleExpand(item.id)}
                           className="btn_milestone_toggle ml-auto"
                         >
-                          <span>{isExpanded ? "Collapse Details" : "⚡ Technical Breakdown"}</span>
-                          <i className={`fa ${isExpanded ? "fa-angle-up" : "fa-angle-down"}`}></i>
+                          <span>{isExpanded ? "▲ Encrypt & Collapse Milestone" : "⚡ Decrypt Classified Milestone ▼"}</span>
                         </button>
                       </div>
                     </div>
@@ -720,25 +746,61 @@ export const RoadTimelineExperience: React.FC = () => {
         }
 
         .milestone_logo_badge {
-          height: 34px;
-          padding: 4px 10px;
+          height: 52px;
+          min-width: 120px;
+          padding: 6px 14px;
           background: #ffffff;
-          border-radius: 8px;
-          border: 1px solid rgba(226, 232, 240, 0.8);
+          border-radius: 12px;
+          border: 1px solid rgba(226, 232, 240, 0.9);
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
         }
 
         .dark .milestone_logo_badge {
-          background: rgba(255, 255, 255, 0.95);
+          background: #ffffff;
+          border: 1.5px solid rgba(56, 189, 248, 0.45);
+          box-shadow: 0 4px 18px rgba(56, 189, 248, 0.25);
         }
 
         .milestone_org_img {
-          max-height: 26px;
-          max-width: 90px;
+          max-height: 42px;
+          max-width: 140px;
           object-fit: contain;
+        }
+
+        .classified_pill {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.35);
+          color: #ef4444;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          padding: 2px 8px;
+          border-radius: 6px;
+        }
+
+        .classified_unlocked_pill {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(16, 185, 129, 0.12);
+          border: 1px solid rgba(16, 185, 129, 0.35);
+          color: #10b981;
+          font-size: 0.68rem;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          padding: 2px 8px;
+          border-radius: 6px;
+        }
+
+        .classified_subtext {
+          font-size: 0.74rem;
+          color: #94a3b8;
+          font-style: italic;
         }
 
         .milestone_role_title {

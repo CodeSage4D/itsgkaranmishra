@@ -1,10 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { recordLead } from "@/lib/analytics-client";
 
 export const Footer: React.FC = () => {
+  const [liveClock, setLiveClock] = useState<string>("");
+  const [liveDate, setLiveDate] = useState<string>("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setLiveClock(now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+      setLiveDate(now.toLocaleDateString("en-US", { weekday: "short", day: "2-digit", month: "short", year: "numeric" }));
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -252,6 +266,22 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Live Regional Telemetry Status Bar */}
+        <div className="footer_live_telemetry_bar mb-4">
+          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div className="d-flex align-items-center gap-2">
+              <span className="telemetry_pulse_beacon"></span>
+              <span className="footer_telemetry_hub">
+                🇮🇳 India Registered Hub (Indore Central) &bull; Asia/Kolkata (IST • UTC+5:30)
+              </span>
+            </div>
+            <div className="d-inline-flex align-items-center gap-3 footer_clock_group font-mono">
+              <span className="footer_clock_text">⏱️ {liveClock || "00:00:00"}</span>
+              <span className="footer_date_pill">{liveDate || "03 Oct 2026"}</span>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar with Back to Top */}
         <div className="footer_bottom_row">
           <div className="footer_copy_col">
@@ -275,8 +305,56 @@ export const Footer: React.FC = () => {
 
       {/* Modern High-End Scoped Footer CSS */}
       <style dangerouslySetInnerHTML={{ __html: `
+        .footer_live_telemetry_bar {
+          background: rgba(9, 23, 31, 0.7);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-radius: 50px;
+          padding: 10px 20px;
+          border: 1px solid rgba(206, 161, 122, 0.15);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        }
+
+        .telemetry_pulse_beacon {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #73C4BF;
+          box-shadow: 0 0 8px #73C4BF;
+          animation: pulseBeacon 2s infinite;
+        }
+
+        @keyframes pulseBeacon {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .footer_telemetry_hub {
+          font-size: 0.8rem;
+          color: #CEA17A;
+          font-weight: 600;
+        }
+
+        .footer_clock_group {
+          font-size: 0.82rem;
+          color: #f1f5f9;
+        }
+
+        .footer_clock_text {
+          color: #73C4BF;
+          font-weight: 700;
+        }
+
+        .footer_date_pill {
+          background: rgba(206, 161, 122, 0.12);
+          color: #CEA17A;
+          font-size: 0.74rem;
+          padding: 2px 8px;
+          border-radius: 6px;
+        }
+
         .modern_footer_root {
-          background: #0f172a;
+          background: #000000;
           color: #94a3b8;
           position: relative;
           overflow: hidden;

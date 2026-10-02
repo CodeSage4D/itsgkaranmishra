@@ -96,7 +96,7 @@ export const Header: React.FC = () => {
                     <span className="founder_name">Karan Mishra</span>
                     <span className="founder_badge">FOUNDER</span>
                   </div>
-                  <span className="brand_tagline">
+                  <span className="brand_tagline d-none d-sm-flex">
                     <span className="live_neon_pulse"></span>
                     Aurxon &bull; Next Gen AI Solutions
                   </span>
@@ -595,32 +595,48 @@ export const Header: React.FC = () => {
         .mobile_hamburger_btn {
           width: 38px;
           height: 38px;
-          border-radius: 10px;
-          border: 1px solid rgba(226, 232, 240, 0.8);
-          background: transparent;
+          border-radius: 50%;
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          background: rgba(255, 255, 255, 0.9);
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           gap: 4px;
           cursor: pointer;
-          padding: 6px;
+          padding: 0;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .dark .mobile_hamburger_btn {
-          border-color: rgba(255, 255, 255, 0.15);
+          background: rgba(15, 23, 42, 0.85);
+          border-color: rgba(56, 189, 248, 0.3);
+          box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+        }
+
+        .mobile_hamburger_btn:hover {
+          transform: scale(1.08);
+          border-color: #38bdf8;
+          box-shadow: 0 0 18px rgba(56, 189, 248, 0.4);
         }
 
         .mobile_hamburger_btn .bar {
-          width: 18px;
+          width: 17px;
           height: 2px;
           background: #0f172a;
           border-radius: 2px;
-          transition: all 0.25s ease;
+          transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .mobile_hamburger_btn .bar {
-          background: #ffffff;
+          background: #38bdf8;
+        }
+
+        .mobile_hamburger_btn.is_active {
+          background: linear-gradient(135deg, rgba(2, 132, 199, 0.2), rgba(129, 140, 248, 0.2));
+          border-color: #38bdf8;
+          box-shadow: 0 0 20px rgba(56, 189, 248, 0.45);
         }
 
         .mobile_hamburger_btn.is_active .bar_top {
@@ -629,18 +645,20 @@ export const Header: React.FC = () => {
 
         .mobile_hamburger_btn.is_active .bar_mid {
           opacity: 0;
+          transform: scale(0);
         }
 
         .mobile_hamburger_btn.is_active .bar_bot {
           transform: translateY(-6px) rotate(-45deg);
         }
 
-        /* Mobile Glass Drawer */
+        /* Mobile Glass Drawer Floating Modal */
         .mobile_drawer_backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.6);
-          backdrop-filter: blur(8px);
+          background: rgba(0, 0, 0, 0.65);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           z-index: 1060;
           opacity: 0;
           pointer-events: none;
@@ -654,27 +672,29 @@ export const Header: React.FC = () => {
 
         .mobile_glass_drawer {
           position: fixed;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          width: 85%;
-          max-width: 360px;
+          top: 10px;
+          right: 10px;
+          bottom: 10px;
+          width: calc(100% - 20px);
+          max-width: 340px;
           background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(25px);
-          -webkit-backdrop-filter: blur(25px);
-          border-left: 1px solid rgba(226, 232, 240, 0.8);
+          backdrop-filter: blur(30px);
+          -webkit-backdrop-filter: blur(30px);
+          border: 1px solid rgba(226, 232, 240, 0.9);
+          border-radius: 24px;
           z-index: 1070;
-          padding: 24px 20px;
+          padding: 20px 18px;
           display: flex;
           flex-direction: column;
-          transform: translateX(100%);
-          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: -15px 0 35px rgba(0, 0, 0, 0.2);
+          transform: translateX(110%);
+          transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: -10px 20px 50px rgba(0, 0, 0, 0.25);
         }
 
         .dark .mobile_glass_drawer {
-          background: rgba(10, 15, 28, 0.95);
-          border-left-color: rgba(255, 255, 255, 0.1);
+          background: rgba(8, 12, 22, 0.94);
+          border: 1px solid rgba(56, 189, 248, 0.35);
+          box-shadow: -10px 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(56, 189, 248, 0.15);
         }
 
         .mobile_glass_drawer.is_open {
@@ -685,7 +705,7 @@ export const Header: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding-bottom: 16px;
+          padding-bottom: 14px;
           border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
@@ -694,13 +714,23 @@ export const Header: React.FC = () => {
         }
 
         .mobile_drawer_close_btn {
-          width: 36px;
-          height: 36px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           border: none;
-          background: rgba(226, 232, 240, 0.5);
+          background: rgba(226, 232, 240, 0.6);
           color: #0f172a;
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.85rem;
+          transition: all 0.2s ease;
+        }
+
+        .mobile_drawer_close_btn:hover {
+          background: #ef4444;
+          color: #ffffff;
         }
 
         .dark .mobile_drawer_close_btn {
@@ -708,17 +738,22 @@ export const Header: React.FC = () => {
           color: #ffffff;
         }
 
+        .dark .mobile_drawer_close_btn:hover {
+          background: #ef4444;
+          color: #ffffff;
+        }
+
         .mobile_affiliations_strip {
           display: flex;
           gap: 8px;
-          padding: 12px 0;
+          padding: 10px 0;
         }
 
         .mobile_org_chip {
-          padding: 6px 12px;
+          padding: 4px 10px;
           border-radius: 50px;
           background: #f1f5f9;
-          font-size: 0.78rem;
+          font-size: 0.74rem;
           color: #0f172a;
           display: flex;
           align-items: center;
@@ -739,11 +774,11 @@ export const Header: React.FC = () => {
 
         .mobile_links_list {
           list-style: none;
-          margin: 16px 0;
+          margin: 10px 0;
           padding: 0;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 5px;
           flex: 1;
           overflow-y: auto;
         }
@@ -752,18 +787,23 @@ export const Header: React.FC = () => {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 12px 16px;
+          padding: 10px 14px;
           border-radius: 12px;
           text-decoration: none;
           color: var(--text-body);
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 0.88rem;
           transition: all 0.2s ease;
         }
 
         .mobile_nav_item_link:hover {
-          background: rgba(56, 189, 248, 0.1);
+          background: rgba(56, 189, 248, 0.12);
           color: #0284c7;
+          transform: translateX(4px);
+        }
+
+        .dark .mobile_nav_item_link:hover {
+          color: #38bdf8;
         }
 
         .mobile_nav_item_link.highlight_link {
