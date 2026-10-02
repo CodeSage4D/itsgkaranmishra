@@ -197,9 +197,11 @@ export const RoadTimelineExperience: React.FC = () => {
         </div>
 
         {/* Storytelling Road Timeline Container */}
-        <div className="road_timeline_wrapper" ref={wrapperRef}>
-          {/* Dynamic Scroll Road Track: Line dynamically grows down as user scrolls (NO permanent line) */}
-          <div className="dynamic_road_track_container">
+        <div className="road_timeline_wrapper">
+          {/* Dedicated Milestones Track Area: Dynamic scroll line is strictly bounded within milestones */}
+          <div className="milestones_track_area" ref={wrapperRef}>
+            {/* Dynamic Scroll Road Track: Line dynamically grows down as user scrolls (NO permanent line) */}
+            <div className="dynamic_road_track_container">
             <div
               className="dynamic_drawn_line"
               style={{
@@ -374,8 +376,9 @@ export const RoadTimelineExperience: React.FC = () => {
               );
             })}
           </div>
+          </div>
 
-          {/* Founder & Enterprise Collaboration Callout Banner */}
+          {/* Founder & Enterprise Collaboration Callout Banner - Cleanly Separated Below Milestones with High Z-Index */}
           <div className="founder_collab_card text-center mt-5">
             <div className="collab_inner">
               <span className="collab_eyebrow">
@@ -476,17 +479,23 @@ export const RoadTimelineExperience: React.FC = () => {
           padding: 40px 0;
         }
 
-        /* Dynamic Drawing Scroll Track (NO permanent static line) */
+        .milestones_track_area {
+          position: relative;
+          padding: 20px 0;
+        }
+
+        /* Dynamic Drawing Scroll Track bounded strictly inside milestones (Never overlaps founder banner) */
         .dynamic_road_track_container {
           position: absolute;
-          top: 30px;
-          bottom: 120px;
+          top: 35px;
+          bottom: 35px;
           left: 50%;
           width: 6px;
           transform: translateX(-50%);
           background: transparent !important;
           border-radius: 6px;
           z-index: 1;
+          pointer-events: none;
         }
 
         .dark .dynamic_road_track_container {
@@ -646,7 +655,8 @@ export const RoadTimelineExperience: React.FC = () => {
 
         .milestone_story_card {
           background: #ffffff;
-          border: 1px solid rgba(226, 232, 240, 0.9);
+          border: none !important;
+          outline: none !important;
           border-radius: 24px;
           padding: 28px 30px;
           box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
@@ -658,19 +668,18 @@ export const RoadTimelineExperience: React.FC = () => {
           background: rgba(15, 23, 42, 0.85);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border: 1px solid rgba(255, 255, 255, 0.04);
+          border: none !important;
+          outline: none !important;
           box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
         }
 
         /* Hover Elevation without Blue Outline */
         .milestone_story_card:hover {
           transform: translateY(-4px);
-          border-color: rgba(2, 132, 199, 0.3);
           box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.12);
         }
 
         .dark .milestone_story_card:hover {
-          border-color: rgba(255, 255, 255, 0.12) !important;
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
         }
 
@@ -954,21 +963,27 @@ export const RoadTimelineExperience: React.FC = () => {
           color: #0284c7;
         }
 
-        /* Founder Collaboration Banner */
+        /* Founder Collaboration Banner - Cleanly separated below milestones with high z-index and borderless design */
         .founder_collab_card {
           position: relative;
-          background: linear-gradient(135deg, rgba(2, 132, 199, 0.1) 0%, rgba(133, 79, 238, 0.12) 100%);
-          border: 1.5px solid rgba(56, 189, 248, 0.35);
+          z-index: 10;
+          clear: both;
+          margin-top: 60px;
+          background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(133, 79, 238, 0.09) 100%);
+          border: none !important;
+          outline: none !important;
           border-radius: 28px;
           padding: 42px 30px;
-          backdrop-filter: blur(12px);
-          box-shadow: 0 14px 40px rgba(2, 132, 199, 0.15);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          box-shadow: 0 14px 40px rgba(2, 132, 199, 0.12);
         }
 
         .dark .founder_collab_card {
-          background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 27, 75, 0.7) 100%);
-          border-color: rgba(56, 189, 248, 0.4);
-          box-shadow: 0 16px 45px rgba(0, 0, 0, 0.6);
+          background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 27, 75, 0.9) 100%);
+          border: none !important;
+          outline: none !important;
+          box-shadow: 0 16px 45px rgba(0, 0, 0, 0.7);
         }
 
         .collab_eyebrow {
