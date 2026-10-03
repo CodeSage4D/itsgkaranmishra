@@ -118,40 +118,58 @@ export default function Home() {
                     Architecting production-grade enterprise AI platforms, autonomous neural systems, and institutional software. Leading <strong>Aurxon</strong> with 47+ open-source GitHub repositories and cutting-edge applied AI research.
                   </p>
 
-                  <div className="d-flex align-items-center flex-wrap gap-2 banner_btn_row">
+                  <div className="d-flex align-items-center flex-wrap banner_btn_row">
                     <a
-                      className="primary_btn"
+                      className="primary_btn hero_consult_btn"
                       href="#direct-contact-section"
                       onClick={(e) => {
                         e.preventDefault();
                         document.getElementById("direct-contact-section")?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
+                      <i className="fa fa-handshake-o mr-2"></i>
                       <span>Initiate Executive Consultation</span>
                     </a>
                     <a
-                      className="primary_btn tr-bg"
+                      className="primary_btn tr-bg hero_cv_btn"
                       href="/pdf/Karann_Mishra_Python_Software_Engineer_Resume.pdf"
                       download="Karann_Mishra_Resume.pdf"
+                      title="Download Updated Python Software Engineer Resume"
                     >
+                      <i className="fa fa-file-pdf-o mr-2"></i>
                       <span>Get CV</span>
                     </a>
                     <a
-                      className="primary_btn tr-bg"
+                      className="primary_btn tr-bg hero_aurxon_btn"
                       href="https://aurxon.com"
                       target="_blank"
                       rel="noopener noreferrer"
                       title="Visit Official Aurxon Platform"
                     >
+                      <i className="fa fa-external-link mr-2"></i>
                       <span>Aurxon.com &rarr;</span>
                     </a>
                     <Link
-                      className="primary_btn tr-bg"
+                      className="primary_btn tr-bg hero_card_btn"
                       href="/card"
                       title="9:16 Portrait Smart Business Card"
                     >
+                      <i className="fa fa-id-card-o mr-2"></i>
                       <span>Smart Card</span>
                     </Link>
+                    <button
+                      type="button"
+                      className="primary_btn tr-bg hero_share_btn"
+                      onClick={() => {
+                        if (typeof window !== "undefined") {
+                          window.dispatchEvent(new CustomEvent("open-portfolio-share"));
+                        }
+                      }}
+                      title="Share Portfolio URL with Auto-Generated Message"
+                    >
+                      <i className="fa fa-share-alt mr-2"></i>
+                      <span>Share</span>
+                    </button>
                   </div>
                 </div>
               </div>
