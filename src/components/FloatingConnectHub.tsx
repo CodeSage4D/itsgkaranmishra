@@ -118,6 +118,18 @@ export const FloatingConnectHub: React.FC = () => {
             >
               <i className="fa fa-instagram" style={{ color: "#ec4899" }}></i>
             </a>
+            <button
+              type="button"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-portfolio-share"));
+                }
+              }}
+              className="quick_tray_item quick_tray_share_item"
+              title="Share Portfolio URL & Auto-Generated Message"
+            >
+              <i className="fa fa-share-alt" style={{ color: "#38bdf8" }}></i>
+            </button>
             <a
               href="https://github.com/CodeSage4D"
               target="_blank"
