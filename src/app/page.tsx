@@ -131,8 +131,8 @@ export default function Home() {
                     </a>
                     <a
                       className="primary_btn tr-bg"
-                      href="/pdf/Karan_Mishra_ResumeDetailed.pdf"
-                      download="Karan_Mishra_CV.pdf"
+                      href="/pdf/Karann_Mishra_Python_Software_Engineer_Resume.pdf"
+                      download="Karann_Mishra_Resume.pdf"
                     >
                       <span>Get CV</span>
                     </a>
@@ -329,8 +329,8 @@ export default function Home() {
                 <div className="d-flex align-items-center gap-3 flex-wrap mt-4">
                   <a
                     className="primary_btn"
-                    href="/pdf/Karan_Mishra_ResumeDetailed.pdf"
-                    download="Karan_Mishra_CV.pdf"
+                    href="/pdf/Karann_Mishra_Python_Software_Engineer_Resume.pdf"
+                    download="Karann_Mishra_Resume.pdf"
                   >
                     <span>Download CV</span>
                   </a>
