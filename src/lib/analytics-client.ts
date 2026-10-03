@@ -1,4 +1,4 @@
-// 10X Advanced Client-side Analytics, Deep Telemetry, and Lead CRM Engine
+// 10X Advanced Real-Time Analytics, Deep Network Telemetry, Audit Trail & Lead CRM Engine
 
 export interface ClientVisitorLog {
   id: string;
@@ -17,10 +17,16 @@ export interface ClientVisitorLog {
   timezone: string;
   language: string;
   networkType?: string;
+  downlink?: string; // e.g. "10 Mbps"
+  rtt?: string; // e.g. "45 ms"
+  effectiveType?: string; // e.g. "4g"
+  cpuCores?: number;
+  ramGb?: string;
   referrer: string;
   referrerDomain?: string;
   landingPage: string;
-  timestamp: string;
+  timestamp: string; // ISO
+  formattedTime: string; // e.g. "03 Oct 2026, 13:25:10 IST"
   profileViews: string[];
   clicksCount: number;
 }
@@ -32,6 +38,7 @@ export interface ClientClickLog {
   targetUrl?: string;
   page: string;
   timestamp: string;
+  formattedTime?: string;
 }
 
 export interface ClientLead {
@@ -39,6 +46,8 @@ export interface ClientLead {
   name: string;
   email: string;
   phone?: string;
+  company?: string;
+  budget?: string;
   subject: string;
   message: string;
   ip?: string;
@@ -46,15 +55,63 @@ export interface ClientLead {
   country?: string;
   source: string;
   timestamp: string;
-  status: "New" | "Contacted" | "In-Discussion" | "Proposal Sent" | "Converted" | "Closed";
+  formattedTime: string;
+  status: "New" | "Contacted" | "In-Discussion" | "Converted" | "Closed";
   priority?: "High" | "Medium" | "Low";
   adminNotes?: string;
 }
 
-const STORAGE_KEY_VISITORS = "ahs_analytics_visitors_v3";
-const STORAGE_KEY_CLICKS = "ahs_analytics_clicks_v3";
-const STORAGE_KEY_LEADS = "ahs_analytics_leads_v3";
-const STORAGE_KEY_SESSION = "ahs_analytics_session_id_v3";
+export interface ClientAuditLog {
+  id: string;
+  eventType:
+    | "PORTFOLIO_OPEN"
+    | "PORTFOLIO_CHANGE"
+    | "BLOG_UPDATE"
+    | "PROJECT_UPDATE"
+    | "CARD_DOWNLOAD"
+    | "SECTION_VIEW"
+    | "LEAD_CAPTURED"
+    | "ADMIN_LOGIN"
+    | "SYSTEM_PURGE";
+  title: string;
+  details: string;
+  page: string;
+  ip?: string;
+  location?: string;
+  device?: string;
+  browser?: string;
+  timestamp: string;
+  timestampIst?: string;
+  formattedTime: string;
+}
+
+// Storage Keys - v4 ensures zero old mock seeds
+const STORAGE_KEY_VISITORS = "ahs_real_visitors_v4";
+const STORAGE_KEY_CLICKS = "ahs_real_clicks_v4";
+const STORAGE_KEY_LEADS = "ahs_real_leads_v4";
+const STORAGE_KEY_AUDIT = "ahs_real_audit_v4";
+const STORAGE_KEY_SESSION = "ahs_real_session_id_v4";
+
+// Helper: Format readable Indian Standard Time (IST) & UTC
+export function formatISTTime(dateObj?: Date): string {
+  const d = dateObj || new Date();
+  try {
+    return (
+      d.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      }) + " IST"
+    );
+  } catch {
+    return d.toISOString();
+  }
+}
 
 // Helper: generate unique session ID
 export function getOrCreateSessionId(): string {
@@ -84,7 +141,11 @@ export function getDeviceType(): "Mobile" | "Tablet" | "Desktop" {
   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
     return "Tablet";
   }
-  if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+  if (
+    /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(
+      ua
+    )
+  ) {
     return "Mobile";
   }
   return "Desktop";
@@ -99,41 +160,44 @@ export function getBrowserInfo(): { browser: string; version: string; os: string
 
   if (ua.indexOf("Firefox") > -1) {
     browser = "Firefox";
-    version = ua.match(/Firefox\/([0-9.]+)/)?.[1] || "Latest";
-  } else if (ua.indexOf("Safari") > -1 && ua.indexOf("Chrome") === -1) {
-    browser = "Safari";
-    version = ua.match(/Version\/([0-9.]+)/)?.[1] || "Latest";
-  } else if (ua.indexOf("Edg") > -1) {
-    browser = "Edge";
-    version = ua.match(/Edg\/([0-9.]+)/)?.[1] || "Latest";
-  } else if (ua.indexOf("OPR") > -1 || ua.indexOf("Opera") > -1) {
+    version = ua.match(/Firefox\/(\d+(\.\d+)?)/)?.[1] || "Latest";
+  } else if (ua.indexOf("SamsungBrowser") > -1) {
+    browser = "Samsung Internet";
+    version = ua.match(/SamsungBrowser\/(\d+(\.\d+)?)/)?.[1] || "Latest";
+  } else if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) {
     browser = "Opera";
-    version = ua.match(/(OPR|Opera)\/([0-9.]+)/)?.[2] || "Latest";
+    version = ua.match(/(Opera|OPR)\/(\d+(\.\d+)?)/)?.[2] || "Latest";
+  } else if (ua.indexOf("Edge") > -1 || ua.indexOf("Edg") > -1) {
+    browser = "Edge";
+    version = ua.match(/Edg?\/(\d+(\.\d+)?)/)?.[1] || "Latest";
   } else if (ua.indexOf("Chrome") > -1) {
     browser = "Chrome";
-    version = ua.match(/Chrome\/([0-9.]+)/)?.[1] || "Latest";
+    version = ua.match(/Chrome\/(\d+(\.\d+)?)/)?.[1] || "Latest";
+  } else if (ua.indexOf("Safari") > -1) {
+    browser = "Safari";
+    version = ua.match(/Version\/(\d+(\.\d+)?)/)?.[1] || "Latest";
   }
 
-  let os = "Desktop OS";
-  if (ua.indexOf("Win") > -1) os = "Windows";
+  let os = "Linux";
+  if (ua.indexOf("Win") > -1) os = "Windows 11/10";
   else if (ua.indexOf("Mac") > -1) os = "macOS";
-  else if (ua.indexOf("Linux") > -1) os = "Linux";
   else if (ua.indexOf("Android") > -1) os = "Android";
-  else if (ua.indexOf("like Mac") > -1) os = "iOS";
+  else if (ua.indexOf("iPhone") > -1 || ua.indexOf("iPad") > -1) os = "iOS";
 
   return { browser, version, os };
 }
 
-// Parse referrer to friendly string with deep domain analysis
+// Helper: get clean referrer
 export function getReadableReferrer(): { friendly: string; domain: string } {
   if (typeof document === "undefined" || !document.referrer) {
-    return { friendly: "Direct (Typed / Bookmark)", domain: "direct" };
+    return { friendly: "Direct (Typed / Bookmark)", domain: "Direct" };
   }
+
   const ref = document.referrer.toLowerCase();
   let domain = "";
   try {
     domain = new URL(document.referrer).hostname;
-  } catch (e) {
+  } catch {
     domain = document.referrer;
   }
 
@@ -141,14 +205,16 @@ export function getReadableReferrer(): { friendly: string; domain: string } {
   if (ref.includes("instagram.com")) return { friendly: "Instagram", domain };
   if (ref.includes("github.com")) return { friendly: "GitHub", domain };
   if (ref.includes("google.")) return { friendly: "Google Search", domain };
-  if (ref.includes("twitter.com") || ref.includes("t.co") || ref.includes("x.com")) return { friendly: "Twitter / X", domain };
+  if (ref.includes("twitter.com") || ref.includes("t.co") || ref.includes("x.com"))
+    return { friendly: "Twitter / X", domain };
   if (ref.includes("whatsapp")) return { friendly: "WhatsApp", domain };
   if (ref.includes("facebook.com")) return { friendly: "Facebook", domain };
 
   return { friendly: domain || "External Site", domain };
 }
 
-// Track a visitor on load with deep telemetry
+// ================= TRACK VISITOR (100% REAL TELEMETRY) =================
+
 export async function trackVisitor(currentPath: string): Promise<void> {
   if (typeof window === "undefined") return;
 
@@ -161,10 +227,24 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
   const language = navigator.language || "en-US";
 
+  // Hardware telemetry
+  const cpuCores = navigator.hardwareConcurrency || undefined;
+  const ramGb = (navigator as any).deviceMemory ? `${(navigator as any).deviceMemory} GB` : undefined;
+
+  // Real Network connection telemetry
   let networkType = "High-Speed";
-  const conn = (navigator as any).connection;
+  let downlink: string | undefined = undefined;
+  let rtt: string | undefined = undefined;
+  let effectiveType: string | undefined = undefined;
+
+  const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
   if (conn) {
-    networkType = conn.effectiveType ? `${conn.effectiveType.toUpperCase()} (${conn.type || "Cellular/Wifi"})` : "Broadband";
+    if (conn.downlink) downlink = `${conn.downlink} Mbps`;
+    if (conn.rtt) rtt = `${conn.rtt} ms`;
+    if (conn.effectiveType) effectiveType = conn.effectiveType.toUpperCase();
+    networkType = conn.effectiveType
+      ? `${conn.effectiveType.toUpperCase()} (${conn.type || "Broadband/WiFi"})`
+      : "Broadband";
   }
 
   // Retrieve existing visitors
@@ -172,7 +252,7 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   try {
     const raw = localStorage.getItem(STORAGE_KEY_VISITORS);
     if (raw) visitors = JSON.parse(raw);
-  } catch (e) {
+  } catch {
     visitors = [];
   }
 
@@ -182,15 +262,25 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   if (existing) {
     if (!existing.profileViews.includes(currentPath)) {
       existing.profileViews.push(currentPath);
+      // Record section/page audit
+      recordAuditEvent({
+        eventType: "PORTFOLIO_OPEN",
+        title: `Page Navigated: ${currentPath}`,
+        details: `Visitor session ${sessionId.substring(0, 8)} opened ${currentPath}`,
+        page: currentPath,
+        ip: existing.ip,
+        location: `${existing.city}, ${existing.country}`,
+        device: existing.device,
+      });
     }
     localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
     return;
   }
 
-  // New session: fetch Geo & IP asynchronously
+  // New session: fetch Real Geo & IP asynchronously
   let ip = "127.0.0.1";
-  let city = "Indore";
-  let region = "Madhya Pradesh";
+  let city = "Local / Direct";
+  let region = "";
   let country = "India";
   let countryCode = "IN";
   let flagEmoji = "🇮🇳";
@@ -214,7 +304,6 @@ export async function trackVisitor(currentPath: string): Promise<void> {
       org = data.org || "";
     }
   } catch {
-    // Fail-safe IP fallback
     try {
       const res2 = await fetch("https://api.ipify.org?format=json");
       if (res2.ok) {
@@ -223,6 +312,9 @@ export async function trackVisitor(currentPath: string): Promise<void> {
       }
     } catch {}
   }
+
+  const now = new Date();
+  const formattedTime = formatISTTime(now);
 
   const newLog: ClientVisitorLog = {
     id: sessionId,
@@ -241,18 +333,34 @@ export async function trackVisitor(currentPath: string): Promise<void> {
     timezone,
     language,
     networkType,
+    downlink,
+    rtt,
+    effectiveType,
+    cpuCores,
+    ramGb,
     referrer,
     referrerDomain,
     landingPage: currentPath,
-    timestamp: new Date().toISOString(),
+    timestamp: now.toISOString(),
+    formattedTime,
     profileViews: [currentPath],
     clicksCount: 0,
   };
 
   visitors.unshift(newLog);
   if (visitors.length > 250) visitors = visitors.slice(0, 250);
-
   localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
+
+  // Record Audit Trail for Portfolio Open
+  recordAuditEvent({
+    eventType: "PORTFOLIO_OPEN",
+    title: `Portfolio Opened from ${city}, ${country}`,
+    details: `${device} • ${browser} on ${os} • IP: ${ip} • Referrer: ${referrer}`,
+    page: currentPath,
+    ip,
+    location: `${city}, ${country}`,
+    device,
+  });
 }
 
 // Track a click event
@@ -260,20 +368,22 @@ export function trackClick(elementText: string, targetUrl?: string, elementId?: 
   if (typeof window === "undefined") return;
 
   const currentPath = window.location.pathname;
+  const now = new Date();
   const clickLog: ClientClickLog = {
     id: "clk_" + Math.random().toString(36).substring(2, 7) + "_" + Date.now().toString(36),
     elementId,
     elementText: elementText.substring(0, 70),
     targetUrl,
     page: currentPath,
-    timestamp: new Date().toISOString(),
+    timestamp: now.toISOString(),
+    formattedTime: formatISTTime(now),
   };
 
   let clicks: ClientClickLog[] = [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_CLICKS);
     if (raw) clicks = JSON.parse(raw);
-  } catch (e) {
+  } catch {
     clicks = [];
   }
 
@@ -292,26 +402,99 @@ export function trackClick(elementText: string, targetUrl?: string, elementId?: 
         localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
       }
     }
-  } catch (e) {}
+  } catch {}
 }
 
-// ================= FULL LEADS CRM (CRUD) =================
+// ================= AUDIT TRAIL ENGINE (WHERE & WHEN PORTFOLIO OPENED/CHANGED) =================
 
-export function recordLead(lead: Omit<ClientLead, "id" | "timestamp" | "status">): ClientLead {
-  if (typeof window === "undefined") {
-    return {
-      id: "lead_temp",
-      ...lead,
-      timestamp: new Date().toISOString(),
-      status: "New",
-    };
-  }
+export function recordAuditEvent(
+  event: Omit<ClientAuditLog, "id" | "timestamp" | "formattedTime">
+): ClientAuditLog {
+  const now = new Date();
+  const formattedTime = formatISTTime(now);
+
+  const newLog: ClientAuditLog = {
+    id: "audit_" + Math.random().toString(36).substring(2, 8) + "_" + Date.now().toString(36),
+    eventType: event.eventType,
+    title: event.title,
+    details: event.details,
+    page: event.page || "/",
+    ip: event.ip,
+    location: event.location,
+    device: event.device,
+    browser: event.browser,
+    timestamp: now.toISOString(),
+    timestampIst: formattedTime,
+    formattedTime,
+  };
+
+  if (typeof window === "undefined") return newLog;
+
+  try {
+    let logs: ClientAuditLog[] = [];
+    const raw = localStorage.getItem(STORAGE_KEY_AUDIT);
+    if (raw) logs = JSON.parse(raw);
+    logs.unshift(newLog);
+    if (logs.length > 300) logs = logs.slice(0, 300);
+    localStorage.setItem(STORAGE_KEY_AUDIT, JSON.stringify(logs));
+  } catch {}
+
+  return newLog;
+}
+
+export function getStoredAuditLogs(): ClientAuditLog[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY_AUDIT);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+// Track Portfolio Change (Projects or Section Updated)
+export function recordPortfolioChange(title: string, action: string, details?: string): void {
+  recordAuditEvent({
+    eventType: "PORTFOLIO_CHANGE",
+    title: `Portfolio Changed: ${action} - "${title}"`,
+    details: details || `Portfolio project or section modified by administrator at ${formatISTTime()}`,
+    page: "/portfolio",
+    device: "Admin Console",
+  });
+}
+
+// Track Blog Change
+export function recordBlogChange(title: string, action: string): void {
+  recordAuditEvent({
+    eventType: "BLOG_UPDATE",
+    title: `Blog Post ${action}: "${title}"`,
+    details: `Article content, metadata, or tags updated via admin dashboard at ${formatISTTime()}`,
+    page: "/blog",
+    device: "Admin Console",
+  });
+}
+
+// ================= REAL LEADS CRM (CRUD) =================
+
+export function recordLead(lead: {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  budget?: string;
+  subject: string;
+  message: string;
+  source?: string;
+}): ClientLead {
+  const now = new Date();
+  const formattedTime = formatISTTime(now);
 
   let visitors: ClientVisitorLog[] = [];
-  try {
-    const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
-    if (rawV) visitors = JSON.parse(rawV);
-  } catch (e) {}
+  if (typeof window !== "undefined") {
+    try {
+      const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
+      if (rawV) visitors = JSON.parse(rawV);
+    } catch {}
+  }
 
   const sessionId = getOrCreateSessionId();
   const currentVisitor = visitors.find((v) => v.id === sessionId);
@@ -321,34 +504,50 @@ export function recordLead(lead: Omit<ClientLead, "id" | "timestamp" | "status">
     name: lead.name,
     email: lead.email,
     phone: lead.phone,
+    company: lead.company,
+    budget: lead.budget,
     subject: lead.subject,
     message: lead.message,
-    source: lead.source || (currentVisitor ? currentVisitor.referrer : "Direct"),
+    source: lead.source || (currentVisitor ? currentVisitor.referrer : "Portfolio Contact Form"),
     ip: currentVisitor?.ip || "Unknown",
     city: currentVisitor?.city || "",
     country: currentVisitor?.country || "",
-    timestamp: new Date().toISOString(),
+    timestamp: now.toISOString(),
+    formattedTime,
     status: "New",
     priority: "High",
     adminNotes: "",
   };
 
-  let leads: ClientLead[] = [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY_LEADS);
-    if (raw) leads = JSON.parse(raw);
-  } catch (e) {
-    leads = [];
+  if (typeof window !== "undefined") {
+    let leads: ClientLead[] = [];
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY_LEADS);
+      if (raw) leads = JSON.parse(raw);
+    } catch {
+      leads = [];
+    }
+
+    leads.unshift(newLead);
+    localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
+
+    // Also record in audit log
+    recordAuditEvent({
+      eventType: "LEAD_CAPTURED",
+      title: `New Lead Received from ${lead.name}`,
+      details: `${lead.subject} • ${lead.email} • Source: ${newLead.source}`,
+      page: "/contact",
+      ip: newLead.ip,
+      location: `${newLead.city}, ${newLead.country}`,
+    });
   }
 
-  leads.unshift(newLead);
-  localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
   return newLead;
 }
 
 export function updateLeadDetails(
   leadId: string,
-  updates: Partial<Pick<ClientLead, "status" | "priority" | "adminNotes" | "name" | "email" | "phone" | "subject" | "message">>
+  updates: Partial<Pick<ClientLead, "status" | "priority" | "adminNotes" | "name" | "email" | "phone" | "company" | "subject" | "message">>
 ): void {
   if (typeof window === "undefined") return;
   try {
@@ -360,7 +559,7 @@ export function updateLeadDetails(
       Object.assign(target, updates);
       localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
     }
-  } catch (e) {}
+  } catch {}
 }
 
 export function deleteLead(leadId: string): void {
@@ -371,206 +570,71 @@ export function deleteLead(leadId: string): void {
     let leads: ClientLead[] = JSON.parse(raw);
     leads = leads.filter((l) => l.id !== leadId);
     localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
-  } catch (e) {}
+  } catch {}
 }
 
-// Get all analytics data for dashboard
+// ================= DASHBOARD DATA RETRIEVAL (100% REAL - ZERO FAKE SEEDS) =================
+
 export function getStoredAnalyticsData(): {
   visitors: ClientVisitorLog[];
   clicks: ClientClickLog[];
   leads: ClientLead[];
+  auditLogs: ClientAuditLog[];
 } {
   if (typeof window === "undefined") {
-    return { visitors: [], clicks: [], leads: [] };
+    return { visitors: [], clicks: [], leads: [], auditLogs: [] };
   }
 
   let visitors: ClientVisitorLog[] = [];
   let clicks: ClientClickLog[] = [];
   let leads: ClientLead[] = [];
+  let auditLogs: ClientAuditLog[] = [];
 
   try {
     const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
     if (rawV) visitors = JSON.parse(rawV);
-  } catch (e) {}
+  } catch {}
 
   try {
     const rawC = localStorage.getItem(STORAGE_KEY_CLICKS);
     if (rawC) clicks = JSON.parse(rawC);
-  } catch (e) {}
+  } catch {}
 
   try {
     const rawL = localStorage.getItem(STORAGE_KEY_LEADS);
     if (rawL) leads = JSON.parse(rawL);
-  } catch (e) {}
+  } catch {}
 
-  // Provide initial rich data if empty
-  if (visitors.length === 0) {
-    visitors = [
-      {
-        id: "sess_seed_1",
-        ip: "49.36.128.14",
-        city: "Indore",
-        region: "Madhya Pradesh",
-        country: "India",
-        countryCode: "IN",
-        flagEmoji: "🇮🇳",
-        org: "Reliance Jio Infocomm",
-        device: "Desktop",
-        browser: "Chrome",
-        browserVersion: "128.0",
-        os: "Windows 11",
-        screenResolution: "1920x1080 (24-bit)",
-        timezone: "Asia/Kolkata",
-        language: "en-IN",
-        networkType: "4G (Fiber)",
-        referrer: "LinkedIn",
-        referrerDomain: "linkedin.com",
-        landingPage: "/",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 2).toISOString(),
-        profileViews: ["/", "/portfolio", "/about", "/blog"],
-        clicksCount: 8,
-      },
-      {
-        id: "sess_seed_2",
-        ip: "103.21.124.9",
-        city: "Bengaluru",
-        region: "Karnataka",
-        country: "India",
-        countryCode: "IN",
-        flagEmoji: "🇮🇳",
-        org: "Bharti Airtel",
-        device: "Mobile",
-        browser: "Safari",
-        browserVersion: "17.4",
-        os: "iOS 17.5",
-        screenResolution: "390x844 (24-bit)",
-        timezone: "Asia/Kolkata",
-        language: "en-GB",
-        networkType: "5G",
-        referrer: "Direct (Typed / Bookmark)",
-        landingPage: "/portfolio",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 8).toISOString(),
-        profileViews: ["/portfolio", "/contact"],
-        clicksCount: 4,
-      },
-      {
-        id: "sess_seed_3",
-        ip: "142.250.190.46",
-        city: "Mountain View",
-        region: "California",
-        country: "United States",
-        countryCode: "US",
-        flagEmoji: "🇺🇸",
-        org: "Google LLC",
-        device: "Desktop",
-        browser: "Chrome",
-        browserVersion: "129.0",
-        os: "macOS Sonoma",
-        screenResolution: "2560x1440 (30-bit Retina)",
-        timezone: "America/Los_Angeles",
-        language: "en-US",
-        networkType: "Gigabit Ethernet",
-        referrer: "Google Search",
-        landingPage: "/",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 18).toISOString(),
-        profileViews: ["/", "/services", "/blog"],
-        clicksCount: 9,
-      },
-      {
-        id: "sess_seed_4",
-        ip: "185.220.101.5",
-        city: "London",
-        region: "England",
-        country: "United Kingdom",
-        countryCode: "GB",
-        flagEmoji: "🇬🇧",
-        org: "Vodafone UK",
-        device: "Desktop",
-        browser: "Edge",
-        browserVersion: "128.0",
-        os: "Windows 11",
-        screenResolution: "1920x1080 (24-bit)",
-        timezone: "Europe/London",
-        language: "en-GB",
-        networkType: "Fiber",
-        referrer: "GitHub",
-        landingPage: "/portfolio-details",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 30).toISOString(),
-        profileViews: ["/portfolio-details", "/about"],
-        clicksCount: 5,
-      },
-      {
-        id: "sess_seed_5",
-        ip: "157.240.22.35",
-        city: "Mumbai",
-        region: "Maharashtra",
-        country: "India",
-        countryCode: "IN",
-        flagEmoji: "🇮🇳",
-        org: "Tata Communications",
-        device: "Mobile",
-        browser: "Chrome",
-        browserVersion: "127.0",
-        os: "Android 14",
-        screenResolution: "412x915 (24-bit)",
-        timezone: "Asia/Kolkata",
-        language: "en-IN",
-        networkType: "5G",
-        referrer: "Instagram",
-        landingPage: "/",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 42).toISOString(),
-        profileViews: ["/", "/contact"],
-        clicksCount: 3,
-      },
-    ];
-    localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
-  }
+  try {
+    const rawA = localStorage.getItem(STORAGE_KEY_AUDIT);
+    if (rawA) auditLogs = JSON.parse(rawA);
+  } catch {}
 
-  if (leads.length === 0) {
-    leads = [
-      {
-        id: "lead_seed_1",
-        name: "Vikram Malhotra",
-        email: "vikram@malhotratech.com",
-        phone: "+91 98260 12345",
-        subject: "Enterprise ERP & AI Consulting",
-        message: "Looking for an AI engineer to integrate predictive analytics and FCOS edge modules into our logistics ERP platform.",
-        source: "LinkedIn",
-        ip: "49.36.128.14",
-        city: "Indore",
-        country: "India",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 14).toISOString(),
-        status: "New",
-        priority: "High",
-        adminNotes: "Urgent inquiry regarding manufacturing automation. Follow up before Friday.",
-      },
-      {
-        id: "lead_seed_2",
-        name: "Sarah Jenkins",
-        email: "s.jenkins@synapseai.io",
-        phone: "+1 415 555 0192",
-        subject: "Full-Stack AI Contract / Role",
-        message: "Impressed by your Cognivex, HemoAI, and ALAMS research. Are you open to a high-equity lead AI engineering role?",
-        source: "Google Search",
-        ip: "142.250.190.46",
-        city: "Mountain View",
-        country: "United States",
-        timestamp: new Date(Date.now() - 3600 * 1000 * 30).toISOString(),
-        status: "Contacted",
-        priority: "High",
-        adminNotes: "Sent introductory portfolio deck and GitHub links.",
-      },
-    ];
-    localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
-  }
-
-  return { visitors, clicks, leads };
+  // Absolutely NO fake seed generation here! Real visitors only.
+  return { visitors, clicks, leads, auditLogs };
 }
 
-// Clear all analytics logs
+// Purge all analytics & reset with fresh real session
 export function clearAnalyticsLogs(): void {
   if (typeof window === "undefined") return;
+
+  // Clear new real keys
   localStorage.removeItem(STORAGE_KEY_VISITORS);
   localStorage.removeItem(STORAGE_KEY_CLICKS);
   localStorage.removeItem(STORAGE_KEY_LEADS);
+  localStorage.removeItem(STORAGE_KEY_AUDIT);
+
+  // Clear any legacy mock keys from prior versions
+  localStorage.removeItem("ahs_analytics_visitors_v3");
+  localStorage.removeItem("ahs_analytics_clicks_v3");
+  localStorage.removeItem("ahs_analytics_leads_v3");
+  localStorage.removeItem("ahs_analytics_session_id_v3");
+
+  // Record clean audit entry
+  recordAuditEvent({
+    eventType: "SYSTEM_PURGE",
+    title: "Analytics Cache Purged by Administrator",
+    details: "All historical and mock visitor data wiped. Telemetry reset to real-time live mode.",
+    page: "/dashboard",
+  });
 }
