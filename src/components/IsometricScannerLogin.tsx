@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface IsometricScannerLoginProps {
@@ -20,6 +20,21 @@ export function IsometricScannerLogin({
   const [capsLockActive, setCapsLockActive] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [authenticating, setAuthenticating] = useState(false);
+  const [customCreds, setCustomCreds] = useState<{ username?: string; password?: string } | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("axn_custom_admin_creds");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.username && parsed.password) {
+            setCustomCreds({ username: parsed.username, password: parsed.password });
+          }
+        }
+      } catch {}
+    }
+  }, []);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,14 +44,21 @@ export function IsometricScannerLogin({
     setTimeout(() => {
       const u = usernameInput.trim().toLowerCase();
       const p = passwordInput.trim();
-      if (
-        (u === adminUser.toLowerCase() ||
-          u === "241550600@qq.com" ||
-          u === "admin" ||
-          u === "karann" ||
-          u === "karannmishra136@gmail.com") &&
-        (p === adminPass || p === "KarannAurxon$22")
-      ) {
+
+      const matchesUser =
+        u === adminUser.toLowerCase() ||
+        (customCreds?.username && u === customCreds.username.toLowerCase()) ||
+        u === "241550600@qq.com" ||
+        u === "admin" ||
+        u === "karann" ||
+        u === "karannmishra136@gmail.com";
+
+      const matchesPass =
+        p === adminPass ||
+        (customCreds?.password && p === customCreds.password) ||
+        p === "KarannAurxon$22";
+
+      if (matchesUser && matchesPass) {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("axn_karann_auth_v4", "true");
           localStorage.setItem("axn_karann_auth_v4", "true");
