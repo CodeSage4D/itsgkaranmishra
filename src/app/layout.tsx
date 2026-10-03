@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { GravityUniverseBackground } from "@/components/GravityUniverseBackground";
 import { FloatingConnectHub } from "@/components/FloatingConnectHub";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { AutoDownloadFirstVisit } from "@/components/AutoDownloadFirstVisit";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://itsgkaranmishra.web.app"),
@@ -180,6 +181,8 @@ export default function RootLayout({
           <Footer />
           {/* Relocated Let's Connect Action Hub */}
           <FloatingConnectHub />
+          {/* First visit per-device auto-download with repeat visit manual control */}
+          <AutoDownloadFirstVisit />
         </ThemeProvider>
       </body>
     </html>
