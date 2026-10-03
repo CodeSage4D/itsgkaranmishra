@@ -72,7 +72,8 @@ export interface ClientAuditLog {
     | "SECTION_VIEW"
     | "LEAD_CAPTURED"
     | "ADMIN_LOGIN"
-    | "SYSTEM_PURGE";
+    | "SYSTEM_PURGE"
+    | "SECURITY";
   title: string;
   details: string;
   page: string;
