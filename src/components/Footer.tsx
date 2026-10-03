@@ -287,7 +287,10 @@ export const Footer: React.FC = () => {
           <div className="footer_copy_col">
             <p className="footer_copy_text">
               &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; Founder &amp; Chief AI Architect,{" "}
-              <span className="text-white font-weight-bold">Aurxon</span> &bull; Next Gen AI Solutions &bull; Where Intelligence Meets Innovation. All rights reserved.
+              <span className="text-white font-weight-bold">Aurxon</span> &bull; Next Gen AI Solutions &bull; Where Intelligence Meets Innovation. All rights reserved.{" "}
+              <Link href="/dashboard" className="footer_admin_lock_link" title="Operator Dashboard Login">
+                <i className="fa fa-lock"></i>
+              </Link>
             </p>
           </div>
           <div className="footer_top_btn_col">
@@ -667,6 +670,24 @@ export const Footer: React.FC = () => {
           font-size: 0.86rem;
           color: #64748b;
           margin: 0;
+        }
+
+        .footer_admin_lock_link {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: #475569;
+          font-size: 0.76rem;
+          margin-left: 6px;
+          opacity: 0.4;
+          transition: all 0.2s ease;
+          text-decoration: none;
+        }
+
+        .footer_admin_lock_link:hover {
+          color: #a855f7;
+          opacity: 1;
+          transform: scale(1.15);
         }
 
         .footer_scroll_top_btn {
