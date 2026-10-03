@@ -72,6 +72,53 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Brand Logos 1 to 9 & Experience Area */}
+      <section className="brand_area section_gap_bottom" id="about-brands">
+        <div className="container">
+          <div className="row justify-content-center align-items-center">
+            <div className="col-lg-7">
+              <div className="row g-3">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <div key={num} className="col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
+                    <div
+                      className={`single-brand-item brand_chromatic_item brand_color_${num}`}
+                    >
+                      <div className="brand_img_box">
+                        <img
+                          src={`/img/brands/logo${num}.png`}
+                          alt="Partner Brand"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="offset-lg-1 col-lg-4 col-md-6 mt-4 mt-lg-0">
+              <div className="client-info">
+                <div className="d-flex align-items-center">
+                  <span className="exper">3+</span>
+                  <div className="exper_content ml-3">
+                    <h2>Years</h2>
+                    <p className="mb-0">Working Experience</p>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <p className="text-muted mb-2">
+                    <i className="fa fa-phone mr-2 text-primary"></i>
+                    Call us now: <strong>+91 83058 39396</strong>
+                  </p>
+                  <p className="text-muted mb-0">
+                    <i className="fa fa-envelope mr-2 text-primary"></i>
+                    Email: <strong>karannmishra136@gmail.com</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Aurxon Company Section (Luxury Glassmorphic Studio Card) */}
       <section id="about" className="aurxon_venture_section section_gap_bottom">
         <div className="container">
