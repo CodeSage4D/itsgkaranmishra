@@ -1029,4 +1029,526 @@ img, video, canvas, svg {
   }
 }
 
+/* =========================================================
+   UNIVERSAL HIGH-END HOVER ENGINE (BUTTONS, CARDS, CONTAINERS, LINKS)
+   Sensational micro-interactions, 3D elevation & volumetric glows
+   ========================================================= */
+
+/* --- 1. Universal Button Hover Enhancements --- */
+.primary_btn,
+.main_btn,
+.btn_bundle_download,
+.btn_card_action,
+.btn_format,
+.btn_unlock_dossier,
+.dossier_tab_btn,
+.floating_connect_btn,
+.search_clear_pill,
+.drawer_dismiss_btn,
+.submit_btn,
+button[type="submit"],
+.filter-btn {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer !important;
+}
+
+.primary_btn:hover {
+  transform: translateY(-3px) scale(1.025) !important;
+  box-shadow: 0 12px 32px -4px rgba(79, 70, 229, 0.7), 0 0 25px rgba(56, 189, 248, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.primary_btn:active,
+.btn_bundle_download:active,
+.btn_format:active,
+.btn_unlock_dossier:active {
+  transform: translateY(0) scale(0.97) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4) !important;
+}
+
+.primary_btn.tr-bg:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.14) 0%, rgba(56, 189, 248, 0.22) 100%) !important;
+  border-color: #4f46e5 !important;
+  box-shadow: 0 10px 28px rgba(79, 70, 229, 0.3), 0 0 20px rgba(56, 189, 248, 0.4) !important;
+}
+
+.dark .primary_btn:hover {
+  box-shadow: 0 14px 40px -4px rgba(59, 130, 246, 0.9), 0 0 35px rgba(56, 189, 248, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark .primary_btn.tr-bg:hover {
+  border-color: #38bdf8 !important;
+  background: rgba(56, 189, 248, 0.2) !important;
+  box-shadow: 0 10px 32px rgba(56, 189, 248, 0.5), 0 0 25px rgba(56, 189, 248, 0.5) !important;
+}
+
+/* Dossier Unlock Button Hover */
+.btn_unlock_dossier {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn_unlock_dossier:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 28px rgba(2, 132, 199, 0.35), 0 0 20px rgba(56, 189, 248, 0.4);
+  border-color: #38bdf8 !important;
+}
+
+/* Dossier Tab Buttons Hover */
+.dossier_tab_btn:hover {
+  transform: translateY(-2px);
+  background: rgba(2, 132, 199, 0.18) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  color: #38bdf8 !important;
+}
+
+/* --- 2. Universal Card & Container Hover Enhancements --- */
+
+/* Features / Services items */
+.feature_item {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer;
+}
+
+.feature_item:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 22px 48px -12px rgba(68, 88, 220, 0.26), 0 0 25px rgba(56, 189, 248, 0.18) !important;
+  border-color: rgba(68, 88, 220, 0.5) !important;
+}
+
+.dark .feature_item:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 24px 55px rgba(0, 0, 0, 0.85), 0 0 30px rgba(56, 189, 248, 0.35) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.feature_item:hover .icon {
+  transform: scale(1.15) rotate(4deg) !important;
+}
+
+/* Hero Stat Cards */
+.hero_stat_card {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: default;
+}
+
+.hero_stat_card:hover {
+  transform: translateY(-6px) scale(1.03) !important;
+  box-shadow: 0 20px 42px -8px rgba(68, 88, 220, 0.3), 0 0 20px rgba(56, 189, 248, 0.25) !important;
+  border-color: rgba(68, 88, 220, 0.55) !important;
+}
+
+.dark .hero_stat_card:hover {
+  transform: translateY(-6px) scale(1.03) !important;
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Portfolio Projects Cards */
+.single_portfolio,
+.project_glass_card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  cursor: pointer;
+}
+
+.single_portfolio:hover,
+.project_glass_card:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  box-shadow: 0 24px 50px -10px rgba(15, 23, 42, 0.22), 0 0 30px rgba(56, 189, 248, 0.2) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+}
+
+.dark .single_portfolio:hover,
+.dark .project_glass_card:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  box-shadow: 0 26px 58px rgba(0, 0, 0, 0.85), 0 0 35px rgba(56, 189, 248, 0.3) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.single_portfolio img,
+.project_glass_card img {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.single_portfolio:hover img,
+.project_glass_card:hover img {
+  transform: scale(1.06) !important;
+}
+
+/* Blog Article Cards */
+.single_blog {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  cursor: pointer;
+}
+
+.single_blog:hover {
+  transform: translateY(-7px) scale(1.015) !important;
+  box-shadow: 0 22px 46px -10px rgba(15, 23, 42, 0.2), 0 0 25px rgba(56, 189, 248, 0.18) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.dark .single_blog:hover {
+  transform: translateY(-7px) scale(1.015) !important;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.28) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+.single_blog img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.single_blog:hover img {
+  transform: scale(1.05) !important;
+}
+
+/* Client Experience Stats Container */
+.client-info {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border-radius: 20px !important;
+  padding: 32px 28px !important;
+}
+
+.client-info:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 42px -10px rgba(15, 23, 42, 0.16), 0 0 25px rgba(68, 88, 220, 0.2) !important;
+  border-color: rgba(68, 88, 220, 0.35) !important;
+}
+
+.dark .client-info:hover {
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.25) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Aurxon Venture Card & Pillar Cards */
+.venture_glass_card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.venture_glass_card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(206, 161, 122, 0.3) !important;
+  border-color: rgba(206, 161, 122, 0.4) !important;
+}
+
+.pillar_card {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: default;
+}
+
+.pillar_card:hover {
+  transform: translateY(-4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.pillar_card:hover .pillar_icon i {
+  transform: scale(1.2);
+}
+
+/* About Us Visual Stack & Portrait Overlay Hover */
+.about_visual_stack {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.about_visual_stack:hover {
+  transform: translateY(-6px);
+}
+
+.about_visual_stack:hover .about_primary_portrait {
+  transform: scale(1.02);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35), 0 0 30px rgba(56, 189, 248, 0.25);
+}
+
+.about_visual_stack:hover .about_classified_badge {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 10px 24px rgba(2, 132, 199, 0.45);
+}
+
+/* Navigation Links & Social Icon Hover */
+.navbar-nav .nav-item .nav-link {
+  position: relative;
+  transition: all 0.25s ease !important;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+  color: #0284c7 !important;
+  transform: translateY(-1px);
+}
+
+.dark .navbar-nav .nav-item .nav-link:hover {
+  color: #38bdf8 !important;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+}
+
+.social_icon_btn,
+.footer_social a {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.social_icon_btn:hover,
+.footer_social a:hover {
+  transform: translateY(-4px) scale(1.14) !important;
+  box-shadow: 0 10px 22px rgba(2, 132, 199, 0.4), 0 0 15px rgba(56, 189, 248, 0.4) !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+}
+
+/* Interactive Chips, Badges & Pills */
+.tech_chip,
+.badge,
+.venture_tag,
+.about_eyebrow {
+  transition: all 0.25s ease !important;
+}
+
+.tech_chip:hover,
+.badge:hover,
+.venture_tag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+}
+
+/* =========================================================
+   CHROMATIC MULTI-COLOR GRADIENT HOVER SYSTEM & MOBILE AUTO-GLOW
+   Rich prismatic glows (Fuchsia, Violet, Cyan, Emerald, Amber)
+   ========================================================= */
+
+/* Multi-Color Prismatic Button Hover Glow */
+.primary_btn:hover {
+  transform: translateY(-3px) scale(1.025) !important;
+  background: linear-gradient(135deg, #0284c7 0%, #6366f1 35%, #a855f7 70%, #ec4899 100%) !important;
+  box-shadow: 0 14px 36px -4px rgba(236, 72, 153, 0.4),
+              0 0 28px rgba(168, 85, 247, 0.5),
+              0 0 22px rgba(6, 182, 212, 0.4),
+              inset 0 1px 2px rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.primary_btn.tr-bg:hover {
+  transform: translateY(-3px) scale(1.02) !important;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.16) 50%, rgba(6, 182, 212, 0.18) 100%) !important;
+  border-color: #a855f7 !important;
+  color: #7e22ce !important;
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35), 0 0 22px rgba(236, 72, 153, 0.3) !important;
+}
+
+.dark .primary_btn:hover {
+  box-shadow: 0 16px 42px -4px rgba(236, 72, 153, 0.55),
+              0 0 35px rgba(168, 85, 247, 0.7),
+              0 0 30px rgba(56, 189, 248, 0.6) !important;
+}
+
+.dark .primary_btn.tr-bg:hover {
+  border-color: #c084fc !important;
+  color: #f0abfc !important;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(6, 182, 212, 0.2) 100%) !important;
+  box-shadow: 0 12px 35px rgba(168, 85, 247, 0.55), 0 0 25px rgba(6, 182, 212, 0.45) !important;
+}
+
+/* Feature Item Multi-Color Radial Hover */
+.feature_item:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 24px 50px -12px rgba(168, 85, 247, 0.28), 0 0 30px rgba(6, 182, 212, 0.22) !important;
+  border-color: rgba(168, 85, 247, 0.5) !important;
+}
+
+.dark .feature_item:hover {
+  box-shadow: 0 26px 58px rgba(0, 0, 0, 0.85), 0 0 35px rgba(168, 85, 247, 0.4), 0 0 20px rgba(6, 182, 212, 0.3) !important;
+  border-color: rgba(192, 132, 252, 0.45) !important;
+}
+
+/* --- Clean Borderless Chromatic Brand Logos (No artificial text, rich gradient glows) --- */
+.single-brand-item.brand_chromatic_item {
+  width: 100% !important;
+  height: 90px !important;
+  padding: 12px !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.75) !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.single-brand-item.brand_chromatic_item .brand_img_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.single-brand-item.brand_chromatic_item img {
+  max-height: 48px !important;
+  max-width: 80% !important;
+  object-fit: contain;
+  filter: grayscale(80%) opacity(0.75);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.single-brand-item.brand_chromatic_item:hover img {
+  filter: grayscale(0%) opacity(1) !important;
+  transform: scale(1.12) !important;
+}
+
+.dark .single-brand-item.brand_chromatic_item {
+  background: rgba(15, 23, 42, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dark .single-brand-item.brand_chromatic_item img {
+  filter: brightness(0.9) contrast(1.1) invert(0.85) opacity(0.8);
+}
+
+.dark .single-brand-item.brand_chromatic_item:hover img {
+  filter: brightness(1) invert(0.95) opacity(1) !important;
+  transform: scale(1.12) !important;
+}
+
+/* Distinct Multi-Color Gradient Glows per Brand */
+/* Brand 1: Electric Cyan & Blue */
+.brand_color_1:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(6, 182, 212, 0.35), 0 0 22px rgba(14, 165, 233, 0.3) !important;
+}
+
+/* Brand 2: Coral Rose & Magenta */
+.brand_color_2:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(244, 63, 94, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(244, 63, 94, 0.35), 0 0 22px rgba(251, 113, 133, 0.3) !important;
+}
+
+/* Brand 3: Electric Purple & Violet */
+.brand_color_3:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(168, 85, 247, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(168, 85, 247, 0.4), 0 0 22px rgba(192, 132, 252, 0.3) !important;
+}
+
+/* Brand 4: Emerald Green & Mint */
+.brand_color_4:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(16, 185, 129, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(16, 185, 129, 0.35), 0 0 22px rgba(52, 211, 153, 0.3) !important;
+}
+
+/* Brand 5: Golden Amber & Tangerine */
+.brand_color_5:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(245, 158, 11, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(245, 158, 11, 0.35), 0 0 22px rgba(251, 191, 36, 0.3) !important;
+}
+
+/* Brand 6: Ruby Pink & Fuchsia */
+.brand_color_6:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(236, 72, 153, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(236, 72, 153, 0.4), 0 0 22px rgba(244, 114, 182, 0.3) !important;
+}
+
+/* Brand 7: Arctic Ice Blue & Aquamarine */
+.brand_color_7:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(56, 189, 248, 0.35), 0 0 22px rgba(45, 212, 191, 0.3) !important;
+}
+
+/* Brand 8: Neon Cyber Lime & Emerald */
+.brand_color_8:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(132, 204, 22, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(132, 204, 22, 0.35), 0 0 22px rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Brand 9: Cosmic Iris & Lavender */
+.brand_color_9:hover {
+  transform: translateY(-7px) scale(1.04) !important;
+  border-color: rgba(99, 102, 241, 0.6) !important;
+  box-shadow: 0 16px 36px -6px rgba(99, 102, 241, 0.4), 0 0 22px rgba(165, 180, 252, 0.3) !important;
+}
+
+/* --- Mobile Scroll Auto-Glow & Touch Elegance --- */
+@keyframes mobileScrollGlowCycle {
+  0%, 100% {
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    border-color: rgba(226, 232, 240, 0.8);
+  }
+  33% {
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.25), 0 0 15px rgba(168, 85, 247, 0.2);
+    border-color: rgba(6, 182, 212, 0.45);
+  }
+  66% {
+    box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25), 0 0 15px rgba(245, 158, 11, 0.2);
+    border-color: rgba(236, 72, 153, 0.45);
+  }
+}
+
+@keyframes darkMobileScrollGlowCycle {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  33% {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 0 20px rgba(6, 182, 212, 0.3);
+    border-color: rgba(6, 182, 212, 0.45);
+  }
+  66% {
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8), 0 0 20px rgba(168, 85, 247, 0.3);
+    border-color: rgba(168, 85, 247, 0.45);
+  }
+}
+
+@media (max-width: 991px), (hover: none) {
+  /* On touch/mobile devices, auto-breathe during scroll */
+  .brand_chromatic_item {
+    animation: mobileScrollGlowCycle 6s ease-in-out infinite;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
+  }
+
+  .dark .brand_chromatic_item {
+    animation: darkMobileScrollGlowCycle 6s ease-in-out infinite;
+  }
+
+  /* Stagger animation across items */
+  .brand_color_1 { animation-delay: 0s; }
+  .brand_color_2 { animation-delay: 0.6s; }
+  .brand_color_3 { animation-delay: 1.2s; }
+  .brand_color_4 { animation-delay: 1.8s; }
+  .brand_color_5 { animation-delay: 2.4s; }
+  .brand_color_6 { animation-delay: 3s; }
+  .brand_color_7 { animation-delay: 3.6s; }
+  .brand_color_8 { animation-delay: 4.2s; }
+  .brand_color_9 { animation-delay: 4.8s; }
+
+  /* Mobile touch activation */
+  .brand_chromatic_item:active {
+    transform: scale(0.96) !important;
+  }
+
+  .brand_chromatic_item:active img {
+    filter: grayscale(0%) opacity(1) !important;
+  }
+}
+
+
+
 
