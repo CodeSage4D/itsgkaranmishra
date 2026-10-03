@@ -56,7 +56,7 @@ export default function AboutPage() {
                   With an academic Computer Science foundation from SAIT, 47+ open-source codebases authored on GitHub (@CodeSage4D), and on-site research instruction at Symbiosis University of Applied Sciences, I partner with ambitious founders and institutions to transform complex problems into deployed software.
                 </p>
                 <div className="d-flex flex-wrap gap-3 mt-4">
-                  <a className="primary_btn" href="/pdf/Karan_Mishra_ResumeDetailed.pdf" download="Karan_Mishra_CV.pdf">
+                  <a className="primary_btn" href="/pdf/Karann_Mishra_Python_Software_Engineer_Resume.pdf" download="Karann_Mishra_Resume.pdf">
                     <span>Download CV</span>
                   </a>
                   <a className="primary_btn tr-bg" href="https://aurxon.com" target="_blank" rel="noopener noreferrer">
