@@ -22,13 +22,21 @@ export const Footer: React.FC = () => {
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [shareCopied, setShareCopied] = useState<string | null>(null);
 
+  useEffect(() => {
+    const handleOpenShare = () => setShowShareModal(true);
+    window.addEventListener("open-portfolio-share", handleOpenShare);
+    return () => window.removeEventListener("open-portfolio-share", handleOpenShare);
+  }, []);
+
   const portfolioUrl = "https://itsgkaranmishra.web.app";
-  const shareTitle = "Karan Mishra | Founder, Aurxon • Applied AI Architect";
-  const formattedCardMessage = `🚀 Explore Karan Mishra's Applied AI Portfolio & Architecture:
-• Founder & Chief AI Architect, Aurxon
-• Production AI/ML, Cognivex Neural Systems & ERP Lite
-• SUAS Indore & 47+ GitHub Repositories
-🔗 ${portfolioUrl}`;
+  const shareTitle = "Karan Mishra | Founder, Aurxon • Applied AI Architect & ML Engineer";
+  const formattedCardMessage = `🚀 Explore Karan Mishra's Engineering Portfolio & AI Codex:
+• Founder & Chief AI Architect @ Aurxon
+• Production AI/ML Systems • Cognivex Neural Platforms • Aurxon ERP Lite
+• Applied AI Researcher @ SUAS Indore • 47+ Open-Source Projects
+🌐 Portfolio URL: ${portfolioUrl}
+📄 Digital Smart Card: ${portfolioUrl}/card
+💼 LinkedIn: https://www.linkedin.com/in/karannmishra136`;
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -153,6 +161,15 @@ export const Footer: React.FC = () => {
                 >
                   <i className="fa fa-behance"></i>
                 </a>
+                <button
+                  type="button"
+                  onClick={() => setShowShareModal(true)}
+                  aria-label="Share Portfolio URL & Digital Profile"
+                  title="Share Portfolio URL with Auto-Generated Message"
+                  className="footer_social_btn footer_share_social_btn"
+                >
+                  <i className="fa fa-share-alt"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -191,6 +208,16 @@ export const Footer: React.FC = () => {
                   <Link href="/contact" className="footer_nav_anchor">
                     <i className="fa fa-angle-right"></i> Contact
                   </Link>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setShowShareModal(true)}
+                    className="footer_nav_anchor footer_nav_share_link"
+                    title="Share Portfolio URL with Auto-Generated Message"
+                  >
+                    <i className="fa fa-share-alt mr-1 text-info"></i> Share Portfolio
+                  </button>
                 </li>
               </ul>
             </div>
@@ -878,10 +905,12 @@ export const Footer: React.FC = () => {
           background: #818cf8;
           color: #ffffff;
           border-color: #818cf8;
+        }
+
         .footer_share_btn {
-          background: linear-gradient(135deg, rgba(99, 102, 241, 0.25) 0%, rgba(168, 85, 247, 0.25) 100%);
-          border: 1px solid rgba(99, 102, 241, 0.45);
-          color: #c7d2fe;
+          background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(99, 102, 241, 0.25) 100%);
+          border: 1px solid rgba(56, 189, 248, 0.45);
+          color: #e0f2fe;
           padding: 8px 18px;
           border-radius: 50px;
           font-size: 0.84rem;
@@ -889,15 +918,71 @@ export const Footer: React.FC = () => {
           cursor: pointer;
           display: inline-flex;
           align-items: center;
-          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: shareBtnPulseGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes shareBtnPulseGlow {
+          0% {
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+            border-color: rgba(56, 189, 248, 0.4);
+          }
+          100% {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.45), 0 0 10px rgba(56, 189, 248, 0.4);
+            border-color: rgba(168, 85, 247, 0.6);
+          }
         }
 
         .footer_share_btn:hover {
-          background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+          background: linear-gradient(135deg, #0284c7 0%, #6366f1 100%);
           color: #ffffff;
           transform: translateY(-2px);
-          box-shadow: 0 4px 18px rgba(99, 102, 241, 0.5);
-          border-color: #818cf8;
+          box-shadow: 0 0 25px rgba(56, 189, 248, 0.7), 0 4px 18px rgba(99, 102, 241, 0.5);
+          border-color: #38bdf8;
+        }
+
+        .footer_share_social_btn {
+          background: rgba(6, 182, 212, 0.12) !important;
+          border: 1px solid rgba(56, 189, 248, 0.35) !important;
+          color: #38bdf8 !important;
+          cursor: pointer;
+          animation: shareIconPulse 2.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes shareIconPulse {
+          0% {
+            box-shadow: 0 0 6px rgba(56, 189, 248, 0.2);
+            border-color: rgba(56, 189, 248, 0.3);
+          }
+          100% {
+            box-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
+            border-color: #38bdf8;
+          }
+        }
+
+        .footer_share_social_btn:hover {
+          background: #0284c7 !important;
+          color: #ffffff !important;
+          transform: translateY(-3px) scale(1.1) !important;
+          box-shadow: 0 0 20px rgba(56, 189, 248, 0.7) !important;
+        }
+
+        .footer_nav_share_link {
+          background: none;
+          border: none;
+          padding: 0;
+          font-size: 0.85rem;
+          color: #94a3b8;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s ease;
+        }
+
+        .footer_nav_share_link:hover {
+          color: #38bdf8;
+          padding-left: 4px;
         }
 
         /* Share Modal Styles */
