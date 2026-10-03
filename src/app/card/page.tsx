@@ -753,19 +753,24 @@ function CardContent() {
           width: 100%;
           padding: 14px;
           border-radius: 14px;
-          background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+          background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
           color: #ffffff;
           font-weight: 800;
           font-size: 0.95rem;
-          border: none;
+          border: 1px solid rgba(255, 255, 255, 0.4);
           cursor: pointer;
-          box-shadow: 0 8px 24px rgba(2, 132, 199, 0.4);
-          transition: all 0.25s ease;
+          box-shadow: 0 8px 25px rgba(2, 132, 199, 0.45);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .btn_bundle_download:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(2, 132, 199, 0.55);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 14px 35px rgba(2, 132, 199, 0.65), 0 0 25px rgba(99, 102, 241, 0.4);
+          border-color: #ffffff;
+        }
+
+        .btn_bundle_download:active {
+          transform: translateY(0) scale(0.97);
         }
 
         .format_btn_grid {
@@ -779,15 +784,16 @@ function CardContent() {
           border-radius: 12px;
           font-weight: 750;
           font-size: 0.85rem;
-          border: 1px solid rgba(2, 132, 199, 0.3);
+          border: 1.5px solid rgba(2, 132, 199, 0.35);
           background: #ffffff;
           color: #0369a1;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 6px;
+          box-shadow: 0 4px 12px rgba(2, 132, 199, 0.08);
         }
 
         .theme_cyber .btn_format {
@@ -797,9 +803,15 @@ function CardContent() {
         }
 
         .btn_format:hover {
-          background: #0284c7;
+          background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
           color: #ffffff;
           border-color: #0284c7;
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 10px 24px rgba(2, 132, 199, 0.45);
+        }
+
+        .btn_format:active {
+          transform: translateY(0) scale(0.97);
         }
 
         .card_actions_row {
@@ -817,7 +829,7 @@ function CardContent() {
           background: #ffffff;
           color: #334155;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .theme_cyber .btn_card_action {
@@ -829,6 +841,12 @@ function CardContent() {
         .btn_card_action:hover {
           border-color: #0284c7;
           color: #0284c7;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(2, 132, 199, 0.25);
+        }
+
+        .btn_card_action:active {
+          transform: translateY(0) scale(0.97);
         }
 
         .card_bottom_footer {
