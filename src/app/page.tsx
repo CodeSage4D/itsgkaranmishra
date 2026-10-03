@@ -351,23 +351,28 @@ export default function Home() {
       {/* ================ End About Us Area ================= */}
 
       {/* ================ Start Brand & Experience Area ================= */}
-      <section className="brand_area section_gap_bottom">
+      <section className="brand_area section_gap_bottom" id="brand-partners">
         <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-6">
-              <div className="row">
+          <div className="row justify-content-center align-items-center">
+            <div className="col-lg-7">
+              <div className="row g-3">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                  <div key={num} className="col-lg-4 col-md-4 col-sm-6 mb-3">
-                    <div className="single-brand-item d-table">
-                      <div className="d-table-cell text-center">
-                        <img src={`/img/brands/logo${num}.png`} alt={`Brand Logo ${num}`} />
+                  <div key={num} className="col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
+                    <div
+                      className={`single-brand-item brand_chromatic_item brand_color_${num}`}
+                    >
+                      <div className="brand_img_box">
+                        <img
+                          src={`/img/brands/logo${num}.png`}
+                          alt="Partner Brand"
+                        />
                       </div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="offset-lg-2 col-lg-4 col-md-6 mt-4 mt-lg-0">
+            <div className="offset-lg-1 col-lg-4 col-md-6 mt-4 mt-lg-0">
               <div className="client-info">
                 <div className="d-flex align-items-center">
                   <span className="exper">3+</span>
