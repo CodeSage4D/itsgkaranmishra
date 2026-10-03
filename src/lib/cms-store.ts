@@ -1,4 +1,5 @@
 // Enterprise CMS Data Engine - Full Dynamic CRUD Architecture
+import { recordPortfolioChange, recordBlogChange } from "./analytics-client";
 
 export interface BlogPost {
   id: string;
@@ -397,6 +398,7 @@ export function saveBlogPost(post: Partial<BlogPost> & { title: string; content:
       };
       blogs[idx] = updated;
       setStored(STORAGE_KEY_BLOGS, blogs);
+      recordBlogChange(updated.title, "Updated");
       return updated;
     }
   }
@@ -420,13 +422,18 @@ export function saveBlogPost(post: Partial<BlogPost> & { title: string; content:
 
   blogs.unshift(newPost);
   setStored(STORAGE_KEY_BLOGS, blogs);
+  recordBlogChange(newPost.title, "Published");
   return newPost;
 }
 
 export function deleteBlogPost(id: string): void {
   let blogs = getAllBlogs();
+  const target = blogs.find((b) => b.id === id);
   blogs = blogs.filter((b) => b.id !== id);
   setStored(STORAGE_KEY_BLOGS, blogs);
+  if (target) {
+    recordBlogChange(target.title, "Deleted");
+  }
 }
 
 // ---------- PROJECTS CRUD ----------
@@ -447,6 +454,7 @@ export function savePortfolioProject(proj: Partial<PortfolioProject> & { title: 
       };
       projects[idx] = updated;
       setStored(STORAGE_KEY_PROJECTS, projects);
+      recordPortfolioChange(updated.title, "Updated", `Category: ${updated.category}`);
       return updated;
     }
   }
@@ -466,13 +474,18 @@ export function savePortfolioProject(proj: Partial<PortfolioProject> & { title: 
 
   projects.unshift(newProj);
   setStored(STORAGE_KEY_PROJECTS, projects);
+  recordPortfolioChange(newProj.title, "Added New", `Category: ${newProj.category}`);
   return newProj;
 }
 
 export function deletePortfolioProject(id: string): void {
   let projects = getAllProjects();
+  const target = projects.find((p) => p.id === id);
   projects = projects.filter((p) => p.id !== id);
   setStored(STORAGE_KEY_PROJECTS, projects);
+  if (target) {
+    recordPortfolioChange(target.title, "Deleted");
+  }
 }
 
 // ---------- USER FEEDBACK / REVIEWS CRUD ----------
