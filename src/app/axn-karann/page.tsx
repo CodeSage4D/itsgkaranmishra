@@ -45,8 +45,18 @@ export default function AxnKarannCommandPortal() {
   const [loginError, setLoginError] = useState("");
   const [authenticating, setAuthenticating] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    "overview" | "leads" | "audit" | "blogs" | "projects" | "feedbacks" | "visitors" | "clicks"
+    "overview" | "charts" | "settings" | "leads" | "audit" | "blogs" | "projects" | "feedbacks" | "visitors" | "clicks"
   >("overview");
+
+  // Custom Operator Credentials & Settings
+  const [customCreds, setCustomCreds] = useState<{ username?: string; password?: string; updatedAt?: string } | null>(null);
+  const [credForm, setCredForm] = useState({
+    currentPassword: "",
+    newUsername: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [credStatus, setCredStatus] = useState<{ type: "success" | "error" | "info" | ""; text: string }>({ type: "", text: "" });
 
   // Telemetry & Lead Data
   const [visitors, setVisitors] = useState<ClientVisitorLog[]>([]);
@@ -156,9 +166,18 @@ export default function AxnKarannCommandPortal() {
     return () => clearInterval(interval);
   }, []);
 
-  // Check Session & Refresh Data
+  // Check Session & Refresh Data & Load Custom Operator Credentials
   useEffect(() => {
     if (typeof window !== "undefined") {
+      try {
+        const raw = localStorage.getItem("axn_custom_admin_creds");
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed.username && parsed.password) {
+            setCustomCreds(parsed);
+          }
+        }
+      } catch {}
       const isAuth =
         sessionStorage.getItem("axn_karann_auth_v4") === "true" ||
         localStorage.getItem("axn_karann_auth_v4") === "true";
@@ -237,13 +256,18 @@ export default function AxnKarannCommandPortal() {
 
     setTimeout(() => {
       const u = usernameInput.trim().toLowerCase();
-      if (
-        (u === ADMIN_USER.toLowerCase() ||
-          u === "241550600@qq.com" ||
-          u === "admin" ||
-          u === "karannmishra136@gmail.com") &&
-        passwordInput === ADMIN_PASS
-      ) {
+      const p = passwordInput.trim();
+      const matchesUser =
+        u === ADMIN_USER.toLowerCase() ||
+        (customCreds?.username && u === customCreds.username.toLowerCase()) ||
+        u === "241550600@qq.com" ||
+        u === "admin" ||
+        u === "karannmishra136@gmail.com";
+      const matchesPass =
+        p === ADMIN_PASS ||
+        (customCreds?.password && p === customCreds.password);
+
+      if (matchesUser && matchesPass) {
         setIsAuthenticated(true);
         sessionStorage.setItem("axn_karann_auth_v4", "true");
         localStorage.setItem("axn_karann_auth_v4", "true");
@@ -254,6 +278,61 @@ export default function AxnKarannCommandPortal() {
       }
       setAuthenticating(false);
     }, 600);
+  };
+
+  const handleUpdateCredentials = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCredStatus({ type: "", text: "" });
+
+    const activePass = customCreds?.password || ADMIN_PASS;
+    if (credForm.currentPassword !== activePass && credForm.currentPassword !== ADMIN_PASS) {
+      setCredStatus({ type: "error", text: "Current password verification failed. Please enter your valid active password." });
+      return;
+    }
+
+    if (credForm.newPassword && credForm.newPassword.length < 6) {
+      setCredStatus({ type: "error", text: "New password must be at least 6 characters long." });
+      return;
+    }
+
+    if (credForm.newPassword && credForm.newPassword !== credForm.confirmPassword) {
+      setCredStatus({ type: "error", text: "New passwords do not match. Please verify password confirmation." });
+      return;
+    }
+
+    const newU = credForm.newUsername.trim() || customCreds?.username || ADMIN_USER;
+    const newP = credForm.newPassword.trim() || activePass;
+
+    const credPayload = {
+      username: newU,
+      password: newP,
+      updatedAt: new Date().toISOString(),
+    };
+
+    localStorage.setItem("axn_custom_admin_creds", JSON.stringify(credPayload));
+    setCustomCreds(credPayload);
+    setCredForm({ currentPassword: "", newUsername: "", newPassword: "", confirmPassword: "" });
+    setCredStatus({ type: "success", text: `Admin credentials successfully updated! Username: "${newU}".` });
+    recordAuditEvent({
+      eventType: "SECURITY",
+      title: "Admin Credentials Updated",
+      details: `Admin credentials updated by operator (Username: ${newU})`,
+      page: "/axn-karann",
+    });
+  };
+
+  const handleResetCredentials = () => {
+    if (confirm("Reset admin credentials back to default factory settings (karann / KarannAurxon$22)?")) {
+      localStorage.removeItem("axn_custom_admin_creds");
+      setCustomCreds(null);
+      setCredStatus({ type: "info", text: "Admin credentials reset to factory default (karann / KarannAurxon$22)." });
+      recordAuditEvent({
+        eventType: "SECURITY",
+        title: "Admin Credentials Reset",
+        details: "Admin credentials reset to default factory keys",
+        page: "/axn-karann",
+      });
+    }
   };
 
   const handleLogout = () => {
@@ -313,6 +392,149 @@ export default function AxnKarannCommandPortal() {
     return days;
   }, [visitors]);
   const maxTrafficCount = Math.max(...trafficTrend.map((d) => d.count), 1);
+
+  // Visual Chart Data Computations (Pie, Donut, Dual Bars, Area Grams)
+  const dualVelocityData = useMemo(() => {
+    const days: { label: string; date: string; visitors: number; clicks: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      const dayLabel = d.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric" });
+      const vCount = visitors.filter((v) => v.timestamp && v.timestamp.slice(0, 10) === dateStr).length;
+      const cCount = clicks.filter((c) => c.timestamp && c.timestamp.slice(0, 10) === dateStr).length;
+      days.push({ label: dayLabel, date: dateStr, visitors: vCount, clicks: cCount });
+    }
+    return days;
+  }, [visitors, clicks]);
+
+  const hourlyActivity = useMemo(() => {
+    const bins = Array.from({ length: 24 }, (_, i) => ({
+      hour: i,
+      label: `${i.toString().padStart(2, "0")}:00`,
+      visitors: 0,
+      clicks: 0,
+      total: 0,
+    }));
+
+    visitors.forEach((v) => {
+      if (v.timestamp) {
+        const h = new Date(v.timestamp).getHours();
+        if (h >= 0 && h < 24) {
+          bins[h].visitors += 1;
+          bins[h].total += 1;
+        }
+      }
+    });
+
+    clicks.forEach((c) => {
+      if (c.timestamp) {
+        const h = new Date(c.timestamp).getHours();
+        if (h >= 0 && h < 24) {
+          bins[h].clicks += 1;
+          bins[h].total += 1;
+        }
+      }
+    });
+
+    return bins;
+  }, [visitors, clicks]);
+
+  const maxHourlyTotal = useMemo(() => {
+    return Math.max(...hourlyActivity.map((b) => b.total), 1);
+  }, [hourlyActivity]);
+
+  const peakHourBin = useMemo(() => {
+    let peak = hourlyActivity[0];
+    hourlyActivity.forEach((b) => {
+      if (b.total > peak.total) peak = b;
+    });
+    return peak;
+  }, [hourlyActivity]);
+
+  const deviceSlices = useMemo(() => {
+    const colors = ["#38bdf8", "#10b981", "#f59e0b"];
+    const devEntries = [
+      { name: "Desktop", count: deviceStats.Desktop || 0 },
+      { name: "Mobile", count: deviceStats.Mobile || 0 },
+      { name: "Tablet", count: deviceStats.Tablet || 0 },
+    ];
+    const tot = devEntries.reduce((acc, curr) => acc + curr.count, 0) || 1;
+    let offsetAcc = 0;
+    const CIRCUMFERENCE = 377; // 2 * Math.PI * 60
+
+    return devEntries.map((dev, idx) => {
+      const pct = Math.round((dev.count / tot) * 100);
+      const dash = (dev.count / tot) * CIRCUMFERENCE;
+      const currentOffset = offsetAcc;
+      offsetAcc += dash;
+      return {
+        name: dev.name,
+        count: dev.count,
+        pct,
+        color: colors[idx % colors.length],
+        dash: Math.max(dash, 0),
+        offset: currentOffset,
+      };
+    });
+  }, [deviceStats]);
+
+  const referrerSlices = useMemo(() => {
+    const colors = ["#38bdf8", "#34d399", "#818cf8", "#c084fc", "#f472b6", "#fbbf24", "#94a3b8"];
+    const tot = visitors.length || 1;
+    let offsetAcc = 0;
+    const CIRCUMFERENCE = 377; // 2 * Math.PI * 60
+
+    return referrerStats.slice(0, 7).map((entry, idx) => {
+      const [name, count] = entry;
+      const pct = Math.round((count / tot) * 100);
+      const dash = (count / tot) * CIRCUMFERENCE;
+      const currentOffset = offsetAcc;
+      offsetAcc += dash;
+      return {
+        name,
+        count,
+        pct,
+        color: colors[idx % colors.length],
+        dash: Math.max(dash, 0),
+        offset: currentOffset,
+      };
+    });
+  }, [referrerStats, visitors]);
+
+  const topElementsInteracted = useMemo(() => {
+    const counts: Record<string, number> = {};
+    clicks.forEach((c) => {
+      const key = c.elementText || c.elementId || "Interaction";
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+  }, [clicks]);
+
+  // Area Gram Points Calculation
+  const hourlyPoints = useMemo(() => {
+    return hourlyActivity.map((bin, i) => {
+      const x = 40 + (i / 23) * 740;
+      const y = 180 - (bin.total / maxHourlyTotal) * 140;
+      return { x, y, val: bin.total };
+    });
+  }, [hourlyActivity, maxHourlyTotal]);
+
+  const areaGramPoints = useMemo(() => {
+    if (hourlyPoints.length === 0) return "";
+    const pts = hourlyPoints.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+    return `40,180 ${pts} 780,180`;
+  }, [hourlyPoints]);
+
+  const lineGramPath = useMemo(() => {
+    if (hourlyPoints.length === 0) return "";
+    return hourlyPoints.reduce((acc, pt, i) => {
+      return i === 0 ? `M ${pt.x.toFixed(1)} ${pt.y.toFixed(1)}` : `${acc} L ${pt.x.toFixed(1)} ${pt.y.toFixed(1)}`;
+    }, "");
+  }, [hourlyPoints]);
 
   // Filtered Leads
   const filteredLeads = useMemo(() => {
@@ -632,6 +854,20 @@ export default function AxnKarannCommandPortal() {
         >
           <span className="tab_icon">📊</span>
           <span className="tab_text">Overview</span>
+        </button>
+        <button
+          className={`tab_btn ${activeTab === "charts" ? "active_tab" : ""}`}
+          onClick={() => setActiveTab("charts")}
+        >
+          <span className="tab_icon">📈</span>
+          <span className="tab_text">Charts &amp; Visuals</span>
+        </button>
+        <button
+          className={`tab_btn ${activeTab === "settings" ? "active_tab" : ""}`}
+          onClick={() => setActiveTab("settings")}
+        >
+          <span className="tab_icon">⚙️</span>
+          <span className="tab_text">Security &amp; Password</span>
         </button>
         <button
           className={`tab_btn ${activeTab === "audit" ? "active_tab" : ""}`}
@@ -1530,6 +1766,419 @@ export default function AxnKarannCommandPortal() {
                 )}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Charts, Visuals, Pie & Grams */}
+      {activeTab === "charts" && (
+        <div className="tab_content charts_advanced_view">
+          {/* Top Visual Summary Bar */}
+          <div className="charts_kpi_banner mb-4">
+            <div className="banner_metric">
+              <span className="b_label">Total Recorded Visits</span>
+              <strong className="b_val cyan_glow">{totalVisitors}</strong>
+              <span className="b_sub">Live unique IP sessions</span>
+            </div>
+            <div className="banner_metric">
+              <span className="b_label">Page / Route Impressions</span>
+              <strong className="b_val violet_glow">{totalPageViews}</strong>
+              <span className="b_sub">All profile view hits</span>
+            </div>
+            <div className="banner_metric">
+              <span className="b_label">Interactive Element Clicks</span>
+              <strong className="b_val amber_glow">{totalClicks}</strong>
+              <span className="b_sub">Buttons, links &amp; cards</span>
+            </div>
+            <div className="banner_metric">
+              <span className="b_label">CRM Leads Captured</span>
+              <strong className="b_val emerald_glow">{totalLeadsCount}</strong>
+              <span className="b_sub">Conversion rate: {conversionRate}%</span>
+            </div>
+          </div>
+
+          {/* Row 1: Donut & Pie Charts */}
+          <div className="charts_grid_2col mb-4">
+            {/* Device Breakdown Donut Chart */}
+            <div className="chart_card">
+              <div className="chart_header">
+                <div>
+                  <h3 className="chart_title">🥧 Device Breakdown (Pie / Donut)</h3>
+                  <p className="chart_sub">Desktop vs. Mobile vs. Tablet client telemetry</p>
+                </div>
+                <span className="chart_tag">Hardware</span>
+              </div>
+              <div className="pie_chart_container">
+                <div className="donut_svg_box">
+                  <svg viewBox="0 0 160 160" className="donut_svg">
+                    <circle cx="80" cy="80" r="60" fill="transparent" stroke="rgba(255,255,255,0.06)" strokeWidth="22" />
+                    {deviceSlices.map((slice, i) => (
+                      <circle
+                        key={i}
+                        cx="80"
+                        cy="80"
+                        r="60"
+                        fill="transparent"
+                        stroke={slice.color}
+                        strokeWidth="22"
+                        strokeDasharray={`${slice.dash} 377`}
+                        strokeDashoffset={`-${slice.offset}`}
+                        strokeLinecap="butt"
+                        transform="rotate(-90 80 80)"
+                        className="donut_segment"
+                      />
+                    ))}
+                    <text x="80" y="74" textAnchor="middle" fill="#94a3b8" fontSize="11" fontWeight="500">DEVICES</text>
+                    <text x="80" y="96" textAnchor="middle" fill="#f8fafc" fontSize="18" fontWeight="700">{totalVisitors}</text>
+                  </svg>
+                </div>
+                <div className="donut_legend">
+                  {deviceSlices.map((slice, i) => (
+                    <div key={i} className="donut_legend_item">
+                      <div className="legend_color_badge" style={{ backgroundColor: slice.color }}></div>
+                      <div className="legend_info">
+                        <span className="legend_name">{slice.name}</span>
+                        <div className="legend_counts">
+                          <strong>{slice.count}</strong>
+                          <span className="legend_pct">({slice.pct}%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Referrer Traffic Origin Donut */}
+            <div className="chart_card">
+              <div className="chart_header">
+                <div>
+                  <h3 className="chart_title">🌐 Traffic Origin (Pie / Donut)</h3>
+                  <p className="chart_sub">Inbound visitor origins &amp; channels</p>
+                </div>
+                <span className="chart_tag">Sources</span>
+              </div>
+              <div className="pie_chart_container">
+                <div className="donut_svg_box">
+                  <svg viewBox="0 0 160 160" className="donut_svg">
+                    <circle cx="80" cy="80" r="60" fill="transparent" stroke="rgba(255,255,255,0.06)" strokeWidth="22" />
+                    {referrerSlices.map((slice, i) => (
+                      <circle
+                        key={i}
+                        cx="80"
+                        cy="80"
+                        r="60"
+                        fill="transparent"
+                        stroke={slice.color}
+                        strokeWidth="22"
+                        strokeDasharray={`${slice.dash} 377`}
+                        strokeDashoffset={`-${slice.offset}`}
+                        strokeLinecap="butt"
+                        transform="rotate(-90 80 80)"
+                        className="donut_segment"
+                      />
+                    ))}
+                    <text x="80" y="74" textAnchor="middle" fill="#94a3b8" fontSize="11" fontWeight="500">ORIGINS</text>
+                    <text x="80" y="96" textAnchor="middle" fill="#f8fafc" fontSize="18" fontWeight="700">{referrerStats.length}</text>
+                  </svg>
+                </div>
+                <div className="donut_legend">
+                  {referrerSlices.slice(0, 5).map((slice, i) => (
+                    <div key={i} className="donut_legend_item">
+                      <div className="legend_color_badge" style={{ backgroundColor: slice.color }}></div>
+                      <div className="legend_info">
+                        <span className="legend_name">{slice.name}</span>
+                        <div className="legend_counts">
+                          <strong>{slice.count}</strong>
+                          <span className="legend_pct">({slice.pct}%)</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 2: Dual Bar Graph (Visitors vs Clicks Velocity) */}
+          <div className="chart_card mb-4">
+            <div className="chart_header_flex">
+              <div>
+                <h3 className="chart_title">📊 7-Day Velocity Bar Graph (Visitors vs. Element Clicks)</h3>
+                <p className="chart_sub">Side-by-side comparative distribution of sessions and engagement</p>
+              </div>
+              <div className="dual_legend_tags">
+                <span className="legend_pill visitor_pill">
+                  <span className="pill_indicator bg_cyan"></span> Visitors (Sessions)
+                </span>
+                <span className="legend_pill click_pill">
+                  <span className="pill_indicator bg_violet"></span> Clicks (Interactions)
+                </span>
+              </div>
+            </div>
+
+            <div className="dual_bar_chart_box">
+              <div className="chart_grid_lines">
+                <div className="grid_line"></div>
+                <div className="grid_line"></div>
+                <div className="grid_line"></div>
+                <div className="grid_line"></div>
+              </div>
+              <div className="dual_bars_container">
+                {dualVelocityData.map((d, i) => {
+                  const maxVal = Math.max(...dualVelocityData.map((v) => Math.max(v.visitors, v.clicks)), 1);
+                  const vHeight = Math.max((d.visitors / maxVal) * 100, 6);
+                  const cHeight = Math.max((d.clicks / maxVal) * 100, 6);
+
+                  return (
+                    <div key={i} className="dual_bar_group">
+                      <div className="dual_bar_pair">
+                        <div className="single_bar_wrap">
+                          <div className="bar_hover_tooltip">Visitors: {d.visitors}</div>
+                          <div className="bar_rect bar_visitor" style={{ height: `${vHeight}%` }}></div>
+                        </div>
+                        <div className="single_bar_wrap">
+                          <div className="bar_hover_tooltip">Clicks: {d.clicks}</div>
+                          <div className="bar_rect bar_click" style={{ height: `${cHeight}%` }}></div>
+                        </div>
+                      </div>
+                      <span className="dual_group_label">{d.label.split(",")[0]}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Row 3: 24-Hour Telemetry Distribution Area Gram (Histogram) */}
+          <div className="chart_card mb-4">
+            <div className="chart_header_flex">
+              <div>
+                <h3 className="chart_title">📈 24-Hour Telemetry Area Gram (Temporal Activity Histogram)</h3>
+                <p className="chart_sub">Distribution of user sessions and clickstream pulses across 24 hours (00:00 to 23:00 IST)</p>
+              </div>
+              <div className="gram_peak_badge">
+                <span>Peak Activity: <strong>{peakHourBin.label} ({peakHourBin.total} hits)</strong></span>
+              </div>
+            </div>
+
+            <div className="area_gram_container">
+              <svg viewBox="0 0 800 220" className="area_gram_svg" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="areaGramGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.45" />
+                    <stop offset="60%" stopColor="#3b82f6" stopOpacity="0.15" />
+                    <stop offset="100%" stopColor="#090a15" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="areaStrokeGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#06b6d4" />
+                    <stop offset="50%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#818cf8" />
+                  </linearGradient>
+                </defs>
+
+                {/* Horizontal reference grid lines */}
+                <line x1="40" y1="30" x2="780" y2="30" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+                <line x1="40" y1="80" x2="780" y2="80" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+                <line x1="40" y1="130" x2="780" y2="130" stroke="rgba(255,255,255,0.06)" strokeDasharray="3 3" />
+                <line x1="40" y1="180" x2="780" y2="180" stroke="rgba(255,255,255,0.12)" />
+
+                {/* Filled Area */}
+                <polygon points={areaGramPoints} fill="url(#areaGramGradient)" />
+
+                {/* Stroke Line */}
+                <path d={lineGramPath} fill="none" stroke="url(#areaStrokeGrad)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+
+                {/* Glowing Data Nodes */}
+                {hourlyPoints.map((pt, i) => (
+                  <g key={i} className="gram_node_group">
+                    <circle cx={pt.x} cy={pt.y} r={pt.val > 0 ? "4.5" : "2.5"} fill={pt.val > 0 ? "#06b6d4" : "#475569"} stroke="#090a15" strokeWidth="2" />
+                  </g>
+                ))}
+              </svg>
+
+              {/* X Axis Time Labels */}
+              <div className="gram_x_labels">
+                {hourlyActivity.filter((_, i) => i % 3 === 0).map((bin, i) => (
+                  <span key={i} className="gram_x_tick">{bin.label}</span>
+                ))}
+                <span className="gram_x_tick">23:00</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Row 4: Top Action Element Interactions */}
+          <div className="chart_card">
+            <div className="chart_header">
+              <h3 className="chart_title">🎯 Top Interactive Elements (Bar Frequency Ranking)</h3>
+              <p className="chart_sub">Buttons, links, and assets receiving the highest direct engagement</p>
+            </div>
+            <div className="ranking_bars_list">
+              {topElementsInteracted.length === 0 ? (
+                <div className="empty_table_cell py-4 text-center">No interactive click events logged yet.</div>
+              ) : (
+                topElementsInteracted.map((item, idx) => {
+                  const maxClicks = Math.max(...topElementsInteracted.map((t) => t.count), 1);
+                  const pct = Math.max((item.count / maxClicks) * 100, 8);
+                  return (
+                    <div key={idx} className="ranking_bar_row">
+                      <div className="ranking_meta">
+                        <span className="ranking_idx">#{idx + 1}</span>
+                        <strong className="ranking_name">{item.name}</strong>
+                        <span className="ranking_count">{item.count} clicks</span>
+                      </div>
+                      <div className="ranking_track">
+                        <div className="ranking_fill" style={{ width: `${pct}%` }}></div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Settings & Credentials */}
+      {activeTab === "settings" && (
+        <div className="tab_content settings_advanced_view">
+          <div className="settings_grid">
+            {/* Operator Profile Card */}
+            <div className="chart_card">
+              <div className="chart_header">
+                <div>
+                  <h3 className="chart_title">🛡️ Active Operator Profile</h3>
+                  <p className="chart_sub">Current authentication identity and system privileges</p>
+                </div>
+                <span className="badge_real_live">LIVE IDENTITY</span>
+              </div>
+
+              <div className="operator_identity_box">
+                <div className="operator_avatar">
+                  <span>KM</span>
+                </div>
+                <div className="operator_details">
+                  <h4 className="operator_name">Karan Mishra</h4>
+                  <span className="operator_role">Chief Systems Architect &amp; Admin</span>
+                  <div className="operator_creds_summary mt-2">
+                    <span className="cred_label">Active Username:</span>
+                    <code className="cred_val_code">{customCreds?.username || ADMIN_USER}</code>
+                  </div>
+                  <div className="operator_creds_summary">
+                    <span className="cred_label">Keyring Mode:</span>
+                    <span className="cred_val_text">{customCreds ? "Custom Encrypted Override" : "Master Genesis Key"}</span>
+                  </div>
+                  <div className="operator_creds_summary">
+                    <span className="cred_label">Last Credential Update:</span>
+                    <span className="cred_val_text">
+                      {customCreds?.updatedAt ? new Date(customCreds.updatedAt).toLocaleString() : "Default Installation"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="security_notice mt-4">
+                <strong>🔒 Security Assurance:</strong>
+                <p className="mb-0 text-muted" style={{ fontSize: "0.85rem", marginTop: "4px" }}>
+                  Credentials updated here are instantly active for both the primary command dashboard and the isometric gateway scanner. Master Genesis keys remain securely bound for recovery.
+                </p>
+              </div>
+
+              {customCreds && (
+                <div className="mt-4 pt-3 border-top border-secondary">
+                  <button onClick={handleResetCredentials} className="btn_reset_keys">
+                    🔄 Reset Back to Factory Genesis Credentials
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Change Username & Password Form Card */}
+            <div className="chart_card">
+              <div className="chart_header">
+                <div>
+                  <h3 className="chart_title">🔑 Change Username &amp; Password</h3>
+                  <p className="chart_sub">Update your administrative credentials for the command portal</p>
+                </div>
+                <span className="chart_tag">ACCESS CONTROL</span>
+              </div>
+
+              {credStatus.text && (
+                <div className={`cred_status_alert alert_${credStatus.type}`}>
+                  {credStatus.type === "success" && "✓ "}
+                  {credStatus.type === "error" && "⚠ "}
+                  {credStatus.type === "info" && "ℹ "}
+                  {credStatus.text}
+                </div>
+              )}
+
+              <form onSubmit={handleUpdateCredentials} className="credentials_form">
+                <div className="form-group mb-3">
+                  <label className="field_label">Current Password *</label>
+                  <input
+                    type="password"
+                    className="login_input"
+                    placeholder="Enter current active password to verify identity"
+                    value={credForm.currentPassword}
+                    onChange={(e) => setCredForm({ ...credForm, currentPassword: e.target.value })}
+                    required
+                  />
+                  <small className="field_help">Required to authorize administrative credential changes.</small>
+                </div>
+
+                <div className="form-group mb-3">
+                  <label className="field_label">New Username (Optional or Keep Current)</label>
+                  <input
+                    type="text"
+                    className="login_input"
+                    placeholder={`Current: ${customCreds?.username || ADMIN_USER}`}
+                    value={credForm.newUsername}
+                    onChange={(e) => setCredForm({ ...credForm, newUsername: e.target.value })}
+                  />
+                  <small className="field_help">Leave blank to retain current username.</small>
+                </div>
+
+                <div className="form-group mb-3">
+                  <label className="field_label">New Password *</label>
+                  <input
+                    type="password"
+                    className="login_input"
+                    placeholder="Enter new secure password (min 6 chars)"
+                    value={credForm.newPassword}
+                    onChange={(e) => setCredForm({ ...credForm, newPassword: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="form-group mb-4">
+                  <label className="field_label">Confirm New Password *</label>
+                  <input
+                    type="password"
+                    className="login_input"
+                    placeholder="Re-enter new secure password"
+                    value={credForm.confirmPassword}
+                    onChange={(e) => setCredForm({ ...credForm, confirmPassword: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="d-flex align-items-center justify-content-between">
+                  <button type="submit" className="modal_save_btn">
+                    💾 Save &amp; Apply New Credentials
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCredForm({ currentPassword: "", newUsername: "", newPassword: "", confirmPassword: "" });
+                      setCredStatus({ type: "", text: "" });
+                    }}
+                    className="modal_cancel_btn"
+                  >
+                    Clear Form
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
@@ -2936,6 +3585,445 @@ export default function AxnKarannCommandPortal() {
             font-size: 0.78rem;
           }
         }
+
+        /* Visual Charts & Visuals Tab Styles */
+        .charts_kpi_banner {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 16px;
+        }
+        .banner_metric {
+          background: rgba(15, 23, 42, 0.65);
+          border: 1px solid rgba(255, 255, 255, 0.07);
+          border-radius: 12px;
+          padding: 16px 20px;
+          display: flex;
+          flex-direction: column;
+        }
+        .b_label {
+          font-size: 0.8rem;
+          color: #94a3b8;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 4px;
+        }
+        .b_val {
+          font-size: 1.8rem;
+          font-weight: 700;
+          font-family: monospace;
+          line-height: 1.2;
+        }
+        .cyan_glow {
+          color: #38bdf8;
+          text-shadow: 0 0 16px rgba(56, 189, 248, 0.4);
+        }
+        .violet_glow {
+          color: #a78bfa;
+          text-shadow: 0 0 16px rgba(167, 139, 250, 0.4);
+        }
+        .amber_glow {
+          color: #fbbf24;
+          text-shadow: 0 0 16px rgba(251, 191, 36, 0.4);
+        }
+        .emerald_glow {
+          color: #34d399;
+          text-shadow: 0 0 16px rgba(52, 211, 153, 0.4);
+        }
+        .b_sub {
+          font-size: 0.75rem;
+          color: #64748b;
+          margin-top: 4px;
+        }
+
+        .charts_grid_2col {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+          gap: 20px;
+        }
+        .pie_chart_container {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          padding: 20px 10px;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+        .donut_svg_box {
+          width: 170px;
+          height: 170px;
+          flex-shrink: 0;
+        }
+        .donut_svg {
+          width: 100%;
+          height: 100%;
+          overflow: visible;
+        }
+        .donut_segment {
+          transition: stroke-width 0.25s ease, filter 0.25s ease;
+          cursor: pointer;
+        }
+        .donut_segment:hover {
+          stroke-width: 26;
+          filter: drop-shadow(0 0 8px currentColor);
+        }
+        .donut_legend {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          min-width: 160px;
+        }
+        .donut_legend_item {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .legend_color_badge {
+          width: 12px;
+          height: 12px;
+          border-radius: 3px;
+          flex-shrink: 0;
+        }
+        .legend_info {
+          display: flex;
+          flex-direction: column;
+        }
+        .legend_name {
+          font-size: 0.84rem;
+          color: #cbd5e1;
+        }
+        .legend_counts {
+          font-size: 0.76rem;
+          color: #94a3b8;
+          display: flex;
+          gap: 4px;
+        }
+        .legend_pct {
+          color: #64748b;
+        }
+
+        /* Dual Bar Chart Styles */
+        .dual_legend_tags {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .legend_pill {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.78rem;
+          color: #94a3b8;
+        }
+        .pill_indicator {
+          width: 10px;
+          height: 10px;
+          border-radius: 2px;
+        }
+        .bg_cyan {
+          background: #38bdf8;
+          box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+        }
+        .bg_violet {
+          background: #a78bfa;
+          box-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
+        }
+        .dual_bar_chart_box {
+          position: relative;
+          height: 230px;
+          padding-top: 24px;
+          margin-top: 10px;
+        }
+        .chart_grid_lines {
+          position: absolute;
+          inset: 0 0 30px 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          pointer-events: none;
+        }
+        .grid_line {
+          width: 100%;
+          border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+        .dual_bars_container {
+          position: relative;
+          z-index: 2;
+          height: 100%;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 12px;
+          padding-bottom: 28px;
+        }
+        .dual_bar_group {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          height: 100%;
+          justify-content: flex-end;
+        }
+        .dual_bar_pair {
+          display: flex;
+          align-items: flex-end;
+          gap: 4px;
+          width: 100%;
+          max-width: 44px;
+          height: 100%;
+        }
+        .single_bar_wrap {
+          flex: 1;
+          height: 100%;
+          display: flex;
+          align-items: flex-end;
+          position: relative;
+        }
+        .bar_hover_tooltip {
+          position: absolute;
+          top: -26px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: #0f172a;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 4px;
+          font-size: 0.68rem;
+          color: #f1f5f9;
+          padding: 2px 6px;
+          white-space: nowrap;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          z-index: 10;
+        }
+        .single_bar_wrap:hover .bar_hover_tooltip {
+          opacity: 1;
+        }
+        .bar_rect {
+          width: 100%;
+          border-radius: 4px 4px 0 0;
+          transition: height 0.4s ease, filter 0.2s ease;
+          min-height: 4px;
+        }
+        .bar_visitor {
+          background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.3) 100%);
+        }
+        .bar_click {
+          background: linear-gradient(180deg, #a78bfa 0%, rgba(167, 139, 250, 0.3) 100%);
+        }
+        .bar_rect:hover {
+          filter: brightness(1.25);
+        }
+        .dual_group_label {
+          margin-top: 8px;
+          font-size: 0.72rem;
+          color: #94a3b8;
+          white-space: nowrap;
+        }
+
+        /* 24-Hour Area Gram */
+        .area_gram_container {
+          position: relative;
+          width: 100%;
+          margin-top: 10px;
+        }
+        .area_gram_svg {
+          width: 100%;
+          height: 190px;
+          display: block;
+        }
+        .gram_x_labels {
+          display: flex;
+          justify-content: space-between;
+          padding: 6px 12px 0 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .gram_x_tick {
+          font-size: 0.7rem;
+          color: #64748b;
+          font-family: monospace;
+        }
+        .gram_node_group circle {
+          transition: r 0.2s ease, fill 0.2s ease;
+        }
+        .gram_node_group:hover circle {
+          r: 6.5;
+          fill: #38bdf8;
+          cursor: pointer;
+        }
+        .gram_peak_badge {
+          background: rgba(6, 182, 212, 0.12);
+          border: 1px solid rgba(6, 182, 212, 0.3);
+          border-radius: 20px;
+          padding: 4px 12px;
+          font-size: 0.78rem;
+          color: #38bdf8;
+        }
+
+        /* Top Interactions Ranking */
+        .ranking_bars_list {
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          padding: 8px 0;
+        }
+        .ranking_bar_row {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+        .ranking_meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.84rem;
+        }
+        .ranking_idx {
+          color: #06b6d4;
+          font-family: monospace;
+          margin-right: 8px;
+          font-weight: 700;
+        }
+        .ranking_name {
+          color: #e2e8f0;
+          flex: 1;
+        }
+        .ranking_count {
+          color: #94a3b8;
+          font-size: 0.76rem;
+          font-family: monospace;
+        }
+        .ranking_track {
+          width: 100%;
+          height: 7px;
+          background: rgba(255, 255, 255, 0.06);
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        .ranking_fill {
+          height: 100%;
+          background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+          border-radius: 4px;
+          transition: width 0.5s ease;
+        }
+
+        /* Settings & Credentials View */
+        .settings_grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+          gap: 22px;
+        }
+        .operator_identity_box {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+          border-radius: 12px;
+          padding: 18px;
+        }
+        .operator_avatar {
+          width: 58px;
+          height: 58px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+          font-size: 1.25rem;
+          color: #090a15;
+          flex-shrink: 0;
+          box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+        }
+        .operator_name {
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: #f8fafc;
+          margin-bottom: 2px;
+        }
+        .operator_role {
+          font-size: 0.78rem;
+          color: #06b6d4;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          display: block;
+        }
+        .operator_creds_summary {
+          font-size: 0.8rem;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 3px;
+        }
+        .cred_label {
+          color: #94a3b8;
+        }
+        .cred_val_code {
+          background: rgba(0, 0, 0, 0.4);
+          padding: 2px 6px;
+          border-radius: 4px;
+          color: #38bdf8;
+          font-family: monospace;
+          font-size: 0.8rem;
+        }
+        .cred_val_text {
+          color: #e2e8f0;
+        }
+        .security_notice {
+          background: rgba(2, 6, 23, 0.5);
+          border-left: 3px solid #06b6d4;
+          padding: 12px 16px;
+          border-radius: 0 8px 8px 0;
+        }
+        .btn_reset_keys {
+          background: transparent;
+          border: 1px dashed rgba(239, 68, 68, 0.4);
+          color: #ef4444;
+          padding: 8px 14px;
+          border-radius: 8px;
+          font-size: 0.82rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          width: 100%;
+        }
+        .btn_reset_keys:hover {
+          background: rgba(239, 68, 68, 0.1);
+          border-color: #ef4444;
+        }
+        .credentials_form {
+          margin-top: 10px;
+        }
+        .field_help {
+          color: #64748b;
+          font-size: 0.74rem;
+          margin-top: 4px;
+          display: block;
+        }
+        .cred_status_alert {
+          padding: 10px 16px;
+          border-radius: 8px;
+          margin-bottom: 16px;
+          font-size: 0.86rem;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .alert_success {
+          background: rgba(16, 185, 129, 0.12);
+          border: 1px solid rgba(16, 185, 129, 0.35);
+          color: #34d399;
+        }
+        .alert_error {
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.35);
+          color: #f87171;
+        }
+        .alert_info {
+          background: rgba(56, 189, 248, 0.12);
+          border: 1px solid rgba(56, 189, 248, 0.35);
+          color: #38bdf8;
+        }
+
       `}} />
     </div>
   );
