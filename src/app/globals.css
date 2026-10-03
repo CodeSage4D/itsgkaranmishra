@@ -813,10 +813,21 @@ img, video, canvas, svg {
   .metrics_telemetry_box {
     margin-top: 14px;
   }
-  .banner_btn_row .primary_btn {
+  .banner_btn_row {
+    gap: 10px !important;
+    margin-top: 22px !important;
+  }
+  .banner_btn_row .hero_consult_btn {
     width: 100% !important;
     text-align: center !important;
-    margin-bottom: 8px;
+  }
+  .banner_btn_row .hero_cv_btn,
+  .banner_btn_row .hero_aurxon_btn,
+  .banner_btn_row .hero_card_btn,
+  .banner_btn_row .hero_share_btn {
+    flex: 1 1 calc(50% - 6px) !important;
+    min-width: 125px !important;
+    text-align: center !important;
   }
   .projects_controls_bar {
     flex-direction: column !important;
@@ -1547,6 +1558,151 @@ button[type="submit"],
   .brand_chromatic_item:active img {
     filter: grayscale(0%) opacity(1) !important;
   }
+}
+
+/* =========================================================
+   LANDING PAGE HERO BUTTONS: TRANSPARENT GLASS, LIGHT BORDER,
+   SMOOTH BREATHING GLOW & MULTI-COLOR SMOOTH HOVER GLOW SYSTEM
+   ========================================================= */
+
+/* Hero Banner Button Row Spacing & Design */
+.banner_btn_row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 14px 18px !important;
+  margin-top: 32px !important;
+  margin-bottom: 24px !important;
+  align-items: center !important;
+}
+
+/* Base Landing Buttons: Transparent Glass with Light Glowing Border */
+.banner_btn_row .primary_btn {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 13px 26px !important;
+  min-height: 48px !important;
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  background: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  color: #f8fafc !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  animation: heroBtnBreathingPulse 3.8s ease-in-out infinite alternate !important;
+}
+
+/* Light Mode Transparent Base */
+:root:not(.dark) .banner_btn_row .primary_btn {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(79, 70, 229, 0.3) !important;
+  color: #1e1b4b !important;
+}
+
+/* Idle Breathing Glow: Smooth on/off glowing cycle */
+@keyframes heroBtnBreathingPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    border-color: rgba(56, 189, 248, 0.28);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.35), 0 0 12px rgba(168, 85, 247, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    border-color: rgba(168, 85, 247, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    border-color: rgba(56, 189, 248, 0.28);
+  }
+}
+
+/* Smooth Color Hover Glow On & Off */
+.banner_btn_row .primary_btn:hover {
+  animation: none !important;
+  transform: translateY(-3px) scale(1.028) !important;
+  color: #ffffff !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* 1. Primary CTA: Initiate Executive Consultation (Electric Cyan-Indigo Glow) */
+.banner_btn_row .hero_consult_btn {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.22) 0%, rgba(99, 102, 241, 0.3) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  color: #ffffff !important;
+}
+.banner_btn_row .hero_consult_btn:hover {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.35) 0%, rgba(99, 102, 241, 0.45) 100%) !important;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.7), 0 0 60px rgba(99, 102, 241, 0.5), inset 0 0 14px rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 2. Get CV (Emerald-Cyan Luminous Glow) */
+.banner_btn_row .hero_cv_btn {
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #a7f3d0 !important;
+}
+.banner_btn_row .hero_cv_btn:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(6, 182, 212, 0.3) 100%) !important;
+  border-color: #34d399 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 28px rgba(16, 185, 129, 0.65), 0 0 50px rgba(6, 182, 212, 0.4), inset 0 0 12px rgba(16, 185, 129, 0.2) !important;
+}
+
+/* 3. Aurxon.com (Amber-Gold Radiant Glow) */
+.banner_btn_row .hero_aurxon_btn {
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #fde68a !important;
+}
+.banner_btn_row .hero_aurxon_btn:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(239, 68, 68, 0.25) 100%) !important;
+  border-color: #fbbf24 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 28px rgba(245, 158, 11, 0.65), 0 0 50px rgba(239, 68, 68, 0.4), inset 0 0 12px rgba(245, 158, 11, 0.2) !important;
+}
+
+/* 4. Smart Card (Purple-Fuchsia Neon Glow) */
+.banner_btn_row .hero_card_btn {
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  color: #f0abfc !important;
+}
+.banner_btn_row .hero_card_btn:hover {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.25) 0%, rgba(236, 72, 153, 0.25) 100%) !important;
+  border-color: #c084fc !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 30px rgba(168, 85, 247, 0.65), 0 0 50px rgba(236, 72, 153, 0.45), inset 0 0 12px rgba(168, 85, 247, 0.2) !important;
+}
+
+/* 5. Share Portfolio Button (Sky-Blue Vibrant Glow) */
+.banner_btn_row .hero_share_btn {
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #bae6fd !important;
+}
+.banner_btn_row .hero_share_btn:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(129, 140, 248, 0.35) 100%) !important;
+  border-color: #38bdf8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.75), 0 0 55px rgba(129, 140, 248, 0.5), inset 0 0 14px rgba(56, 189, 248, 0.25) !important;
+}
+
+/* General Buttons in Other Sections Glow Alignment */
+.hero_cta_group .primary_btn,
+.about_cta_group .primary_btn {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+.hero_cta_group .primary_btn:hover,
+.about_cta_group .primary_btn:hover {
+  transform: translateY(-3px) scale(1.025) !important;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.6), 0 0 50px rgba(99, 102, 241, 0.4) !important;
+  border-color: #38bdf8 !important;
 }
 
 
