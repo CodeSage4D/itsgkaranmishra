@@ -210,7 +210,7 @@ export default function Home() {
                 <div className="about_card_glass_backdrop"></div>
                 <img
                   className="img-fluid about_primary_portrait"
-                  src="/img/founder/karan-mishra-founder.jpg"
+                  src="/img/founder/karan_mishra_founder.jpg"
                   alt="Karan Mishra (Karann Mishra, G Karan Mishra) - Founder & Chief AI Architect at Aurxon"
                 />
                 <div className="about_classified_badge">

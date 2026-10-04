@@ -1594,7 +1594,7 @@ export default function AxnKarannCommandPortal() {
                     Official Founder Photograph
                   </h4>
                   <img
-                    src="/img/founder/karan-mishra-founder.jpg"
+                    src="/img/founder/karan_mishra_founder.jpg"
                     alt="Karan Mishra"
                     className="img-fluid rounded mb-3 shadow"
                     style={{ maxHeight: "300px", objectFit: "cover", border: "2px solid rgba(99, 102, 241, 0.4)" }}
@@ -1602,7 +1602,7 @@ export default function AxnKarannCommandPortal() {
                   <div className="badge badge-success py-2 px-3 mb-2 d-block">
                     ✓ Verified Founder Photo Active
                   </div>
-                  <small className="text-muted d-block">Path: /img/founder/karan-mishra-founder.jpg</small>
+                  <small className="text-muted d-block">Path: /img/founder/karan_mishra_founder.jpg</small>
                 </div>
               </div>
 
@@ -1921,7 +1921,7 @@ export default function AxnKarannCommandPortal() {
             <div className="dash_projects_grid">
               <div className="dash_project_card" style={{ border: "2px solid #06b6d4" }}>
                 <img
-                  src="/img/founder/karan-mishra-founder.jpg"
+                  src="/img/founder/karan_mishra_founder.jpg"
                   alt="Karan Mishra Portrait"
                   className="rounded mb-2 img-fluid"
                   style={{ height: "180px", width: "100%", objectFit: "cover" }}
@@ -1930,7 +1930,7 @@ export default function AxnKarannCommandPortal() {
                 <p className="text-muted small mb-2">1135x1388 &bull; 133 KB &bull; Primary Avatar &bull; Active in Dossier</p>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText("/img/founder/karan-mishra-founder.jpg");
+                    navigator.clipboard.writeText("/img/founder/karan_mishra_founder.jpg");
                     showToast("Copied image path to clipboard!");
                   }}
                   className="dash_btn_action small"

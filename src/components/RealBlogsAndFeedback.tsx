@@ -11,6 +11,14 @@ export const RealBlogsAndFeedback: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
+  // High-Tech Whitepaper Reader In-Page Modal States
+  const [activeWhitepaper, setActiveWhitepaper] = useState<BlogPost | null>(null);
+  const [whitepaperFontSize, setWhitepaperFontSize] = useState<number>(1);
+  const [isModalAudioPlaying, setIsModalAudioPlaying] = useState<boolean>(false);
+  const [modalAudioProgress, setModalAudioProgress] = useState<number>(0);
+  const [modalCitationCopied, setModalCitationCopied] = useState<boolean>(false);
+  const [modalCopiedCodeIdx, setModalCopiedCodeIdx] = useState<number | null>(null);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -111,10 +119,29 @@ export const RealBlogsAndFeedback: React.FC = () => {
                   <span className="blog_date_text">
                     <i className="fa fa-calendar mr-1"></i> {blog.publishedDate}
                   </span>
-                  <Link href={`/blog/${blog.slug}`} className="btn_read_article">
-                    <span>Read Whitepaper</span>
-                    <i className="fa fa-arrow-right ml-1"></i>
-                  </Link>
+                  <div className="d-flex align-items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveWhitepaper(blog);
+                        if (typeof document !== "undefined") {
+                          document.body.style.overflow = "hidden";
+                        }
+                      }}
+                      className="btn_read_article"
+                      title="Inspect publication in high-tech in-page viewer"
+                    >
+                      <i className="fa fa-microchip mr-1 text-gold"></i>
+                      <span>Read Whitepaper</span>
+                    </button>
+                    <Link
+                      href={`/blog/${blog.slug}`}
+                      className="btn_open_external"
+                      title="Open Dedicated Publication Route"
+                    >
+                      <i className="fa fa-external-link"></i>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -325,7 +352,252 @@ export const RealBlogsAndFeedback: React.FC = () => {
         </div>
       )}
 
-      {/* Scoped Styling for Luxury Dark Mode & Clean Glass */}
+      {/* ================= HIGH-TECH DYNAMIC WHITEPAPER READER MODAL ================= */}
+      {activeWhitepaper && (
+        <div
+          className="whitepaper_modal_backdrop"
+          onClick={() => {
+            setActiveWhitepaper(null);
+            if (typeof document !== "undefined") {
+              document.body.style.overflow = "auto";
+            }
+          }}
+        >
+          <div
+            className="whitepaper_modal_window"
+            onClick={(e) => e.stopPropagation()}
+            style={{ fontSize: `${whitepaperFontSize * 100}%` }}
+          >
+            {/* High-Tech HUD Header */}
+            <div className="whitepaper_modal_hud_bar">
+              <div className="d-flex align-items-center gap-2 flex-wrap">
+                <span className="hud_radar_dot"></span>
+                <span className="font-mono text-gold small font-weight-bold">
+                  AXN-DOC-2026 // {activeWhitepaper.category.toUpperCase()}
+                </span>
+                <span className="badge badge-dark border border-secondary text-cyan font-mono small">
+                  STATUS: VERIFIED PRODUCTION ARCHITECTURE
+                </span>
+              </div>
+
+              <div className="d-flex align-items-center gap-2 flex-wrap">
+                {/* Font Scaling */}
+                <div className="btn-group btn-group-sm">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary text-muted"
+                    onClick={() => setWhitepaperFontSize((p) => Math.max(0.85, p - 0.05))}
+                    title="Decrease text size"
+                  >
+                    A-
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary text-muted"
+                    onClick={() => setWhitepaperFontSize(1)}
+                    title="Reset text size"
+                  >
+                    100%
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary text-muted"
+                    onClick={() => setWhitepaperFontSize((p) => Math.min(1.25, p + 0.05))}
+                    title="Increase text size"
+                  >
+                    A+
+                  </button>
+                </div>
+
+                {/* Audio Narration Simulator */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsModalAudioPlaying(!isModalAudioPlaying);
+                    if (!isModalAudioPlaying) {
+                      setModalAudioProgress(1);
+                    }
+                  }}
+                  className={`btn btn-sm ${isModalAudioPlaying ? "btn-success" : "btn-outline-info"}`}
+                  title="Listen to neural voice stream"
+                >
+                  <i className={`fa ${isModalAudioPlaying ? "fa-pause" : "fa-headphones"} mr-1`}></i>
+                  <span>{isModalAudioPlaying ? "Playing AI Voice" : "Audio"}</span>
+                </button>
+
+                {/* Link to Full Route */}
+                <Link
+                  href={`/blog/${activeWhitepaper.slug}`}
+                  className="btn btn-sm btn-outline-warning"
+                  title="Open dedicated full page terminal"
+                >
+                  <i className="fa fa-external-link mr-1"></i> Full Page
+                </Link>
+
+                {/* Close Button */}
+                <button
+                  type="button"
+                  className="btn btn-sm btn-danger ml-2"
+                  onClick={() => {
+                    setActiveWhitepaper(null);
+                    if (typeof document !== "undefined") {
+                      document.body.style.overflow = "auto";
+                    }
+                  }}
+                >
+                  ✕ Close
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Body Scrollable Content */}
+            <div className="whitepaper_modal_scroll_body">
+              {/* Paper Header */}
+              <div className="mb-4">
+                <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
+                  <span className="badge badge-primary py-1 px-2 font-mono small">{activeWhitepaper.category}</span>
+                  <span className="text-muted small font-mono"><i className="fa fa-clock-o mr-1"></i>{activeWhitepaper.readTime}</span>
+                  <span className="text-muted small font-mono">&bull; {activeWhitepaper.publishedDate}</span>
+                </div>
+                <h2 className="text-white font-weight-bold mb-3" style={{ fontSize: "1.85rem", lineHeight: "1.3" }}>
+                  {activeWhitepaper.title}
+                </h2>
+
+                {/* Author Dossier Ribbon */}
+                <div className="d-flex align-items-center gap-3 p-3 rounded mb-4" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <img
+                    src="/img/founder/karan_mishra_founder.jpg"
+                    alt="Karan Mishra"
+                    style={{ width: "48px", height: "48px", borderRadius: "50%", objectFit: "cover", border: "2px solid #06b6d4" }}
+                  />
+                  <div>
+                    <div className="text-white font-weight-bold">
+                      {activeWhitepaper.author} <span className="text-gold small font-mono">(@CodeSage4D)</span>
+                    </div>
+                    <div className="text-muted small">
+                      {activeWhitepaper.authorRole} &bull; Applied AI Researcher at SUAS Indore
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Executive Abstract Callout Box */}
+              <div className="executive_abstract_box mb-4 p-3 rounded">
+                <div className="font-mono text-cyan small mb-1 font-weight-bold">
+                  <i className="fa fa-microchip mr-1"></i> EXECUTIVE ARCHITECTURAL ABSTRACT
+                </div>
+                <p className="mb-0 text-white-50" style={{ fontStyle: "italic", fontSize: "1.05rem" }}>
+                  &ldquo;{activeWhitepaper.summary}&rdquo;
+                </p>
+              </div>
+
+              {/* Formatted Markdown Content */}
+              <div className="whitepaper_rendered_text mb-4">
+                {activeWhitepaper.content.split("\n").map((line, idx) => {
+                  const trimmed = line.trim();
+                  if (trimmed.startsWith("### ")) {
+                    return (
+                      <h4 key={idx} className="text-cyan font-weight-bold mt-4 mb-2" style={{ borderLeft: "3px solid #06b6d4", paddingLeft: "10px" }}>
+                        {trimmed.replace("### ", "")}
+                      </h4>
+                    );
+                  }
+                  if (trimmed.startsWith("#### ")) {
+                    return (
+                      <h5 key={idx} className="text-white font-weight-bold mt-3 mb-2">
+                        {trimmed.replace("#### ", "")}
+                      </h5>
+                    );
+                  }
+                  if (trimmed.startsWith("---")) {
+                    return <hr key={idx} className="my-3" style={{ borderColor: "rgba(255,255,255,0.1)" }} />;
+                  }
+                  if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+                    return (
+                      <div key={idx} className="d-flex align-items-start mb-2 ml-2">
+                        <span className="text-cyan mr-2">◆</span>
+                        <span className="text-white-50">{trimmed.replace(/^(\*|-)\s+/, "")}</span>
+                      </div>
+                    );
+                  }
+                  if (trimmed.match(/^[0-9]+\.\s+/)) {
+                    return (
+                      <div key={idx} className="p-3 mb-2 rounded" style={{ background: "rgba(2, 132, 199, 0.08)", borderLeft: "3px solid #0284c7" }}>
+                        <span className="text-white font-weight-500">{trimmed}</span>
+                      </div>
+                    );
+                  }
+                  if (!trimmed) {
+                    return <div key={idx} className="my-2" />;
+                  }
+                  return (
+                    <p key={idx} className="text-white mb-3" style={{ lineHeight: "1.75", fontSize: "1.05rem", opacity: "0.9" }}>
+                      {trimmed}
+                    </p>
+                  );
+                })}
+              </div>
+
+              {/* Research Citation & Tags */}
+              <div className="p-3 rounded mb-4" style={{ background: "rgba(0, 0, 0, 0.4)", border: "1px dashed rgba(255,255,255,0.15)" }}>
+                <div className="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+                  <span className="text-gold font-mono small font-weight-bold">
+                    <i className="fa fa-quote-left mr-1"></i> ACADEMIC CITATION ENTRY
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        const cite = `@article{mishra2026${activeWhitepaper.id},\n  author = {Karan Mishra},\n  title = {${activeWhitepaper.title}},\n  journal = {Aurxon Research Codex},\n  year = {2026}\n}`;
+                        navigator.clipboard.writeText(cite);
+                        setModalCitationCopied(true);
+                        setTimeout(() => setModalCitationCopied(false), 2000);
+                      }
+                    }}
+                    className="btn btn-sm btn-outline-warning font-mono"
+                  >
+                    {modalCitationCopied ? "✓ Copied" : "Copy BibTeX"}
+                  </button>
+                </div>
+                <div className="d-flex flex-wrap gap-2">
+                  {activeWhitepaper.tags.map((t) => (
+                    <span key={t} className="badge badge-dark border border-secondary text-muted font-mono">
+                      #{t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Bottom Actions */}
+            <div className="whitepaper_modal_footer">
+              <div className="text-muted small font-mono">
+                Author: Karan Mishra (Karann Mishra) &bull; Aurxon Research Codex
+              </div>
+              <div className="d-flex gap-2">
+                <button
+                  type="button"
+                  className="primary_btn tr-bg btn-sm"
+                  onClick={() => {
+                    setActiveWhitepaper(null);
+                    if (typeof document !== "undefined") {
+                      document.body.style.overflow = "auto";
+                    }
+                  }}
+                >
+                  <span>Close Viewer</span>
+                </button>
+                <Link
+                  href={`/blog/${activeWhitepaper.slug}`}
+                  className="primary_btn btn-sm"
+                >
+                  <span>Open Full Screen Codex &rarr;</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <style dangerouslySetInnerHTML={{ __html: `
         .real_blogs_feedback_area {
           position: relative;
@@ -654,6 +926,98 @@ export const RealBlogsAndFeedback: React.FC = () => {
         .luxury_input:focus {
           border-color: #CEA17A !important;
           box-shadow: 0 0 10px rgba(206, 161, 122, 0.3) !important;
+        }
+
+        /* High-Tech In-Page Whitepaper Reader Modal Styles */
+        .btn_open_external {
+          width: 32px;
+          height: 32px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #94a3b8;
+          font-size: 0.8rem;
+          transition: all 0.2s ease;
+          text-decoration: none !important;
+        }
+        .btn_open_external:hover {
+          background: rgba(2, 132, 199, 0.2);
+          border-color: #0284c7;
+          color: #38bdf8;
+        }
+
+        .whitepaper_modal_backdrop {
+          position: fixed;
+          inset: 0;
+          background: rgba(4, 7, 15, 0.88);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          z-index: 100000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+        .whitepaper_modal_window {
+          background: #070b16;
+          border: 1px solid rgba(2, 132, 199, 0.35);
+          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(2, 132, 199, 0.15);
+          border-radius: 16px;
+          max-width: 900px;
+          width: 100%;
+          max-height: 90vh;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          animation: modalAppear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalAppear {
+          from { opacity: 0; transform: scale(0.96) translateY(10px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .whitepaper_modal_hud_bar {
+          background: #0c1222;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 12px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .hud_radar_dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 8px #10b981;
+          display: inline-block;
+          animation: radarBlink 1.8s infinite ease-in-out;
+        }
+        @keyframes radarBlink {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.3; transform: scale(0.75); }
+        }
+        .whitepaper_modal_scroll_body {
+          padding: 28px;
+          overflow-y: auto;
+          flex-grow: 1;
+        }
+        .whitepaper_modal_footer {
+          background: #090d19;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+          padding: 14px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .text-cyan {
+          color: #38bdf8 !important;
         }
       `}} />
     </section>

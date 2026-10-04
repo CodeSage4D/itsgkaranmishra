@@ -73,7 +73,7 @@ export const metadata: Metadata = {
     siteName: "Karan Mishra (Karann Mishra) • Founder at Aurxon",
     images: [
       {
-        url: "/img/founder/karan-mishra-founder.jpg",
+        url: "/img/founder/karan_mishra_founder.jpg",
         width: 1135,
         height: 1388,
         alt: "Karan Mishra (Karann Mishra) - Founder & Chief AI Architect at Aurxon",
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Karan Mishra (Karann Mishra) | Founder, Aurxon • G Karan Mishra",
     description: "Founder & Chief AI Architect at Aurxon (@CodeSage4D). Architecting production machine learning systems, FCOS, and ALAMS.",
-    images: ["/img/founder/karan-mishra-founder.jpg"],
+    images: ["/img/founder/karan_mishra_founder.jpg"],
     creator: "@karannmishra136",
   },
   verification: {
@@ -133,7 +133,7 @@ const jsonLdData = {
         "name": "Symbiosis University of Applied Sciences (SUAS Indore)"
       },
       "url": "https://itsgkaranmishra.web.app",
-      "image": "https://itsgkaranmishra.web.app/img/founder/karan-mishra-founder.jpg",
+      "image": "https://itsgkaranmishra.web.app/img/founder/karan_mishra_founder.jpg",
       "sameAs": [
         "https://github.com/CodeSage4D",
         "https://linkedin.com/in/karannmishra136",

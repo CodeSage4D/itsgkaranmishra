@@ -29,7 +29,7 @@ export default function AboutPage() {
             <div className="col-lg-5 mb-4 mb-lg-0">
               <div className="about_img_wrapper position-relative text-center">
                 <div className="about_glow_halo"></div>
-                <img className="img-fluid rounded-lg shadow-lg position-relative" src="/img/founder/karan-mishra-founder.jpg" alt="Karan Mishra (Karann Mishra, G Karan Mishra) - Founder & Chief AI Architect, Aurxon" />
+                <img className="img-fluid rounded-lg shadow-lg position-relative" src="/img/founder/karan_mishra_founder.jpg" alt="Karan Mishra (Karann Mishra, G Karan Mishra) - Founder & Chief AI Architect, Aurxon" />
                 <div className="founder_badge_overlay">
                   <span className="founder_pulse_dot"></span>
                   <span>Founder &bull; Aurxon</span>
