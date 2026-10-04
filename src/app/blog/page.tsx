@@ -78,11 +78,11 @@ export default function BlogPage() {
                 </span>
                 <span className="codex_telemetry_chip gold">
                   <i className="fa fa-certificate mr-1 text-gold"></i>
-                  <span className="font-mono">IEEE FORMAT &bull; PRODUCTION VERIFIED</span>
+                  <span className="font-mono">PRACTICAL ARCHITECTURE &bull; PRODUCTION TESTED</span>
                 </span>
                 <span className="codex_telemetry_chip cyan">
                   <i className="fa fa-print mr-1 text-cyan"></i>
-                  <span className="font-mono">IEEE PDF ENGINE ACTIVE</span>
+                  <span className="font-mono">PRINTABLE A4 PDF ENGINE ACTIVE</span>
                 </span>
               </div>
 
@@ -93,7 +93,7 @@ export default function BlogPage() {
 
               {/* Subtitle */}
               <p className="codex_hero_subtitle mb-4">
-                Practical breakdowns, architecture notes, and lessons I&apos;ve learned while building real-world software and autonomous systems at Aurxon. No AI-generated fluff—browse complete technical write-ups, listen to voice audio digests, or download clean IEEE formatted notes.
+                Practical breakdowns, architecture notes, and lessons I&apos;ve learned while building real-world software and autonomous systems at Aurxon. No AI-generated fluff—browse complete technical write-ups, listen to voice audio digests, or download clean formatted A4 PDF notes.
               </p>
 
               {/* Quick Navigation Breadcrumb & Stats Matrix */}
@@ -272,9 +272,9 @@ export default function BlogPage() {
                                 <Link
                                   href={`/blog/${blog.slug}#print`}
                                   className="btn_codex_pdf"
-                                  title="Export formatted IEEE Standard PDF note"
+                                  title="Export formatted A4 PDF note"
                                 >
-                                  <i className="fa fa-print mr-1"></i> IEEE PDF
+                                  <i className="fa fa-print mr-1"></i> A4 PDF
                                 </Link>
                               </div>
                             </div>
@@ -440,8 +440,8 @@ export default function BlogPage() {
                       <span className="badge badge-success py-1">Sub-10ms</span>
                     </li>
                     <li className="d-flex justify-content-between py-2">
-                      <span>IEEE Standard PDF Engine</span>
-                      <span className="badge badge-light py-1 text-dark">IEEE Format</span>
+                      <span>Printable A4 PDF Engine</span>
+                      <span className="badge badge-light py-1 text-dark">Clean A4 Format</span>
                     </li>
                   </ul>
                 </div>

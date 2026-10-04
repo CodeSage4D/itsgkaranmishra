@@ -50,6 +50,10 @@ export function getDatabase(): sqlite3.Database {
   db.serialize(() => {
     db.run("PRAGMA journal_mode = WAL;");
     db.run("PRAGMA synchronous = NORMAL;");
+    db.run("PRAGMA busy_timeout = 8000;");
+    db.run("PRAGMA temp_store = MEMORY;");
+    db.run("PRAGMA cache_size = -64000;");
+    db.run("PRAGMA foreign_keys = ON;");
 
     // 1. Visitors table (Rich networking, device, and screen dimensions)
     db.run(`

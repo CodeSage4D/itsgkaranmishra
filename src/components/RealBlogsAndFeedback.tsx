@@ -100,7 +100,7 @@ export const RealBlogsAndFeedback: React.FC = () => {
                     <i className="fa fa-code text-gold mr-1"></i> Hands-on Code &amp; Testing
                   </span>
                   <span className="codex_feature_badge">
-                    <i className="fa fa-file-pdf-o text-cyan mr-1"></i> Download Notes (IEEE PDF)
+                    <i className="fa fa-file-pdf-o text-cyan mr-1"></i> Download Notes (PDF)
                   </span>
                   <span className="codex_feature_badge">
                     <i className="fa fa-volume-up text-purple mr-1"></i> Audio Speech Reader (3 Accents)
@@ -185,9 +185,9 @@ export const RealBlogsAndFeedback: React.FC = () => {
                         <Link
                           href={`/blog/${blog.slug}#print`}
                           className="btn_quick_pdf"
-                          title="Download Formatted IEEE PDF Note"
+                          title="Download Formatted A4 PDF Note"
                         >
-                          <i className="fa fa-download mr-1"></i> IEEE PDF
+                          <i className="fa fa-download mr-1"></i> PDF Note
                         </Link>
                         <Link
                           href={`/blog/${blog.slug}`}
@@ -214,7 +214,7 @@ export const RealBlogsAndFeedback: React.FC = () => {
                   Read All Engineering Notes &amp; Breakdowns &rarr;
                 </span>
                 <span className="launchpad_sub_text font-mono">
-                  All Practical Articles &bull; Systems Schematics &bull; IEEE PDF Generator
+                  All Practical Articles &bull; Systems Schematics &bull; Printable A4 PDF Engine
                 </span>
               </div>
             </Link>

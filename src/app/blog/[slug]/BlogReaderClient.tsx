@@ -53,6 +53,37 @@ export default function BlogReaderClient({ slug }: Props) {
     return () => window.removeEventListener("ahs_cms_updated", handleUpdate);
   }, [slug]);
 
+  // Initialize reader theme to match active portfolio theme (light vs dark)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const detectAndApplyTheme = () => {
+      const activeTheme =
+        document.documentElement.getAttribute("data-theme") ||
+        localStorage.getItem("portfolio_theme") ||
+        "light";
+
+      if (activeTheme === "light" || !document.documentElement.classList.contains("dark")) {
+        setReaderTheme("paper");
+      } else {
+        setReaderTheme("cyber");
+      }
+    };
+
+    detectAndApplyTheme();
+
+    const observer = new MutationObserver(() => {
+      detectAndApplyTheme();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme", "class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   // Auto-trigger clean A4 PDF Print if URL contains #print
   useEffect(() => {
     if (post && typeof window !== "undefined" && window.location.hash === "#print") {
@@ -268,17 +299,17 @@ export default function BlogReaderClient({ slug }: Props) {
     }
   };
 
-  // Citation generator (BibTeX & IEEE format)
+  // Citation generator (BibTeX & Technical Note format)
   const bibtexCitation = useMemo(() => {
     if (!post) return "";
     const citeKey = `mishra2026${post.id.replace(/[^a-z0-9]/gi, "").toLowerCase()}`;
     return `@article{${citeKey},
-  author    = {Mishra, Karan and Aurxon Engineering Notes},
+  author    = {Mishra, Karan and Aurxon Engineering},
   title     = {${post.title}},
-  journal   = {IEEE Transactions / Aurxon Engineering Codex},
+  journal   = {Aurxon Engineering Notes & Systems Architecture},
   year      = {2026},
   url       = {https://itsgkaranmishra.web.app/blog/${post.slug}},
-  publisher = {Aurxon Engineering Publications}
+  publisher = {Aurxon Open Engineering Notes}
 }`;
   }, [post]);
 
@@ -566,7 +597,7 @@ export default function BlogReaderClient({ slug }: Props) {
               type="button"
               onClick={() => setShowCitationModal(true)}
               className="tool_btn btn_citation"
-              title="Generate BibTeX & IEEE Research Citation"
+              title="Generate BibTeX Citation"
             >
               <i className="fa fa-quote-left mr-1"></i> Cite
             </button>
@@ -791,10 +822,10 @@ export default function BlogReaderClient({ slug }: Props) {
                       type="button"
                       onClick={handlePrint}
                       className="audio_ctrl_btn pdf_btn"
-                      title="Download IEEE Standard PDF"
+                      title="Download Printable A4 PDF Note"
                     >
                       <i className="fa fa-file-pdf-o mr-1 text-danger"></i>
-                      <span>Download IEEE PDF</span>
+                      <span>Download PDF</span>
                     </button>
                   </div>
                 </div>
@@ -975,7 +1006,7 @@ export default function BlogReaderClient({ slug }: Props) {
               </button>
             </div>
             <p className="text-muted small mb-3">
-              Standard citation entry formatted for IEEE, ACM, and BibTeX research papers:
+              Standard bibliographic citation entry formatted for technical notes and BibTeX:
             </p>
             <pre className="modal_citation_pre font-mono p-3 rounded">
               <code>{bibtexCitation}</code>
@@ -1000,19 +1031,19 @@ export default function BlogReaderClient({ slug }: Props) {
         </div>
       )}
 
-      {/* ================= DEDICATED ACADEMIC A4 PRINT CODEX TEMPLATE (IEEE STANDARD) ================= */}
+      {/* ================= DEDICATED A4 PRINT & PDF CODEX TEMPLATE ================= */}
       {/* This template is exclusively formatted for print / PDF export (A4 paper dimensions) */}
       <div className="academic_a4_print_template" aria-hidden="true">
-        {/* A4 Running Header (IEEE Standard) */}
+        {/* A4 Running Header */}
         <div className="print_running_header d-flex justify-content-between align-items-center">
-          <span className="print_header_brand">IEEE TRANSACTIONS ON APPLIED SYSTEMS &amp; AUTONOMOUS ARCHITECTURES, VOL. 14, NO. 2, OCTOBER 2026</span>
-          <span className="print_header_issn">ISSN: 2831-9214 &bull; IEEE-AXN-2026</span>
+          <span className="print_header_brand">AURXON ENGINEERING NOTES &bull; SYSTEMS ARCHITECTURE ARCHIVE</span>
+          <span className="print_header_issn">AXN-ENG-2026 &bull; OPEN ACCESS</span>
         </div>
 
         {/* Academic Monograph Masthead */}
         <div className="print_monograph_masthead">
           <div className="print_classification_badge">
-            IEEE OPEN ACCESS SPECIFICATION &bull; PEER-REVIEWED PRODUCTION ARCHITECTURE
+            AURXON PRODUCTION ARCHITECTURE &bull; OPEN TECHNICAL SPECIFICATION
           </div>
 
           <h1 className="print_paper_title">{post.title}</h1>
@@ -1020,7 +1051,7 @@ export default function BlogReaderClient({ slug }: Props) {
           {/* Author Dossier & Institutional Affiliation */}
           <div className="print_author_block">
             <div className="print_author_primary">
-              <strong>Karan Mishra</strong> (Lead Systems Architect &amp; Founder, Aurxon &bull; @CodeSage4D)
+              <strong>Karan Mishra</strong> (Founder &amp; Systems Architect, Aurxon &bull; @CodeSage4D)
             </div>
             <div className="print_affiliation">
               School of Computer Science &amp; Information Technology, Symbiosis University of Applied Sciences (SUAS), Indore, MP, India
@@ -1030,10 +1061,10 @@ export default function BlogReaderClient({ slug }: Props) {
             </div>
           </div>
 
-          {/* IEEE Live Archive QR Code Verification Strip */}
-          <div className="print_ieee_qr_strip d-flex align-items-center justify-content-between">
+          {/* Live Archive QR Code Verification Strip */}
+          <div className="print_archive_qr_strip d-flex align-items-center justify-content-between">
             <div className="print_qr_info">
-              <div className="print_qr_heading">IEEE OPEN ACCESS ARCHIVE &bull; VERIFIED REPOSITORY CODEX</div>
+              <div className="print_qr_heading">AURXON ARCHIVE &bull; VERIFIED REPOSITORY CODEX</div>
               <p className="print_qr_desc mb-1">
                 Scan this QR code with any smartphone camera to open the live online note, source code references, interactive architecture diagrams, and telemetry streams.
               </p>
@@ -1064,8 +1095,8 @@ export default function BlogReaderClient({ slug }: Props) {
               <span className="print_meta_val">{post.readTime}</span>
             </div>
             <div className="print_meta_cell">
-              <span className="print_meta_lbl">DOI IDENTIFIER:</span>
-              <span className="print_meta_val">doi:10.1109/AXN.2026.{post.id}</span>
+              <span className="print_meta_lbl">IDENTIFIER:</span>
+              <span className="print_meta_val">axn.2026.{post.id}</span>
             </div>
             <div className="print_meta_cell">
               <span className="print_meta_lbl">PEER STATUS:</span>
@@ -1083,6 +1114,7 @@ export default function BlogReaderClient({ slug }: Props) {
             <span>{post.tags.join(", ")}, Autonomous Telemetry, High Availability, Karan Mishra, Aurxon Architecture.</span>
           </div>
         </div>
+
 
         {/* Figure 1: Systems Architecture Vector Blueprint */}
         <div className="print_figure">
@@ -1351,6 +1383,85 @@ export default function BlogReaderClient({ slug }: Props) {
         }
         .theme_paper .related_card_title a {
           color: #0f172a !important;
+        }
+        .theme_paper .whitepaper_breadcrumb a {
+          color: #475569 !important;
+        }
+        .theme_paper .whitepaper_breadcrumb .crumb_active {
+          color: #0284c7 !important;
+        }
+        .theme_paper .doc_spec_pill {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #334155 !important;
+        }
+        .theme_paper .cyber_badge {
+          background: #fef3c7 !important;
+          border-color: #fde68a !important;
+          color: #b45309 !important;
+        }
+        .theme_paper .chip_author_name {
+          color: #0f172a !important;
+        }
+        .theme_paper .chip_author_credentials {
+          color: #475569 !important;
+        }
+        .theme_paper .chip_portrait_img {
+          border-color: #0284c7 !important;
+          box-shadow: 0 0 10px rgba(2, 132, 199, 0.25) !important;
+        }
+        .theme_paper .whitepaper_numbered_point {
+          background: #f8fafc !important;
+          border: 1px solid #cbd5e1 !important;
+          border-left: 3px solid #0284c7 !important;
+          color: #0f172a !important;
+        }
+        .theme_paper .point_body_text {
+          color: #0f172a !important;
+        }
+        .theme_paper .point_pill_badge {
+          background: #e0f2fe !important;
+          color: #0284c7 !important;
+          border: 1px solid #bae6fd !important;
+        }
+        .theme_paper .bullet_body_text {
+          color: #334155 !important;
+        }
+        .theme_paper .bullet_cyber_diamond {
+          color: #0284c7 !important;
+        }
+        .theme_paper .author_dossier_role {
+          color: #0284c7 !important;
+        }
+        .theme_paper .author_dossier_bio {
+          color: #475569 !important;
+        }
+        .theme_paper .dossier_btn {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          color: #334155 !important;
+        }
+        .theme_paper .dossier_btn:hover {
+          background: #0284c7 !important;
+          color: #ffffff !important;
+        }
+        .theme_paper .document_specs_box {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+        }
+        .theme_paper .spec_list li {
+          color: #475569 !important;
+        }
+        .theme_paper .whitepaper_tags_section {
+          border-color: #e2e8f0 !important;
+        }
+        .theme_paper .cyber_tag_pill {
+          background: #f1f5f9 !important;
+          border-color: #cbd5e1 !important;
+          color: #0284c7 !important;
+        }
+        .theme_paper .audio_console_status {
+          color: #64748b !important;
         }
 
         /* Reading Progress Top Rail */
@@ -2280,7 +2391,7 @@ export default function BlogReaderClient({ slug }: Props) {
             font-size: 8pt;
           }
 
-          .print_ieee_qr_strip {
+          .print_archive_qr_strip {
             border: 1.5px solid #0284c7;
             background: #f8fafc;
             padding: 8px 12px;
