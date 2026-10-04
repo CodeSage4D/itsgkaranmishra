@@ -363,22 +363,30 @@ export const ModernContactSection: React.FC = () => {
 
         /* Left Info Card */
         .contact_info_card_wrapper {
-          background: linear-gradient(145deg, #f8fafc 0%, #edf2f7 100%);
-          border: 1px solid #e2e8f0;
-          border-radius: 20px;
+          position: relative;
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          border-radius: 24px;
           padding: 34px 28px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+          box-shadow: 0 10px 35px rgba(15, 23, 42, 0.04);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .contact_info_card_wrapper {
-          background: rgba(15, 23, 42, 0.78) !important;
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-color: rgba(255, 255, 255, 0.08) !important;
+          background: rgba(13, 21, 38, 0.6) !important;
+          border-color: rgba(255, 255, 255, 0.07) !important;
           box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .contact_info_card_wrapper:hover {
+          transform: translateY(-4px);
+          border-color: rgba(6, 182, 212, 0.45) !important;
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2), 0 0 35px rgba(6, 182, 212, 0.22), 0 0 50px rgba(139, 92, 246, 0.15);
         }
 
         .karan_avatar_row {
@@ -459,22 +467,22 @@ export const ModernContactSection: React.FC = () => {
           align-items: center;
           gap: 14px;
           padding: 12px 16px;
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
+          background: rgba(255, 255, 255, 0.7);
+          border: 1px solid rgba(0, 0, 0, 0.06);
           border-radius: 12px;
           text-decoration: none !important;
           transition: all 0.25s ease;
         }
 
         .dark .direct_channel_item {
-          background: #0f172a;
-          border-color: #1e293b;
+          background: rgba(15, 23, 42, 0.6);
+          border-color: rgba(255, 255, 255, 0.06);
         }
 
         .direct_channel_item:hover {
           transform: translateY(-2px);
-          border-color: #4458dc;
-          box-shadow: 0 6px 18px rgba(68, 88, 220, 0.12);
+          border-color: rgba(6, 182, 212, 0.5);
+          box-shadow: 0 8px 24px rgba(6, 182, 212, 0.2);
         }
 
         .channel_icon {
@@ -575,19 +583,27 @@ export const ModernContactSection: React.FC = () => {
 
         /* Right Form Interactive Card */
         .contact_form_interactive_card {
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
-          border-radius: 20px;
+          position: relative;
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          border-radius: 24px;
           padding: 38px 32px;
-          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+          box-shadow: 0 10px 35px rgba(15, 23, 42, 0.04);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .dark .contact_form_interactive_card {
-          background: rgba(15, 23, 42, 0.78);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-color: rgba(255, 255, 255, 0.08);
+          background: rgba(13, 21, 38, 0.6) !important;
+          border-color: rgba(255, 255, 255, 0.07) !important;
           box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+        }
+
+        .contact_form_interactive_card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(6, 182, 212, 0.45) !important;
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2), 0 0 35px rgba(6, 182, 212, 0.22), 0 0 50px rgba(139, 92, 246, 0.15);
         }
 
         .form_heading {
@@ -623,32 +639,44 @@ export const ModernContactSection: React.FC = () => {
 
         .form_field_input {
           width: 100%;
-          padding: 10px 14px;
-          background: #f8fafc;
-          border: 1px solid #cbd5e1;
-          border-radius: 10px;
+          padding: 12px 16px;
+          background: rgba(248, 250, 252, 0.85);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          border-radius: 12px;
           font-size: 0.92rem;
           color: #0f172a;
           outline: none;
-          transition: all 0.2s ease;
+          transition: all 0.25s ease;
         }
 
         .dark .form_field_input {
-          background: #0f172a;
-          border-color: #334155;
+          background: rgba(8, 14, 28, 0.7);
+          border-color: rgba(255, 255, 255, 0.08);
           color: #ffffff;
         }
 
-        .form_field_input:focus {
-          border-color: #4458dc;
+        .form_field_input:hover {
+          border-color: rgba(6, 182, 212, 0.4);
           background: #ffffff;
-          box-shadow: 0 0 0 3px rgba(68, 88, 220, 0.15);
+          box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+        }
+
+        .dark .form_field_input:hover {
+          background: rgba(11, 18, 33, 0.85);
+          border-color: rgba(6, 182, 212, 0.5);
+          box-shadow: 0 0 18px rgba(6, 182, 212, 0.2);
+        }
+
+        .form_field_input:focus {
+          border-color: #06b6d4;
+          background: #ffffff;
+          box-shadow: 0 0 25px rgba(6, 182, 212, 0.3), 0 0 45px rgba(139, 92, 246, 0.18);
         }
 
         .dark .form_field_input:focus {
-          border-color: #818cf8;
-          background: #0f172a;
-          box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.25);
+          border-color: #38bdf8;
+          background: rgba(11, 18, 33, 0.95);
+          box-shadow: 0 0 25px rgba(56, 189, 248, 0.35), 0 0 45px rgba(139, 92, 246, 0.22);
         }
 
         .field_textarea {

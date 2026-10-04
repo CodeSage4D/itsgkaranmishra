@@ -74,26 +74,26 @@ export default function BlogPage() {
               <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-3">
                 <span className="codex_telemetry_chip">
                   <span className="telemetry_pulse_dot"></span>
-                  <span className="font-mono">AURXON RESEARCH CODEX &bull; REPO: AXN-RSRCH-2026</span>
+                  <span className="font-mono">AURXON ENGINEERING NOTES &bull; OPEN ACCESS</span>
                 </span>
                 <span className="codex_telemetry_chip gold">
                   <i className="fa fa-certificate mr-1 text-gold"></i>
-                  <span className="font-mono">ISSN: 2831-9214 &bull; PEER-REVIEWED</span>
+                  <span className="font-mono">IEEE FORMAT &bull; PRODUCTION VERIFIED</span>
                 </span>
                 <span className="codex_telemetry_chip cyan">
                   <i className="fa fa-print mr-1 text-cyan"></i>
-                  <span className="font-mono">A4 PRINT &amp; PDF ENGINE ACTIVE</span>
+                  <span className="font-mono">IEEE PDF ENGINE ACTIVE</span>
                 </span>
               </div>
 
               {/* Main Glowing Gradient Title */}
               <h1 className="codex_hero_title mb-3">
-                AI Systems, FCOS &amp; Agentic Architectures
+                Engineering Notes &amp; Architecture Breakdowns
               </h1>
 
               {/* Subtitle */}
               <p className="codex_hero_subtitle mb-4">
-                Real in-depth architectural analyses, autonomous edge consensus loops, multi-agent swarms, and production post-mortems authored by <strong>Karan Mishra</strong>. No placeholder filler—read complete technical dissertations and export formatted A4 academic whitepapers directly.
+                Practical breakdowns, architecture notes, and lessons I&apos;ve learned while building real-world software and autonomous systems at Aurxon. No AI-generated fluff—browse complete technical write-ups, listen to voice audio digests, or download clean IEEE formatted notes.
               </p>
 
               {/* Quick Navigation Breadcrumb & Stats Matrix */}
@@ -103,14 +103,14 @@ export default function BlogPage() {
                     <i className="fa fa-home mr-1"></i> Home
                   </Link>
                   <span className="crumb_sep">&bull;</span>
-                  <span className="crumb_current">Research Codex</span>
+                  <span className="crumb_current">Engineering Notes</span>
                   <span className="crumb_sep">&bull;</span>
                   <span className="crumb_category text-cyan">{selectedCategory}</span>
                 </div>
 
                 <div className="codex_stat_pill">
                   <span className="text-gold font-weight-bold">{blogs.length}</span>
-                  <span className="text-muted ml-1 font-mono">Total Monographs</span>
+                  <span className="text-muted ml-1 font-mono">Total Notes &amp; Breakdowns</span>
                 </div>
 
                 <div className="codex_stat_pill">
@@ -178,7 +178,7 @@ export default function BlogPage() {
                     <div className="empty_radar_icon mb-3">📡</div>
                     <h3 className="text-white font-weight-bold">No Research Publications Found</h3>
                     <p className="text-muted small">
-                      No matching architectural papers found for &ldquo;{searchQuery}&rdquo; in category &ldquo;{selectedCategory}&rdquo;.
+                      No matching engineering notes found for &ldquo;{searchQuery}&rdquo; in category &ldquo;{selectedCategory}&rdquo;.
                     </p>
                     <button
                       className="primary_btn mt-3"
@@ -187,7 +187,7 @@ export default function BlogPage() {
                         setSearchQuery("");
                       }}
                     >
-                      <span>Reset Filters &bull; Show All Whitepapers</span>
+                      <span>Reset Filters &bull; Show All Notes</span>
                     </button>
                   </div>
                 ) : (
@@ -265,16 +265,16 @@ export default function BlogPage() {
                                 <Link
                                   href={`/blog/${blog.slug}`}
                                   className="btn_codex_read"
-                                  title="Read complete dissertation in cybernetic terminal"
+                                  title="Read complete engineering breakdown"
                                 >
-                                  <span>⚡ Read Paper</span>
+                                  <span>⚡ Read Note</span>
                                 </Link>
                                 <Link
                                   href={`/blog/${blog.slug}#print`}
                                   className="btn_codex_pdf"
-                                  title="Export formatted A4 PDF whitepaper"
+                                  title="Export formatted IEEE Standard PDF note"
                                 >
-                                  <i className="fa fa-print mr-1"></i> A4 PDF
+                                  <i className="fa fa-print mr-1"></i> IEEE PDF
                                 </Link>
                               </div>
                             </div>
@@ -364,9 +364,6 @@ export default function BlogPage() {
                       >
                         <i className="fa fa-envelope-o"></i>
                       </a>
-                      <Link href="/card" className="sidebar_social_btn" title="Smart Portfolio Card">
-                        <i className="fa fa-id-card-o"></i>
-                      </Link>
                     </div>
 
                     <Link href="/contact" className="primary_btn btn-block btn-sm">
@@ -443,8 +440,8 @@ export default function BlogPage() {
                       <span className="badge badge-success py-1">Sub-10ms</span>
                     </li>
                     <li className="d-flex justify-content-between py-2">
-                      <span>A4 Academic Whitepaper Engine</span>
-                      <span className="badge badge-light py-1 text-dark">LaTeX Standard</span>
+                      <span>IEEE Standard PDF Engine</span>
+                      <span className="badge badge-light py-1 text-dark">IEEE Format</span>
                     </li>
                   </ul>
                 </div>
@@ -677,19 +674,28 @@ export default function BlogPage() {
 
         /* Article Cards Stream */
         .codex_article_card {
-          background: rgba(15, 23, 42, 0.65);
+          background: rgba(255, 255, 255, 0.82);
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(0, 0, 0, 0.08);
           border-radius: 18px;
           overflow: hidden;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        }
+        .dark .codex_article_card {
+          background: rgba(15, 23, 42, 0.65);
+          border-color: rgba(255, 255, 255, 0.08);
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
         }
         .codex_article_card:hover {
           transform: translateY(-5px);
-          border-color: rgba(6, 182, 212, 0.4);
-          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(6, 182, 212, 0.15);
+          border-color: rgba(6, 182, 212, 0.5);
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.15), 0 0 30px rgba(6, 182, 212, 0.2);
+        }
+        .dark .codex_article_card:hover {
+          border-color: rgba(6, 182, 212, 0.6);
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(6, 182, 212, 0.25);
         }
         .codex_thumb_wrapper {
           position: relative;
@@ -755,22 +761,31 @@ export default function BlogPage() {
           margin-bottom: 10px;
         }
         .codex_paper_title a {
-          color: #ffffff;
+          color: #0f172a;
           text-decoration: none !important;
           transition: color 0.15s ease;
         }
+        .dark .codex_paper_title a {
+          color: #ffffff;
+        }
         .codex_paper_title a:hover {
+          color: #0284c7;
+        }
+        .dark .codex_paper_title a:hover {
           color: #38bdf8;
         }
         .codex_paper_summary {
           font-size: 0.9rem;
           line-height: 1.6;
-          color: #94a3b8;
+          color: #334155;
           margin-bottom: 14px;
           display: -webkit-box;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
+        }
+        .dark .codex_paper_summary {
+          color: #94a3b8;
         }
         .codex_tags_row {
           display: flex;

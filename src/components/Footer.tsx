@@ -19,63 +19,52 @@ export const Footer: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const [showShareModal, setShowShareModal] = useState<boolean>(false);
-  const [shareCopied, setShareCopied] = useState<string | null>(null);
-  const [shareAvatarMode, setShareAvatarMode] = useState<"photo" | "anime">("photo");
+  const [shareToast, setShareToast] = useState<string | null>(null);
+
+  const portfolioUrl = "https://itsgkaranmishra.web.app";
+  const shareTitle = "Karan Mishra | Founder & Chief AI Architect, Aurxon";
+  const shareText = "Karan Mishra — Founder & Chief AI Architect @ Aurxon | Applied AI Researcher @ SUAS Indore\nExplore portfolio & codebases:";
+
+  const executeSystemShare = async () => {
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: `${shareText}\n${portfolioUrl}`,
+          url: portfolioUrl,
+        });
+        return;
+      } catch (err: any) {
+        if (err?.name === "AbortError") return;
+      }
+    }
+
+    // Direct clipboard copy fallback
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(
+          `${shareTitle}\n${shareText}\n${portfolioUrl}\nWhatsApp: https://wa.me/917804895074\nGitHub: https://github.com/CodeSage4D`
+        );
+        setShareToast("Link & Profile copied to clipboard!");
+        setTimeout(() => setShareToast(null), 3000);
+      } catch {
+        setShareToast("Share URL: " + portfolioUrl);
+        setTimeout(() => setShareToast(null), 3000);
+      }
+    }
+  };
 
   useEffect(() => {
-    const handleOpenShare = () => setShowShareModal(true);
+    const handleOpenShare = () => {
+      executeSystemShare();
+    };
     window.addEventListener("open-portfolio-share", handleOpenShare);
     return () => window.removeEventListener("open-portfolio-share", handleOpenShare);
   }, []);
 
-  const portfolioUrl = "https://itsgkaranmishra.web.app";
-  const shareTitle = "Karan Mishra | Founder & Chief AI Architect, Aurxon";
-  const formattedCardMessage = `⚡ EXECUTIVE DOSSIER // KARAN MISHRA
-Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
-─────────────────────────────────────────────
-🌐 Official Portfolio: ${portfolioUrl}
-🪪 Smart Card & Contact: ${portfolioUrl}/card
-📦 47+ Open-Source AI Systems: https://github.com/CodeSage4D
-💬 Direct WhatsApp: https://wa.me/917804895074
-💼 Executive LinkedIn: https://www.linkedin.com/in/karannmishra136
-📧 Direct Email: karannmishra136@gmail.com
-─────────────────────────────────────────────
-[TELEMETRY: AXN-DOC-2026 // Production Verified Architect]`;
-
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
-
-  const handleNativeShare = async () => {
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: formattedCardMessage,
-          url: portfolioUrl,
-        });
-      } catch {}
-    } else {
-      handleCopyLink();
-    }
-  };
-
-  const handleCopyLink = () => {
-    if (typeof navigator !== "undefined") {
-      navigator.clipboard.writeText(portfolioUrl);
-      setShareCopied("link");
-      setTimeout(() => setShareCopied(null), 2500);
-    }
-  };
-
-  const handleCopyCardMessage = () => {
-    if (typeof navigator !== "undefined") {
-      navigator.clipboard.writeText(formattedCardMessage);
-      setShareCopied("card");
-      setTimeout(() => setShareCopied(null), 2500);
     }
   };
 
@@ -176,15 +165,6 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
                 >
                   <i className="fa fa-whatsapp" style={{ color: "#25d366" }}></i>
                 </a>
-                <button
-                  type="button"
-                  onClick={() => setShowShareModal(true)}
-                  aria-label="Share Portfolio URL & Digital Profile"
-                  title="Share Portfolio URL with Auto-Generated Message"
-                  className="footer_social_btn footer_share_social_btn"
-                >
-                  <i className="fa fa-share-alt"></i>
-                </button>
               </div>
             </div>
           </div>
@@ -223,16 +203,6 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
                   <Link href="/contact" className="footer_nav_anchor">
                     <i className="fa fa-angle-right"></i> Contact
                   </Link>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setShowShareModal(true)}
-                    className="footer_nav_anchor footer_nav_share_link"
-                    title="Share Portfolio URL with Auto-Generated Message"
-                  >
-                    <i className="fa fa-share-alt mr-1 text-info"></i> Share Portfolio
-                  </button>
                 </li>
               </ul>
             </div>
@@ -345,28 +315,25 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
                   <i className="fa fa-external-link mr-2"></i> Visit Aurxon Corporate &rarr;
                 </a>
               </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Live Regional Telemetry Status Bar */}
-        <div className="footer_live_telemetry_bar mb-4">
-          <div className="d-flex align-items-center justify-content-between flex-wrap gap-2">
-            <div className="d-flex align-items-center gap-2">
-              <span className="telemetry_pulse_beacon"></span>
-              <span className="footer_telemetry_hub">
-                🇮🇳 India Registered Hub (Indore Central) &bull; Asia/Kolkata (IST • UTC+5:30)
-              </span>
-            </div>
-            <div className="d-inline-flex align-items-center gap-3 footer_clock_group font-mono">
-              <span className="footer_clock_text">⏱️ {liveClock || "00:00:00"}</span>
-              <span className="footer_date_pill">{liveDate || "03 Oct 2026"}</span>
+              {/* Seamless Regional Telemetry & Live Clock Integration */}
+              <div className="footer_hq_live_telemetry mt-3 pt-3 border-top border-secondary">
+                <div className="d-flex align-items-center justify-content-between text-muted small font-mono flex-wrap gap-2">
+                  <span className="d-inline-flex align-items-center gap-2">
+                    <span className="telemetry_pulse_beacon"></span>
+                    <span className="text-white-50">Indore Central &bull; IST (UTC+5:30)</span>
+                  </span>
+                  <span className="footer_clock_badge text-cyan font-weight-bold">
+                    {liveClock || "00:00:00"}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar with Back to Top */}
-        <div className="footer_bottom_row">
+        <div className="footer_bottom_row mt-4">
           <div className="footer_copy_col">
             <p className="footer_copy_text">
               &copy; {new Date().getFullYear()} <strong>Karan Mishra</strong> &bull; Founder &amp; Chief AI Architect,{" "}
@@ -378,10 +345,10 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
           </div>
           <div className="footer_top_btn_col d-flex align-items-center gap-2">
             <button
-              onClick={() => setShowShareModal(true)}
+              onClick={executeSystemShare}
               className="footer_share_btn"
               aria-label="Share Portfolio"
-              title="Share Karan Mishra's Profile & Smart Card"
+              title="Share via System Apps (WhatsApp, Bluetooth, etc.)"
             >
               <i className="fa fa-share-alt mr-2"></i>
               <span>Share</span>
@@ -397,187 +364,12 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
           </div>
         </div>
 
-        {/* ================= REDESIGNED EXECUTIVE SHARE & SCANNER QR MODAL ================= */}
-        {showShareModal && (
-          <div className="share_modal_overlay" onClick={() => setShowShareModal(false)}>
-            <div className="share_modal_card executive_share_dossier_modal" onClick={(e) => e.stopPropagation()}>
-              {/* Modal Top Header with Founder Portrait & Status */}
-              <div className="share_modal_header d-flex justify-content-between align-items-center">
-                <div className="d-flex align-items-center gap-3">
-                  <div className="share_avatar_ring position-relative">
-                    <img
-                      src={
-                        shareAvatarMode === "photo"
-                          ? "/img/founder/karan_mishra_founder.jpg"
-                          : "/img/vectors/vector-anime-avatar.jpeg"
-                      }
-                      alt="Karan Mishra"
-                      className="share_founder_avatar"
-                    />
-                    <span className="share_avatar_pulse"></span>
-                  </div>
-                  <div>
-                    <div className="d-flex align-items-center gap-2">
-                      <h3 className="share_title mb-0">Karan Mishra</h3>
-                      <span className="text-gold font-mono small">(@CodeSage4D)</span>
-                    </div>
-                    <p className="share_sub mb-0">Founder &bull; AURXON &bull; Applied AI Architect</p>
-                  </div>
-                </div>
-
-                <div className="d-flex align-items-center gap-2">
-                  <div className="share_avatar_toggle_dock d-none d-sm-flex">
-                    <button
-                      type="button"
-                      className={`share_mode_pill ${shareAvatarMode === "photo" ? "active" : ""}`}
-                      onClick={() => setShareAvatarMode("photo")}
-                      title="Show Official Portrait"
-                    >
-                      📷 Photo
-                    </button>
-                    <button
-                      type="button"
-                      className={`share_mode_pill ${shareAvatarMode === "anime" ? "active" : ""}`}
-                      onClick={() => setShareAvatarMode("anime")}
-                      title="Show Cyber Anime Persona"
-                    >
-                      ⚡ Anime
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => setShowShareModal(false)}
-                    className="share_modal_close ml-2"
-                    aria-label="Close"
-                  >
-                    &times;
-                  </button>
-                </div>
-              </div>
-
-              {/* Main Content Body: Scanner QR Code + Executive Telemetry Dossier */}
-              <div className="share_modal_body mt-4">
-                <div className="row g-4 align-items-stretch">
-                  {/* Left Column: Interactive Scanner QR Code */}
-                  <div className="col-md-5 text-center d-flex flex-column justify-content-between">
-                    <div className="scanner_qr_frame p-3 rounded position-relative">
-                      <div className="qr_scanner_laser_line"></div>
-                      <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Fitsgkaranmishra.web.app"
-                        alt="Karan Mishra Portfolio Scanner QR Code"
-                        className="scanner_qr_img img-fluid rounded"
-                        loading="lazy"
-                      />
-                      <div className="scanner_qr_tag font-mono mt-2">
-                        <i className="fa fa-qrcode mr-1 text-gold"></i>
-                        <span>SCANNER QR CODE</span>
-                      </div>
-                    </div>
-                    <div className="qr_scan_instruction mt-2">
-                      <span className="small text-muted font-mono">
-                        <i className="fa fa-camera mr-1 text-cyan"></i>
-                        Scan with phone camera to launch live digital dossier &amp; card
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Telemetric Executive Briefing Text */}
-                  <div className="col-md-7 d-flex flex-column justify-content-between">
-                    <div>
-                      <div className="d-flex justify-content-between align-items-center mb-2">
-                        <span className="telemetry_chip font-mono">
-                          <span className="pulse_dot_green"></span>
-                          <span>STATUS: PRODUCTION VERIFIED</span>
-                        </span>
-                        <span className="small text-muted font-mono">AXN-DOC-2026</span>
-                      </div>
-
-                      <div className="executive_brief_terminal_box p-3 rounded mb-3">
-                        <pre className="executive_brief_text mb-0 font-mono">
-                          {formattedCardMessage}
-                        </pre>
-                      </div>
-                    </div>
-
-                    {/* Instant 1-Click Copy Buttons */}
-                    <div className="d-flex gap-2 flex-wrap mb-3">
-                      <button
-                        type="button"
-                        onClick={handleCopyCardMessage}
-                        className={`share_action_btn flex-fill ${shareCopied === "card" ? "copied" : ""}`}
-                        title="Copy complete executive dossier message to clipboard"
-                      >
-                        <i className="fa fa-copy mr-2"></i>
-                        <span>{shareCopied === "card" ? "✓ Executive Brief Copied!" : "Copy Executive Brief"}</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleCopyLink}
-                        className={`share_action_btn tr-bg flex-fill ${shareCopied === "link" ? "copied" : ""}`}
-                        title="Copy direct website link"
-                      >
-                        <i className="fa fa-link mr-2"></i>
-                        <span>{shareCopied === "link" ? "✓ Link Copied!" : "Copy Direct Link"}</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Direct 1-Click Channel Dispatch (WhatsApp, LinkedIn, Twitter, Email, Device) */}
-                <div className="share_direct_channels_bar mt-3 pt-3 border-top border-secondary">
-                  <div className="small font-mono text-muted mb-2">
-                    DIRECT 1-CLICK PLATFORM DISPATCH:
-                  </div>
-                  <div className="share_channels_grid">
-                    <a
-                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(formattedCardMessage)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share_channel_btn channel_whatsapp"
-                      title="Direct Share on WhatsApp"
-                    >
-                      <i className="fa fa-whatsapp"></i>
-                      <span>WhatsApp</span>
-                    </a>
-                    <a
-                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(portfolioUrl)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share_channel_btn channel_linkedin"
-                      title="Share to LinkedIn Network"
-                    >
-                      <i className="fa fa-linkedin"></i>
-                      <span>LinkedIn</span>
-                    </a>
-                    <a
-                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(formattedCardMessage)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="share_channel_btn channel_twitter"
-                      title="Share on X / Twitter"
-                    >
-                      <i className="fa fa-twitter"></i>
-                      <span>X / Twitter</span>
-                    </a>
-                    <a
-                      href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(formattedCardMessage)}`}
-                      className="share_channel_btn channel_email"
-                      title="Send Executive Email"
-                    >
-                      <i className="fa fa-envelope"></i>
-                      <span>Email</span>
-                    </a>
-                    <button
-                      type="button"
-                      onClick={handleNativeShare}
-                      className="share_channel_btn channel_native"
-                      title="Native Smartphone Share Sheet"
-                    >
-                      <i className="fa fa-mobile"></i>
-                      <span>Device Share</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+        {/* Lightweight Non-Intrusive Floating Toast Notification */}
+        {shareToast && (
+          <div className="share_floating_toast" role="status" aria-live="polite">
+            <div className="d-flex align-items-center gap-2">
+              <span className="toast_check_circle">✓</span>
+              <span>{shareToast}</span>
             </div>
           </div>
         )}
@@ -1021,89 +813,49 @@ Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
           border-color: #38bdf8;
         }
 
-        .footer_share_social_btn {
-          background: rgba(6, 182, 212, 0.12) !important;
-          border: 1px solid rgba(56, 189, 248, 0.35) !important;
-          color: #38bdf8 !important;
-          cursor: pointer;
-          animation: shareIconPulse 2.8s ease-in-out infinite alternate;
-        }
 
-        @keyframes shareIconPulse {
-          0% {
-            box-shadow: 0 0 6px rgba(56, 189, 248, 0.2);
-            border-color: rgba(56, 189, 248, 0.3);
-          }
-          100% {
-            box-shadow: 0 0 16px rgba(56, 189, 248, 0.55);
-            border-color: #38bdf8;
-          }
-        }
 
-        .footer_share_social_btn:hover {
-          background: #0284c7 !important;
-          color: #ffffff !important;
-          transform: translateY(-3px) scale(1.1) !important;
-          box-shadow: 0 0 20px rgba(56, 189, 248, 0.7) !important;
-        }
-
-        .footer_nav_share_link {
-          background: none;
-          border: none;
-          padding: 0;
-          font-size: 0.85rem;
-          color: #94a3b8;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          transition: all 0.2s ease;
-        }
-
-        .footer_nav_share_link:hover {
-          color: #38bdf8;
-          padding-left: 4px;
-        }
-
-        /* Share Modal Styles */
-        .share_modal_overlay {
+        /* Floating Toast Notification for Direct Share */
+        .share_floating_toast {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(8, 11, 20, 0.85);
-          backdrop-filter: blur(10px);
-          display: flex;
+          bottom: 24px;
+          right: 24px;
+          z-index: 99999;
+          background: #090e18;
+          color: #ffffff;
+          padding: 12px 22px;
+          border-radius: 50px;
+          border: 1px solid #10b981;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.35);
+          font-size: 0.88rem;
+          font-weight: 600;
+          animation: toastSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast_check_circle {
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          z-index: 99999;
-          padding: 16px;
-        }
-
-        .share_modal_card.executive_share_dossier_modal {
-          width: 100%;
-          max-width: 720px;
-          background: #090e18;
-          border: 1px solid rgba(6, 182, 212, 0.4);
-          border-radius: 24px;
-          padding: 26px 28px;
-          box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(6, 182, 212, 0.2);
-          animation: sharePop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes sharePop {
-          0% { transform: scale(0.92); opacity: 0; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-
-        .share_avatar_ring {
-          width: 52px;
-          height: 52px;
+          width: 22px;
+          height: 22px;
           border-radius: 50%;
-          padding: 2px;
-          background: linear-gradient(135deg, #06b6d4 0%, #CEA17A 100%);
+          background: #10b981;
+          color: #ffffff;
+          font-size: 0.76rem;
+          font-weight: 900;
         }
+
+        @keyframes toastSlideUp {
+          from {
+            transform: translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
 
         .share_founder_avatar {
           width: 100%;

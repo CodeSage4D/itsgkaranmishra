@@ -72,47 +72,41 @@ export const RealBlogsAndFeedback: React.FC = () => {
 
   return (
     <section className="real_blogs_feedback_area section_gap" id="publications-feedback">
-      <div className="container">
-        {/* ================= Part 1: Real Technical Publications Super Container ================= */}
-        <div className="cyber_publications_super_container p-4 p-md-5 mb-5 position-relative">
-          {/* Ambient Multi-Color Animated Border Glow & Brackets */}
-          <div className="container_corner_bracket tl">[AXN-PUB-TERMINAL]</div>
-          <div className="container_corner_bracket tr">ISSN: 2831-9214</div>
-          <div className="container_corner_bracket bl">OPEN ACCESS CC-BY</div>
-          <div className="container_corner_bracket br">SEC: UNRESTRICTED</div>
-
+      <div className="container position-relative">
+        {/* ================= Part 1: Real Technical Publications & Whitepapers ================= */}
+        <div className="mb-5 position-relative">
           <div className="row justify-content-center">
             <div className="col-lg-10 text-center">
               <div className="main_title mb-4">
                 <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-2">
                   <span className="luxury_section_eyebrow">
-                    <i className="fa fa-book mr-2"></i> PEER-REVIEWED ARCHITECTURES &bull; RESEARCH PUBLICATIONS
+                    <i className="fa fa-book mr-2"></i> PRACTICAL NOTES &bull; ARCHITECTURE BREAKDOWNS
                   </span>
                   <span className="container_live_tag font-mono">
                     <span className="pulse_dot_cyan"></span>
-                    <span>100% PRODUCTION VERIFIED</span>
+                    <span>HANDS-ON VERIFIED</span>
                   </span>
                 </div>
                 <h2 className="mt-3 font-weight-bold cyber_glow_heading">
-                  Technical Publications &amp; Engineering Whitepapers
+                  Engineering Notes &amp; Architecture Breakdowns
                 </h2>
                 <p className="section_sub_text">
-                  Real in-depth architectural analyses, autonomous systems design, and production post-mortems authored by <strong>Karan Mishra</strong>. No placeholder filler—read the complete technical dissertations directly.
+                  Practical breakdowns, architecture notes, and lessons I&apos;ve learned while building real-world software, AI tools, and enterprise systems at <strong>Aurxon</strong> and SUAS Indore. Plain, honest, and grounded in working code.
                 </p>
 
                 {/* Engaging Interactive Capability Chips */}
                 <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mt-3 mb-2">
                   <span className="codex_feature_badge">
-                    <i className="fa fa-bolt text-gold mr-1"></i> Peer-Reviewed Codebases
+                    <i className="fa fa-code text-gold mr-1"></i> Hands-on Code &amp; Testing
                   </span>
                   <span className="codex_feature_badge">
-                    <i className="fa fa-print text-cyan mr-1"></i> A4 Academic PDF Export
+                    <i className="fa fa-file-pdf-o text-cyan mr-1"></i> Download Notes (IEEE PDF)
                   </span>
                   <span className="codex_feature_badge">
-                    <i className="fa fa-headphones text-purple mr-1"></i> Neural Voice Audio Digest
+                    <i className="fa fa-volume-up text-purple mr-1"></i> Audio Speech Reader (3 Accents)
                   </span>
                   <span className="codex_feature_badge">
-                    <i className="fa fa-shield text-success mr-1"></i> Zero Filler Content
+                    <i className="fa fa-check-circle text-success mr-1"></i> Real Production Lessons
                   </span>
                 </div>
               </div>
@@ -183,22 +177,22 @@ export const RealBlogsAndFeedback: React.FC = () => {
                             }
                           }}
                           className="btn_read_article"
-                          title="Inspect publication in high-tech in-page viewer"
+                          title="Open note in interactive reader"
                         >
-                          <i className="fa fa-microchip mr-1 text-gold"></i>
-                          <span>Read Whitepaper</span>
+                          <i className="fa fa-book mr-1 text-gold"></i>
+                          <span>Read Note</span>
                         </button>
                         <Link
                           href={`/blog/${blog.slug}#print`}
                           className="btn_quick_pdf"
-                          title="Export Formatted A4 PDF Whitepaper"
+                          title="Download Formatted IEEE PDF Note"
                         >
-                          <i className="fa fa-print mr-1"></i> A4 PDF
+                          <i className="fa fa-download mr-1"></i> IEEE PDF
                         </Link>
                         <Link
                           href={`/blog/${blog.slug}`}
                           className="btn_open_external"
-                          title="Open Dedicated Publication Route"
+                          title="Open Dedicated Note Page"
                         >
                           <i className="fa fa-external-link"></i>
                         </Link>
@@ -216,11 +210,11 @@ export const RealBlogsAndFeedback: React.FC = () => {
               <div className="launchpad_btn_glow"></div>
               <div className="launchpad_btn_content">
                 <span className="launchpad_main_text">
-                  <i className="fa fa-rocket mr-2 text-cyan"></i>
-                  Explore All Technical Publications in Codex &rarr;
+                  <i className="fa fa-compass mr-2 text-cyan"></i>
+                  Read All Engineering Notes &amp; Breakdowns &rarr;
                 </span>
                 <span className="launchpad_sub_text font-mono">
-                  Access All 12+ Whitepapers &bull; Systems Schematics &bull; A4 PDF Generator
+                  All Practical Articles &bull; Systems Schematics &bull; IEEE PDF Generator
                 </span>
               </div>
             </Link>
@@ -672,80 +666,25 @@ export const RealBlogsAndFeedback: React.FC = () => {
         </div>
       )}
       <style dangerouslySetInnerHTML={{ __html: `
+        /* Section transparent background */
         .real_blogs_feedback_area {
           position: relative;
           background: transparent !important;
         }
-
-        /* ================= CYBER PUBLICATIONS SUPER CONTAINER ================= */
-        .cyber_publications_super_container {
-          position: relative;
-          background: rgba(13, 21, 38, 0.55);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 28px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
-          overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Animated Multi-Color Glowing Border Aura on Hover */
-        .cyber_publications_super_container::before {
-          content: "";
-          position: absolute;
-          inset: -2px;
-          border-radius: 30px;
-          padding: 2px;
-          background: linear-gradient(135deg, #06b6d4, #8b5cf6, #CEA17A, #10b981, #06b6d4);
-          background-size: 300% 300%;
-          animation: containerAuraShift 8s ease infinite;
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          opacity: 0.4;
-          transition: opacity 0.4s ease;
-          pointer-events: none;
-        }
-
-        .cyber_publications_super_container:hover::before {
-          opacity: 1;
-        }
-
-        .cyber_publications_super_container:hover {
-          box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 50px rgba(6, 182, 212, 0.18), 0 0 70px rgba(139, 92, 246, 0.12);
-        }
-
-        @keyframes containerAuraShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        .container_corner_bracket {
-          position: absolute;
-          font-family: monospace;
-          font-size: 0.7rem;
-          color: rgba(206, 161, 122, 0.7);
-          letter-spacing: 0.05em;
-          pointer-events: none;
-          z-index: 2;
-        }
-        .container_corner_bracket.tl { top: 14px; left: 20px; }
-        .container_corner_bracket.tr { top: 14px; right: 20px; }
-        .container_corner_bracket.bl { bottom: 14px; left: 20px; }
-        .container_corner_bracket.br { bottom: 14px; right: 20px; }
 
         .container_live_tag {
           display: inline-flex;
           align-items: center;
           gap: 6px;
           font-size: 0.74rem;
-          color: #38bdf8;
+          color: #0284c7;
           background: rgba(6, 182, 212, 0.12);
           border: 1px solid rgba(6, 182, 212, 0.3);
           padding: 5px 12px;
           border-radius: 50px;
+        }
+        .dark .container_live_tag {
+          color: #38bdf8;
         }
         .pulse_dot_cyan {
           width: 7px;
@@ -757,10 +696,15 @@ export const RealBlogsAndFeedback: React.FC = () => {
 
         .cyber_glow_heading {
           font-size: 2.3rem;
+          font-weight: 800;
+          color: #0f172a;
+          letter-spacing: -0.01em;
+        }
+        .dark .cyber_glow_heading {
+          color: #ffffff;
           background: linear-gradient(135deg, #ffffff 40%, #7dd3fc 75%, #CEA17A 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          letter-spacing: -0.01em;
         }
 
         .codex_feature_badge {
@@ -925,31 +869,35 @@ export const RealBlogsAndFeedback: React.FC = () => {
           box-shadow: 0 0 8px #CEA17A;
         }
 
-        /* Luxury Blog Card */
+        /* Luxury Blog Transparent Glass Card with Multi-Color Hover Glow */
         .luxury_blog_card {
-          background: rgba(255, 255, 255, 0.85);
-          backdrop-filter: blur(14px);
-          -webkit-backdrop-filter: blur(14px);
-          border-radius: 22px;
-          padding: 26px;
-          box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
-          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-          border: none !important;
-          outline: none !important;
+          position: relative;
+          background: rgba(255, 255, 255, 0.78);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-radius: 20px;
+          padding: 24px;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          overflow: hidden;
         }
 
         .dark .luxury_blog_card {
-          background: rgba(9, 23, 31, 0.88);
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+          background: rgba(13, 21, 38, 0.65);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
         }
 
         .luxury_blog_card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 20px 45px rgba(206, 161, 122, 0.15);
+          border-color: rgba(6, 182, 212, 0.5);
+          box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12), 0 0 30px rgba(6, 182, 212, 0.22), 0 0 50px rgba(139, 92, 246, 0.15);
         }
 
         .dark .luxury_blog_card:hover {
-          box-shadow: 0 22px 50px rgba(0, 0, 0, 0.8);
+          border-color: rgba(6, 182, 212, 0.65);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(6, 182, 212, 0.35), 0 0 60px rgba(139, 92, 246, 0.25);
         }
 
         .blog_card_top_bar {

@@ -105,9 +105,9 @@ export default function Home() {
 
                   <h3 className="text-uppercase hero_greeting">Hello, I Am</h3>
                   <h1 className="text-uppercase hero_name">Karan Mishra</h1>
-                  <div className="hero_alias_subtitle mb-2">
-                    <span className="badge badge-dark border border-secondary text-gold px-2 py-1 small font-mono mr-2">Karann Mishra</span>
-                    <span className="text-muted small font-mono">G Karan Mishra &bull; Founder @ Aurxon &bull; @CodeSage4D</span>
+                  {/* Invisible SEO & Semantic Indexing Layer (Preserving Karann Mishra, G Karan Mishra, Aurxon, CodeSage4D keywords for search crawlers) */}
+                  <div className="sr-only" aria-hidden="true" style={{ position: "absolute", width: "1px", height: "1px", padding: 0, margin: "-1px", overflow: "hidden", clip: "rect(0, 0, 0, 0)", border: 0 }}>
+                    Karan Mishra (Karann Mishra, G Karan Mishra) &bull; Founder &amp; Chief AI Architect at Aurxon &bull; @CodeSage4D
                   </div>
                   
                   {/* Dynamic Changing Words Rotating Banner */}
@@ -144,7 +144,7 @@ export default function Home() {
                       <span>Get CV</span>
                     </a>
 
-                    {/* Concise Action Strip: WhatsApp, Smart Card & Share */}
+                    {/* Concise Action Strip: Direct WhatsApp & Executive Share (Card button removed) */}
                     <div className="hero_concise_action_strip d-flex align-items-center gap-2">
                       <a
                         href="https://wa.me/917804895074?text=Hello%20Karan%20Mishra,%20I%20am%20interested%20in%20an%20AI%20collaboration"
@@ -156,14 +156,6 @@ export default function Home() {
                         <i className="fa fa-whatsapp text-success"></i>
                         <span>WhatsApp</span>
                       </a>
-                      <Link
-                        href="/card"
-                        className="hero_action_pill"
-                        title="9:16 Portrait Smart Business Card"
-                      >
-                        <i className="fa fa-id-card-o text-cyan"></i>
-                        <span>Card</span>
-                      </Link>
                       <button
                         type="button"
                         className="hero_action_pill share_pill"
@@ -174,7 +166,7 @@ export default function Home() {
                         }}
                         title="Open Executive Share Dossier & QR"
                       >
-                        <i className="fa fa-share-alt text-gold"></i>
+                        <i className="fa fa-share-alt text-info"></i>
                         <span>Share</span>
                       </button>
                     </div>
@@ -1121,6 +1113,29 @@ export default function Home() {
         .about_primary_portrait {
           position: relative;
           z-index: 1;
+          width: 100%;
+          max-width: 380px;
+          max-height: 460px;
+          object-fit: cover;
+          object-position: top center;
+          border-radius: 22px;
+          margin: 0 auto;
+          display: block;
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+        }
+
+        @media (max-width: 991px) {
+          .about_primary_portrait {
+            max-width: 320px;
+            max-height: 390px;
+          }
+        }
+
+        @media (max-width: 575px) {
+          .about_primary_portrait {
+            max-width: 260px;
+            max-height: 320px;
+          }
         }
 
         .about_classified_badge {

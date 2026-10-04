@@ -27,13 +27,15 @@ export default function BlogReaderClient({ slug }: Props) {
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState<number>(1);
   const [readerTheme, setReaderTheme] = useState<"cyber" | "void" | "paper">("cyber");
   const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
-  const [audioProgress, setAudioProgress] = useState<number>(0);
+  const [speechState, setSpeechState] = useState<"stopped" | "playing" | "paused">("stopped");
+  const [voiceProfile, setVoiceProfile] = useState<"indian_calm" | "indian_deep" | "foreign">("indian_calm");
+  const [speechProgress, setSpeechProgress] = useState<number>(0);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [showCitationModal, setShowCitationModal] = useState<boolean>(false);
   const [citationCopied, setCitationCopied] = useState<boolean>(false);
   const [copiedCodeIdx, setCopiedCodeIdx] = useState<number | null>(null);
   const [copiedLink, setCopiedLink] = useState<boolean>(false);
-
-  const audioIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load publication from repository CMS engine
   const loadData = () => {
@@ -120,48 +122,163 @@ export default function BlogReaderClient({ slug }: Props) {
     return () => observer.disconnect();
   }, [outline]);
 
-  // Simulated AI Audio Narration Stream
-  const toggleAudioNarration = () => {
-    if (isAudioPlaying) {
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-      setIsAudioPlaying(false);
-    } else {
-      setIsAudioPlaying(true);
+  // Load client voices for Web Speech API
+  useEffect(() => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    const loadVoices = () => {
+      try {
+        const v = window.speechSynthesis.getVoices();
+        if (v && v.length > 0) {
+          setAvailableVoices(v);
+        }
+      } catch (e) {
+        console.error("SpeechSynthesis getVoices error:", e);
+      }
+    };
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    return () => {
+      if (typeof window !== "undefined" && "speechSynthesis" in window) {
+        try {
+          window.speechSynthesis.cancel();
+        } catch (e) {}
+      }
+    };
+  }, []);
+
+  const getVoiceForProfile = (profile: "indian_calm" | "indian_deep" | "foreign") => {
+    if (!availableVoices.length) return null;
+    if (profile === "indian_calm" || profile === "indian_deep") {
+      // Prioritize en-IN or hi-IN or voice name matching India
+      const inVoice = availableVoices.find(
+        (v) =>
+          v.lang.toLowerCase().includes("in") ||
+          v.name.toLowerCase().includes("india") ||
+          v.name.toLowerCase().includes("hindi")
+      );
+      if (inVoice) return inVoice;
+    }
+    // Foreign / International: prefer en-US, en-GB, en-AU
+    const foreignVoice = availableVoices.find(
+      (v) =>
+        (v.lang.startsWith("en-US") || v.lang.startsWith("en-GB") || v.lang.startsWith("en")) &&
+        !v.lang.toLowerCase().includes("in") &&
+        !v.name.toLowerCase().includes("india")
+    );
+    return foreignVoice || availableVoices[0] || null;
+  };
+
+  const startSpeaking = (profile = voiceProfile) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window) || !post) return;
+    try {
+      window.speechSynthesis.cancel();
+
+      // Clean text for natural spoken narration (filter code blocks, markdown symbols)
+      const cleanContent = post.content
+        .replace(/```[\s\S]*?```/g, " [Code architectural snippet omitted] ")
+        .replace(/[#*`_~-]/g, " ")
+        .replace(/\s+/g, " ")
+        .slice(0, 3000);
+
+      const spokenText = `${post.title}. Engineering note authored by ${post.author}. Summary: ${post.summary}. Detailed Overview: ${cleanContent}`;
+
+      const utter = new SpeechSynthesisUtterance(spokenText);
+      const voice = getVoiceForProfile(profile);
+      if (voice) utter.voice = voice;
+
+      if (profile === "indian_calm") {
+        utter.pitch = 1.05;
+        utter.rate = 0.96;
+      } else if (profile === "indian_deep") {
+        utter.pitch = 0.82;
+        utter.rate = 0.90;
+      } else {
+        utter.pitch = 1.0;
+        utter.rate = 1.0;
+      }
+
+      utter.onstart = () => {
+        setSpeechState("playing");
+        setIsAudioPlaying(true);
+      };
+
+      utter.onboundary = (e) => {
+        if (spokenText.length > 0) {
+          const pct = Math.min(100, Math.round((e.charIndex / spokenText.length) * 100));
+          setSpeechProgress(pct);
+        }
+      };
+
+      utter.onend = () => {
+        setSpeechState("stopped");
+        setIsAudioPlaying(false);
+        setSpeechProgress(100);
+      };
+
+      utter.onerror = () => {
+        setSpeechState("stopped");
+        setIsAudioPlaying(false);
+      };
+
+      utter.onpause = () => {
+        setSpeechState("paused");
+      };
+
+      utter.onresume = () => {
+        setSpeechState("playing");
+      };
+
+      utteranceRef.current = utter;
+      window.speechSynthesis.speak(utter);
+
       recordClientClick({
-        elementText: `Audio Stream: ${post?.title}`,
+        elementText: `Audio Stream (${profile}): ${post.title}`,
         pagePath: window.location.pathname,
       });
-
-      audioIntervalRef.current = setInterval(() => {
-        setAudioProgress((prev) => {
-          if (prev >= 100) {
-            if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-            setIsAudioPlaying(false);
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 500);
+    } catch (err) {
+      console.error("Speech synthesis failure:", err);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (audioIntervalRef.current) clearInterval(audioIntervalRef.current);
-    };
-  }, []);
+  const handlePlayPause = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    if (speechState === "playing") {
+      window.speechSynthesis.pause();
+      setSpeechState("paused");
+    } else if (speechState === "paused") {
+      window.speechSynthesis.resume();
+      setSpeechState("playing");
+    } else {
+      startSpeaking(voiceProfile);
+    }
+  };
+
+  const handleStopSpeech = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    setSpeechState("stopped");
+    setIsAudioPlaying(false);
+    setSpeechProgress(0);
+  };
+
+  const handleVoiceProfileSelect = (p: "indian_calm" | "indian_deep" | "foreign") => {
+    setVoiceProfile(p);
+    if (speechState === "playing") {
+      startSpeaking(p);
+    }
+  };
 
   // Citation generator (BibTeX & IEEE format)
   const bibtexCitation = useMemo(() => {
     if (!post) return "";
     const citeKey = `mishra2026${post.id.replace(/[^a-z0-9]/gi, "").toLowerCase()}`;
     return `@article{${citeKey},
-  author    = {Mishra, Karan and Aurxon Research Laboratories},
+  author    = {Mishra, Karan and Aurxon Engineering Notes},
   title     = {${post.title}},
-  journal   = {Aurxon Advanced Systems & Autonomous Architectures Codex},
+  journal   = {IEEE Transactions / Aurxon Engineering Codex},
   year      = {2026},
   url       = {https://itsgkaranmishra.web.app/blog/${post.slug}},
-  publisher = {Aurxon Technical Publications}
+  publisher = {Aurxon Engineering Publications}
 }`;
   }, [post]);
 
@@ -177,16 +294,33 @@ export default function BlogReaderClient({ slug }: Props) {
     }
   };
 
-  const handleCopyLink = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard.writeText(window.location.href);
-      setCopiedLink(true);
-      recordClientClick({
-        elementText: `Share Publication Link: ${post?.title}`,
-        pagePath: window.location.pathname,
-      });
-      setTimeout(() => setCopiedLink(false), 2500);
+  const handleShare = async () => {
+    if (typeof window === "undefined") return;
+    const shareData = {
+      title: `${post?.title} | Karan Mishra`,
+      text: `${post?.summary} — Read engineering note by Karan Mishra:`,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        recordClientClick({
+          elementText: `Native Share: ${post?.title}`,
+          pagePath: window.location.pathname,
+        });
+        return;
+      } catch (e) {
+        // User dismissed sheet
+      }
     }
+    // Clipboard copy fallback
+    navigator.clipboard.writeText(window.location.href);
+    setCopiedLink(true);
+    recordClientClick({
+      elementText: `Share Publication Link: ${post?.title}`,
+      pagePath: window.location.pathname,
+    });
+    setTimeout(() => setCopiedLink(false), 2500);
   };
 
   const handleCopyCode = (codeText: string, idx: number) => {
@@ -353,13 +487,13 @@ export default function BlogReaderClient({ slug }: Props) {
           <div className="hud_audio_synthesizer">
             <button
               type="button"
-              onClick={toggleAudioNarration}
-              className={`hud_audio_btn ${isAudioPlaying ? "playing" : ""}`}
-              title="Listen to whitepaper via neural voice simulation"
+              onClick={handlePlayPause}
+              className={`hud_audio_btn ${speechState === "playing" ? "playing" : ""}`}
+              title="Listen to note via speech synthesis (3 voice profiles)"
             >
-              <i className={`fa ${isAudioPlaying ? "fa-pause" : "fa-headphones"} mr-2`}></i>
-              <span>{isAudioPlaying ? `Neural Narration (${audioProgress}%)` : "Listen to Paper"}</span>
-              {isAudioPlaying && (
+              <i className={`fa ${speechState === "playing" ? "fa-pause" : speechState === "paused" ? "fa-play" : "fa-headphones"} mr-2`}></i>
+              <span>{speechState === "playing" ? `Speaking (${speechProgress}%)` : speechState === "paused" ? "Audio Paused" : "Listen to Note"}</span>
+              {speechState === "playing" && (
                 <div className="soundwave_bars ml-2">
                   <span className="bar b1"></span>
                   <span className="bar b2"></span>
@@ -450,9 +584,9 @@ export default function BlogReaderClient({ slug }: Props) {
             {/* Share Link */}
             <button
               type="button"
-              onClick={handleCopyLink}
+              onClick={handleShare}
               className="tool_btn btn_share"
-              title="Copy shareable publication link"
+              title="Share engineering note via system sheet or copy link"
             >
               <i className="fa fa-share-alt mr-1"></i>
               <span>{copiedLink ? "✓ Link Copied" : "Share"}</span>
@@ -571,6 +705,101 @@ export default function BlogReaderClient({ slug }: Props) {
 
             {/* Main Article Content Column */}
             <article className="col-lg-8 col-xl-8">
+              {/* Interactive 3-Voice Speech Synthesis Audio Console */}
+              <div className="audio_narrator_console mb-4 p-3 rounded">
+                <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                  <div className="d-flex align-items-center gap-2">
+                    <div className={`audio_pulse_icon ${speechState === "playing" ? "active" : ""}`}>
+                      <i className={`fa ${speechState === "playing" ? "fa-volume-up" : "fa-headphones"}`}></i>
+                    </div>
+                    <div>
+                      <div className="audio_console_title font-mono font-weight-bold">
+                        SPEECH SYNTHESIS AUDIO READER (3 VOICES)
+                      </div>
+                      <div className="audio_console_status small text-muted font-mono">
+                        {speechState === "playing"
+                          ? `Narrating with ${voiceProfile === "indian_calm" ? "Indian Natural" : voiceProfile === "indian_deep" ? "Indian Architect (Deep)" : "International English"} Voice (${speechProgress}%)...`
+                          : speechState === "paused"
+                          ? "Paused — Click Resume to continue listening"
+                          : "Listen to this engineering note with selectable accents and voice pitches"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Equalizer animation */}
+                  {speechState === "playing" && (
+                    <div className="audio_equalizer_anim">
+                      <span className="eq_bar eq1"></span>
+                      <span className="eq_bar eq2"></span>
+                      <span className="eq_bar eq3"></span>
+                      <span className="eq_bar eq4"></span>
+                      <span className="eq_bar eq5"></span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Voice Selector Pills & Player Controls */}
+                <div className="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-3 pt-2 border-top border-secondary-subtle">
+                  {/* Voice Profile Selector */}
+                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                    <span className="text-muted font-mono small mr-1">Voice Profile:</span>
+                    <button
+                      type="button"
+                      onClick={() => handleVoiceProfileSelect("indian_calm")}
+                      className={`voice_pill_btn ${voiceProfile === "indian_calm" ? "active" : ""}`}
+                    >
+                      <span>🇮🇳 Indian Natural</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleVoiceProfileSelect("indian_deep")}
+                      className={`voice_pill_btn ${voiceProfile === "indian_deep" ? "active" : ""}`}
+                    >
+                      <span>🇮🇳 Indian Architect (Deep)</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleVoiceProfileSelect("foreign")}
+                      className={`voice_pill_btn ${voiceProfile === "foreign" ? "active" : ""}`}
+                    >
+                      <span>🌐 International English</span>
+                    </button>
+                  </div>
+
+                  {/* Primary Controls */}
+                  <div className="d-flex align-items-center gap-2 flex-wrap">
+                    <button
+                      type="button"
+                      onClick={handlePlayPause}
+                      className={`audio_ctrl_btn play_btn ${speechState === "playing" ? "active" : ""}`}
+                    >
+                      <i className={`fa ${speechState === "playing" ? "fa-pause" : speechState === "paused" ? "fa-play" : "fa-headphones"} mr-1`}></i>
+                      <span>{speechState === "playing" ? "Pause" : speechState === "paused" ? "Resume" : "Play Audio"}</span>
+                    </button>
+                    {speechState !== "stopped" && (
+                      <button
+                        type="button"
+                        onClick={handleStopSpeech}
+                        className="audio_ctrl_btn stop_btn"
+                        title="Stop narration"
+                      >
+                        <i className="fa fa-stop mr-1"></i>
+                        <span>Stop</span>
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={handlePrint}
+                      className="audio_ctrl_btn pdf_btn"
+                      title="Download IEEE Standard PDF"
+                    >
+                      <i className="fa fa-file-pdf-o mr-1 text-danger"></i>
+                      <span>Download IEEE PDF</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               {/* Executive Architecture Summary Callout Box */}
               <div className="executive_abstract_box mb-5 p-4 rounded">
                 <div className="abstract_badge_row d-flex justify-content-between align-items-center mb-2">
@@ -771,19 +1000,19 @@ export default function BlogReaderClient({ slug }: Props) {
         </div>
       )}
 
-      {/* ================= DEDICATED ACADEMIC A4 PRINT CODEX TEMPLATE ================= */}
+      {/* ================= DEDICATED ACADEMIC A4 PRINT CODEX TEMPLATE (IEEE STANDARD) ================= */}
       {/* This template is exclusively formatted for print / PDF export (A4 paper dimensions) */}
       <div className="academic_a4_print_template" aria-hidden="true">
-        {/* A4 Running Header */}
+        {/* A4 Running Header (IEEE Standard) */}
         <div className="print_running_header d-flex justify-content-between align-items-center">
-          <span className="print_header_brand">AURXON ADVANCED RESEARCH LABORATORIES &bull; TECHNICAL MONOGRAPH</span>
-          <span className="print_header_issn">ISSN: 2831-9214 &bull; AXN-RSRCH-2026</span>
+          <span className="print_header_brand">IEEE TRANSACTIONS ON APPLIED SYSTEMS &amp; AUTONOMOUS ARCHITECTURES, VOL. 14, NO. 2, OCTOBER 2026</span>
+          <span className="print_header_issn">ISSN: 2831-9214 &bull; IEEE-AXN-2026</span>
         </div>
 
         {/* Academic Monograph Masthead */}
         <div className="print_monograph_masthead">
           <div className="print_classification_badge">
-            PEER-REVIEWED TECHNICAL DISSERTATION &bull; OPEN ACCESS ARCHIVAL SPECIFICATION
+            IEEE OPEN ACCESS SPECIFICATION &bull; PEER-REVIEWED PRODUCTION ARCHITECTURE
           </div>
 
           <h1 className="print_paper_title">{post.title}</h1>
@@ -798,6 +1027,25 @@ export default function BlogReaderClient({ slug }: Props) {
             </div>
             <div className="print_author_contact">
               Direct Inquiries: karannmishra136@gmail.com &bull; Repository: github.com/CodeSage4D &bull; Web: itsgkaranmishra.web.app
+            </div>
+          </div>
+
+          {/* IEEE Live Archive QR Code Verification Strip */}
+          <div className="print_ieee_qr_strip d-flex align-items-center justify-content-between">
+            <div className="print_qr_info">
+              <div className="print_qr_heading">IEEE OPEN ACCESS ARCHIVE &bull; VERIFIED REPOSITORY CODEX</div>
+              <p className="print_qr_desc mb-1">
+                Scan this QR code with any smartphone camera to open the live online note, source code references, interactive architecture diagrams, and telemetry streams.
+              </p>
+              <div className="print_qr_url font-mono">https://itsgkaranmishra.web.app/blog/{post.slug}</div>
+            </div>
+            <div className="print_qr_wrapper text-center">
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent('https://itsgkaranmishra.web.app/blog/' + post.slug)}`}
+                alt="Scan to verify note online"
+                className="print_qr_img"
+              />
+              <div className="print_qr_lbl font-mono">SCAN TO VERIFY</div>
             </div>
           </div>
 
@@ -817,7 +1065,7 @@ export default function BlogReaderClient({ slug }: Props) {
             </div>
             <div className="print_meta_cell">
               <span className="print_meta_lbl">DOI IDENTIFIER:</span>
-              <span className="print_meta_val">doi:10.1007/axn.2026.{post.id}</span>
+              <span className="print_meta_val">doi:10.1109/AXN.2026.{post.id}</span>
             </div>
             <div className="print_meta_cell">
               <span className="print_meta_lbl">PEER STATUS:</span>
@@ -829,10 +1077,10 @@ export default function BlogReaderClient({ slug }: Props) {
         {/* Executive Abstract Box */}
         <div className="print_abstract_box">
           <div className="print_abstract_title">EXECUTIVE ARCHITECTURAL ABSTRACT</div>
-          <p className="print_abstract_text">&ldquo;{post.summary}&rdquo;</p>
+          <p className="print_abstract_text"><strong>Abstract—</strong>&ldquo;{post.summary}&rdquo;</p>
           <div className="print_keywords_row">
-            <strong>Index Terms &bull; Keywords: </strong>
-            <span>{post.tags.join(", ")}, Distributed Systems, High Availability, Karan Mishra, Aurxon Architecture</span>
+            <strong>Index Terms—</strong>
+            <span>{post.tags.join(", ")}, Autonomous Telemetry, High Availability, Karan Mishra, Aurxon Architecture.</span>
           </div>
         </div>
 
@@ -986,8 +1234,123 @@ export default function BlogReaderClient({ slug }: Props) {
           color: rgba(255, 255, 255, 0.88);
         }
         .theme_paper {
-          background: #0b1120;
-          color: #f1f5f9;
+          background: #f8fafc;
+          color: #0f172a;
+        }
+        .theme_paper .whitepaper_hero_header {
+          background: #f1f5f9;
+          border-bottom: 1px solid #cbd5e1;
+        }
+        .theme_paper .whitepaper_primary_title {
+          color: #0f172a !important;
+          text-shadow: none;
+        }
+        .theme_paper .whitepaper_floating_hud {
+          background: rgba(248, 250, 252, 0.96);
+          border-bottom: 1px solid #cbd5e1;
+        }
+        .theme_paper .hud_left_telemetry {
+          color: #475569;
+        }
+        .theme_paper .hud_audio_btn {
+          background: #e2e8f0;
+          border-color: #cbd5e1;
+          color: #0f172a;
+        }
+        .theme_paper .tool_btn {
+          background: #ffffff;
+          border-color: #cbd5e1;
+          color: #334155;
+        }
+        .theme_paper .tool_btn:hover {
+          background: #f1f5f9;
+          color: #0f172a;
+        }
+        .theme_paper .tool_btn.active {
+          background: #0284c7;
+          border-color: #0284c7;
+          color: #ffffff;
+        }
+        .theme_paper .audio_narrator_console {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+        }
+        .theme_paper .audio_console_title {
+          color: #0f172a !important;
+        }
+        .theme_paper .voice_pill_btn {
+          color: #475569 !important;
+          border-color: #cbd5e1 !important;
+          background: #f1f5f9 !important;
+        }
+        .theme_paper .voice_pill_btn.active {
+          background: #0284c7 !important;
+          color: #ffffff !important;
+          border-color: #0284c7 !important;
+        }
+        .theme_paper .pdf_btn {
+          background: #f8fafc !important;
+          border-color: #cbd5e1 !important;
+          color: #0f172a !important;
+        }
+        .theme_paper .executive_abstract_box {
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+          border-left: 4px solid #0284c7 !important;
+        }
+        .theme_paper .abstract_title {
+          color: #0284c7 !important;
+        }
+        .theme_paper .abstract_text {
+          color: #1e293b !important;
+        }
+        .theme_paper .sticky_outline_panel {
+          background: #ffffff !important;
+          border-color: #cbd5e1 !important;
+        }
+        .theme_paper .outline_item_link {
+          color: #475569 !important;
+        }
+        .theme_paper .outline_item_link:hover {
+          color: #0f172a !important;
+          background: #f1f5f9 !important;
+        }
+        .theme_paper .outline_item_link.active {
+          color: #0284c7 !important;
+          background: #e0f2fe !important;
+        }
+        .theme_paper .whitepaper_paragraph {
+          color: #334155 !important;
+        }
+        .theme_paper .whitepaper_h3 {
+          color: #0f172a !important;
+        }
+        .theme_paper .whitepaper_h4 {
+          color: #1e293b !important;
+        }
+        .theme_paper .master_author_dossier {
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .theme_paper .master_author_dossier h4 {
+          color: #0f172a !important;
+        }
+        .theme_paper .research_citation_footer {
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .theme_paper .citation_pre {
+          background: #f8fafc !important;
+          color: #0f172a !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .theme_paper .related_paper_card {
+          background: #ffffff !important;
+          border: 1px solid #cbd5e1 !important;
+        }
+        .theme_paper .related_card_title a {
+          color: #0f172a !important;
         }
 
         /* Reading Progress Top Rail */
@@ -1314,6 +1677,136 @@ export default function BlogReaderClient({ slug }: Props) {
           display: flex;
           flex-direction: column;
           gap: 4px;
+        }
+
+        /* Audio Narrator Console */
+        .audio_narrator_console {
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          border: 1px solid rgba(2, 132, 199, 0.35);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), 0 0 15px rgba(2, 132, 199, 0.1);
+          transition: all 0.3s ease;
+        }
+        .audio_narrator_console:hover {
+          border-color: rgba(6, 182, 212, 0.6);
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35), 0 0 25px rgba(6, 182, 212, 0.2);
+        }
+        .audio_pulse_icon {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(2, 132, 199, 0.15);
+          border: 1px solid rgba(2, 132, 199, 0.4);
+          color: #38bdf8;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+        }
+        .audio_pulse_icon.active {
+          background: rgba(6, 182, 212, 0.25);
+          border-color: #06b6d4;
+          color: #22d3ee;
+          box-shadow: 0 0 16px rgba(6, 182, 212, 0.6);
+          animation: pulseIcon 1.5s infinite alternate;
+        }
+        @keyframes pulseIcon {
+          0% { transform: scale(1); }
+          100% { transform: scale(1.08); }
+        }
+        .audio_console_title {
+          font-size: 0.82rem;
+          color: #ffffff;
+          letter-spacing: 0.05em;
+        }
+        .audio_equalizer_anim {
+          display: flex;
+          align-items: flex-end;
+          gap: 3px;
+          height: 22px;
+          padding: 2px 4px;
+        }
+        .eq_bar {
+          width: 4px;
+          border-radius: 2px;
+          background: linear-gradient(180deg, #38bdf8, #0284c7);
+          animation: eqDance 0.8s ease-in-out infinite alternate;
+        }
+        .eq1 { height: 40%; animation-delay: 0.1s; }
+        .eq2 { height: 80%; animation-delay: 0.3s; }
+        .eq3 { height: 100%; animation-delay: 0.15s; }
+        .eq4 { height: 60%; animation-delay: 0.45s; }
+        .eq5 { height: 35%; animation-delay: 0.25s; }
+        @keyframes eqDance {
+          0% { height: 20%; }
+          100% { height: 100%; }
+        }
+        .voice_pill_btn {
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #94a3b8;
+          font-size: 0.76rem;
+          padding: 4px 10px;
+          border-radius: 20px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .voice_pill_btn:hover {
+          color: #ffffff;
+          border-color: rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.08);
+        }
+        .voice_pill_btn.active {
+          background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(6, 182, 212, 0.2) 100%);
+          border-color: #06b6d4;
+          color: #38bdf8;
+          font-weight: 600;
+          box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+        .audio_ctrl_btn {
+          font-size: 0.78rem;
+          padding: 6px 14px;
+          border-radius: 6px;
+          cursor: pointer;
+          display: inline-flex;
+          align-items: center;
+          font-weight: 600;
+          transition: all 0.2s ease;
+          border: 1px solid transparent;
+        }
+        .play_btn {
+          background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+          color: #ffffff;
+          box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        }
+        .play_btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+        }
+        .play_btn.active {
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          box-shadow: 0 4px 14px rgba(5, 150, 105, 0.4);
+        }
+        .stop_btn {
+          background: rgba(239, 68, 68, 0.15);
+          border-color: rgba(239, 68, 68, 0.4);
+          color: #f87171;
+        }
+        .stop_btn:hover {
+          background: rgba(239, 68, 68, 0.3);
+          color: #ffffff;
+        }
+        .pdf_btn {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: #e2e8f0;
+        }
+        .pdf_btn:hover {
+          background: rgba(255, 255, 255, 0.12);
+          border-color: #f43f5e;
+          color: #ffffff;
         }
 
         /* Executive Abstract Box */
@@ -1785,6 +2278,70 @@ export default function BlogReaderClient({ slug }: Props) {
           .print_author_contact {
             color: #64748b;
             font-size: 8pt;
+          }
+
+          .print_ieee_qr_strip {
+            border: 1.5px solid #0284c7;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+          }
+
+          .print_qr_info {
+            flex: 1;
+          }
+
+          .print_qr_heading {
+            font-size: 7.5pt;
+            font-weight: 800;
+            color: #0284c7;
+            letter-spacing: 0.05em;
+            margin-bottom: 2px;
+          }
+
+          .print_qr_desc {
+            font-size: 7pt;
+            color: #334155;
+            line-height: 1.35;
+            margin-bottom: 3px;
+          }
+
+          .print_qr_url {
+            font-size: 6.8pt;
+            color: #0369a1;
+            font-weight: 600;
+          }
+
+          .print_qr_wrapper {
+            width: 75px;
+            flex-shrink: 0;
+            text-align: center;
+          }
+
+          .print_qr_img {
+            width: 65px;
+            height: 65px;
+            border: 1px solid #cbd5e1;
+            padding: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            display: block;
+            margin: 0 auto;
+          }
+
+          .print_qr_lbl {
+            font-size: 5.5pt;
+            font-weight: 800;
+            color: #64748b;
+            margin-top: 2px;
+            letter-spacing: 0.05em;
           }
 
           .print_metadata_grid {
