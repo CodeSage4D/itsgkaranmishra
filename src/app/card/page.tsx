@@ -14,6 +14,7 @@ function CardContent() {
   const autoDownloadParam = searchParams.get("autodownload");
 
   const [selectedTheme, setSelectedTheme] = useState<CardTheme>("glacier");
+  const [cardAvatarMode, setCardAvatarMode] = useState<"portrait" | "anime">("portrait");
   const [copied, setCopied] = useState(false);
   const [downloadingFormat, setDownloadingFormat] = useState<string | null>(null);
   const [downloadStatus, setDownloadStatus] = useState<string | null>(null);
@@ -131,8 +132,35 @@ function CardContent() {
             </div>
           </div>
 
-          {/* Profile Identity */}
+          {/* Profile Identity with Avatar Mode Switcher */}
           <div className="profile_identity_section">
+            <div className="card_avatar_wrapper position-relative mx-auto mb-3" style={{ width: "80px", height: "80px" }}>
+              <img
+                src={cardAvatarMode === "portrait" ? "/img/founder/karan_mishra_founder.jpg" : "/img/vectors/vector-anime-avatar.jpeg"}
+                alt="Karan Mishra"
+                style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", border: "2px solid #38bdf8", boxShadow: "0 0 16px rgba(56, 189, 248, 0.4)" }}
+              />
+              <button
+                type="button"
+                onClick={() => setCardAvatarMode(cardAvatarMode === "portrait" ? "anime" : "portrait")}
+                className="card_avatar_mode_toggle"
+                title="Toggle Portrait / Cyber Anime Persona"
+                style={{
+                  position: "absolute",
+                  bottom: "-6px",
+                  right: "-6px",
+                  fontSize: "0.65rem",
+                  background: "#082f49",
+                  color: "#38bdf8",
+                  border: "1px solid #38bdf8",
+                  borderRadius: "20px",
+                  padding: "2px 6px",
+                  cursor: "pointer",
+                }}
+              >
+                {cardAvatarMode === "portrait" ? "⚡ Anime" : "📷 Photo"}
+              </button>
+            </div>
             <h1 className="profile_full_name">Karan Mishra</h1>
             <p className="profile_designation">Founder &bull; Aurxon</p>
             <div className="specialty_pill">MACHINE LEARNING &amp; PYTHON ARCHITECT</div>

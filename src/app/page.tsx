@@ -23,6 +23,36 @@ export default function Home() {
   const [pinnedServiceDrawer, setPinnedServiceDrawer] = useState<string | null>(null);
   const [serviceSearchQuery, setServiceSearchQuery] = useState<string>("");
 
+  // Interactive Hero Visual Mode (Anime & Vector Artwork)
+  const [heroGraphicMode, setHeroGraphicMode] = useState<"anime" | "analytics" | "enterprising" | "screens" | "classic">("anime");
+  const heroGraphics = {
+    anime: {
+      src: "/img/vectors/vector-anime-avatar.jpeg",
+      label: "Cyber Anime Creator Persona",
+      badge: "⚡ Anime Creator Persona",
+    },
+    analytics: {
+      src: "/img/vectors/vector-ui-analytics-3d.jpeg",
+      label: "3D AI Analytics Dashboard",
+      badge: "📊 3D Telemetry Architecture",
+    },
+    enterprising: {
+      src: "/img/vectors/vector-enterprising-man.jpeg",
+      label: "Enterprising Systems Engineer",
+      badge: "💻 Sprint Execution & Systems",
+    },
+    screens: {
+      src: "/img/vectors/vector-ui-animation-screens.jpeg",
+      label: "Reactive Animated Screens",
+      badge: "📱 Reactive UI/UX Interfaces",
+    },
+    classic: {
+      src: "/img/banner/home-right.png",
+      label: "Aurxon Neural Core",
+      badge: "🌐 Aurxon Digital Grid",
+    },
+  };
+
   // Region, Date and Live Clock Auto-Detection
   const [liveClock, setLiveClock] = useState<string>("");
   const [liveDate, setLiveDate] = useState<string>("");
@@ -181,11 +211,64 @@ export default function Home() {
               <div className="col-lg-5">
                 <div className="home_right_img_wrapper text-center">
                   <div className="hero_img_aurora_glow"></div>
-                  <img
-                    className="img-fluid hero_main_graphic"
-                    src="/img/banner/home-right.png"
-                    alt="Karan Mishra - Founder Aurxon"
-                  />
+                  
+                  {/* Interactive Graphic Container */}
+                  <div className="hero_main_graphic_frame position-relative">
+                    <img
+                      className="img-fluid hero_main_graphic rounded"
+                      src={heroGraphics[heroGraphicMode].src}
+                      alt={heroGraphics[heroGraphicMode].label}
+                      style={{ maxHeight: "420px", objectFit: "cover", boxShadow: "0 15px 45px rgba(0,0,0,0.6)" }}
+                    />
+                    <div className="hero_mode_floating_tag font-mono">
+                      <span>{heroGraphics[heroGraphicMode].badge}</span>
+                    </div>
+                  </div>
+
+                  {/* Interactive Visual Switcher Controls */}
+                  <div className="hero_visual_switcher_pills mt-3 d-flex justify-content-center gap-1 flex-wrap">
+                    <button
+                      type="button"
+                      className={`visual_pill_btn ${heroGraphicMode === "anime" ? "active" : ""}`}
+                      onClick={() => setHeroGraphicMode("anime")}
+                      title="View Karan Mishra's Cyber Anime Persona"
+                    >
+                      ⚡ Anime
+                    </button>
+                    <button
+                      type="button"
+                      className={`visual_pill_btn ${heroGraphicMode === "analytics" ? "active" : ""}`}
+                      onClick={() => setHeroGraphicMode("analytics")}
+                      title="View 3D AI Analytics Dashboard"
+                    >
+                      📊 3D UI
+                    </button>
+                    <button
+                      type="button"
+                      className={`visual_pill_btn ${heroGraphicMode === "enterprising" ? "active" : ""}`}
+                      onClick={() => setHeroGraphicMode("enterprising")}
+                      title="View Enterprising Software Engineer"
+                    >
+                      💻 Architect
+                    </button>
+                    <button
+                      type="button"
+                      className={`visual_pill_btn ${heroGraphicMode === "screens" ? "active" : ""}`}
+                      onClick={() => setHeroGraphicMode("screens")}
+                      title="View Animated UI Screens"
+                    >
+                      📱 Screens
+                    </button>
+                    <button
+                      type="button"
+                      className={`visual_pill_btn ${heroGraphicMode === "classic" ? "active" : ""}`}
+                      onClick={() => setHeroGraphicMode("classic")}
+                      title="View Core Architecture Graphic"
+                    >
+                      🌐 Core
+                    </button>
+                  </div>
+
                   <div className="hero_floating_badge heartbeat_soft">
                     <img src="/img/logo/aurxon-logo-official.png" alt="Aurxon" className="badge_logo_mini" />
                     <div className="text-left ml-2">
@@ -217,9 +300,14 @@ export default function Home() {
                   <span className="radar_ping"></span>
                   <span>DOSSIER STATUS: LEVEL 4 CLEARED</span>
                 </div>
-                {/* Secondary Vector Artwork */}
-                <div className="vector_accent_bubble">
+                {/* Dual Anime & Vector Persona Badges */}
+                <div className="vector_accent_bubble vector_anime_chip" title="Karan Mishra - Cyber Anime Creator Persona">
+                  <img src="/img/vectors/vector-anime-avatar.jpeg" alt="Cyber Anime Persona" className="vector_img_mini" />
+                  <span className="vector_bubble_label font-mono">Anime Persona</span>
+                </div>
+                <div className="vector_accent_bubble vector_engineer_chip" title="Enterprising Systems Engineer">
                   <img src="/img/vectors/vector-enterprising-man.jpeg" alt="Enterprise Engineering" className="vector_img_mini" />
+                  <span className="vector_bubble_label font-mono">Systems Architect</span>
                 </div>
               </div>
             </div>
@@ -770,21 +858,39 @@ export default function Home() {
 
           {/* Vector Feature Spotlights */}
           <div className="row mt-4 align-items-center justify-content-center">
-            <div className="col-lg-6 col-md-6 mb-3">
+            <div className="col-lg-3 col-md-6 mb-3">
               <div className="vector_spotlight_card d-flex align-items-center gap-3">
                 <img src="/img/vectors/vector-scalable-solutions.jpeg" alt="Scalable Solutions" className="spotlight_vector_thumb" />
                 <div>
-                  <h5 className="mb-1 font-weight-bold">Scalable Enterprise Engineering</h5>
-                  <p className="small text-muted mb-0">Production deployments built for high transaction volume and zero downtime.</p>
+                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Scalable Enterprise</h5>
+                  <p className="small text-muted mb-0">High-throughput microservices &amp; zero downtime.</p>
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 mb-3">
+            <div className="col-lg-3 col-md-6 mb-3">
               <div className="vector_spotlight_card d-flex align-items-center gap-3">
                 <img src="/img/vectors/vector-hybrid-apps.jpeg" alt="Hybrid App Systems" className="spotlight_vector_thumb" />
                 <div>
-                  <h5 className="mb-1 font-weight-bold">Cross-Platform &amp; Edge Integration</h5>
-                  <p className="small text-muted mb-0">Native sensor plugins and low-latency mobile inference runtimes.</p>
+                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Hybrid Mobile &amp; Edge</h5>
+                  <p className="small text-muted mb-0">Native sensor hooks &amp; low-latency edge AI.</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 mb-3">
+              <div className="vector_spotlight_card d-flex align-items-center gap-3">
+                <img src="/img/vectors/vector-brand-trust.jpeg" alt="Brand Trust" className="spotlight_vector_thumb" />
+                <div>
+                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Enterprise Trust</h5>
+                  <p className="small text-muted mb-0">Verifiable architecture &amp; long-term contracts.</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 mb-3">
+              <div className="vector_spotlight_card d-flex align-items-center gap-3">
+                <img src="/img/vectors/vector-worker-creative.jpeg" alt="Engineering Craftsmanship" className="spotlight_vector_thumb" />
+                <div>
+                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Craftsmanship</h5>
+                  <p className="small text-muted mb-0">Obsessive attention to code &amp; system quality.</p>
                 </div>
               </div>
             </div>

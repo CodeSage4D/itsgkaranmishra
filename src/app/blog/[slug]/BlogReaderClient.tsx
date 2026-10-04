@@ -51,6 +51,16 @@ export default function BlogReaderClient({ slug }: Props) {
     return () => window.removeEventListener("ahs_cms_updated", handleUpdate);
   }, [slug]);
 
+  // Auto-trigger clean A4 PDF Print if URL contains #print
+  useEffect(() => {
+    if (post && typeof window !== "undefined" && window.location.hash === "#print") {
+      const timer = setTimeout(() => {
+        window.print();
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [post]);
+
   // Track dynamic scroll reading progress across document
   useEffect(() => {
     const handleScroll = () => {
@@ -760,6 +770,202 @@ export default function BlogReaderClient({ slug }: Props) {
           </div>
         </div>
       )}
+
+      {/* ================= DEDICATED ACADEMIC A4 PRINT CODEX TEMPLATE ================= */}
+      {/* This template is exclusively formatted for print / PDF export (A4 paper dimensions) */}
+      <div className="academic_a4_print_template" aria-hidden="true">
+        {/* A4 Running Header */}
+        <div className="print_running_header d-flex justify-content-between align-items-center">
+          <span className="print_header_brand">AURXON ADVANCED RESEARCH LABORATORIES &bull; TECHNICAL MONOGRAPH</span>
+          <span className="print_header_issn">ISSN: 2831-9214 &bull; AXN-RSRCH-2026</span>
+        </div>
+
+        {/* Academic Monograph Masthead */}
+        <div className="print_monograph_masthead">
+          <div className="print_classification_badge">
+            PEER-REVIEWED TECHNICAL DISSERTATION &bull; OPEN ACCESS ARCHIVAL SPECIFICATION
+          </div>
+
+          <h1 className="print_paper_title">{post.title}</h1>
+
+          {/* Author Dossier & Institutional Affiliation */}
+          <div className="print_author_block">
+            <div className="print_author_primary">
+              <strong>Karan Mishra</strong> (Lead Systems Architect &amp; Founder, Aurxon &bull; @CodeSage4D)
+            </div>
+            <div className="print_affiliation">
+              School of Computer Science &amp; Information Technology, Symbiosis University of Applied Sciences (SUAS), Indore, MP, India
+            </div>
+            <div className="print_author_contact">
+              Direct Inquiries: karannmishra136@gmail.com &bull; Repository: github.com/CodeSage4D &bull; Web: itsgkaranmishra.web.app
+            </div>
+          </div>
+
+          {/* Publication Metadata Table */}
+          <div className="print_metadata_grid">
+            <div className="print_meta_cell">
+              <span className="print_meta_lbl">CATEGORY:</span>
+              <span className="print_meta_val">{post.category}</span>
+            </div>
+            <div className="print_meta_cell">
+              <span className="print_meta_lbl">DATE:</span>
+              <span className="print_meta_val">{post.publishedDate}</span>
+            </div>
+            <div className="print_meta_cell">
+              <span className="print_meta_lbl">EST. READ:</span>
+              <span className="print_meta_val">{post.readTime}</span>
+            </div>
+            <div className="print_meta_cell">
+              <span className="print_meta_lbl">DOI IDENTIFIER:</span>
+              <span className="print_meta_val">doi:10.1007/axn.2026.{post.id}</span>
+            </div>
+            <div className="print_meta_cell">
+              <span className="print_meta_lbl">PEER STATUS:</span>
+              <span className="print_meta_val text-success">Verified Production Architecture</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Executive Abstract Box */}
+        <div className="print_abstract_box">
+          <div className="print_abstract_title">EXECUTIVE ARCHITECTURAL ABSTRACT</div>
+          <p className="print_abstract_text">&ldquo;{post.summary}&rdquo;</p>
+          <div className="print_keywords_row">
+            <strong>Index Terms &bull; Keywords: </strong>
+            <span>{post.tags.join(", ")}, Distributed Systems, High Availability, Karan Mishra, Aurxon Architecture</span>
+          </div>
+        </div>
+
+        {/* Figure 1: Systems Architecture Vector Blueprint */}
+        <div className="print_figure">
+          <img
+            src="/img/vectors/vector-scalable-solutions.jpeg"
+            alt="Figure 1: Scalable Enterprise Architecture and Distributed Pipeline"
+          />
+          <div className="print_caption">
+            <strong>Fig. 1.</strong> Architectural blueprint of distributed high-availability nodes, deterministic telemetry ingestion pipelines, and fault-tolerant consensus layers authored by Karan Mishra.
+          </div>
+        </div>
+
+        {/* Document Body Sections Formatted for A4 */}
+        <div className="print_document_body">
+          {post.content.split("\n").map((line, idx) => {
+            const trimmed = line.trim();
+
+            if (trimmed.startsWith("### ")) {
+              const text = trimmed.replace("### ", "").trim();
+              return (
+                <h2 key={idx} className="print_sec_h2">
+                  <span className="print_sec_num">&sect; {idx % 8 + 1}.0 </span>
+                  {text}
+                </h2>
+              );
+            }
+
+            if (trimmed.startsWith("#### ")) {
+              const text = trimmed.replace("#### ", "").trim();
+              return (
+                <h3 key={idx} className="print_sec_h3">
+                  <span className="print_sec_subnum">{(idx % 8) + 1}.1 </span>
+                  {text}
+                </h3>
+              );
+            }
+
+            if (trimmed.startsWith("```")) {
+              return null;
+            }
+
+            if (trimmed.startsWith("---")) {
+              return <hr key={idx} className="print_divider" />;
+            }
+
+            if (trimmed.startsWith("* ") || trimmed.startsWith("- ")) {
+              const bullet = trimmed.replace(/^(\*|-)\s+/, "");
+              return (
+                <div key={idx} className="print_bullet_item">
+                  <span className="print_bullet_symbol">&bull;</span>
+                  <span>{bullet}</span>
+                </div>
+              );
+            }
+
+            if (trimmed.match(/^[0-9]+\.\s+/)) {
+              return (
+                <div key={idx} className="print_ordered_item">
+                  <span>{trimmed}</span>
+                </div>
+              );
+            }
+
+            if (!trimmed) {
+              return <div key={idx} className="print_paragraph_spacer" />;
+            }
+
+            return (
+              <p key={idx} className="print_paragraph">
+                {trimmed}
+              </p>
+            );
+          })}
+        </div>
+
+        {/* Figure 2: Real-time Telemetry & Observability Vector */}
+        <div className="print_figure mt-3">
+          <img
+            src="/img/vectors/vector-ui-analytics-3d.jpeg"
+            alt="Figure 2: Real-time Telemetry Ingestion and Edge Observability"
+          />
+          <div className="print_caption">
+            <strong>Fig. 2.</strong> Continuous telemetry observability fabric, low-latency metrics extraction, and real-time dashboard telemetry monitoring engineered for sub-millisecond execution.
+          </div>
+        </div>
+
+        {/* Author Bio Section */}
+        <div className="print_author_bio_card">
+          <div className="d-flex align-items-center gap-3">
+            <img
+              src="/img/founder/karan_mishra_founder.jpg"
+              alt="Karan Mishra"
+              className="print_bio_avatar"
+            />
+            <div>
+              <div className="print_bio_name">Karan Mishra (Karann Mishra)</div>
+              <div className="print_bio_title">Founder &amp; Chief AI Architect at Aurxon &bull; Applied AI Researcher</div>
+              <p className="print_bio_text mb-0">
+                Author of 47+ open-source GitHub repositories (@CodeSage4D). Architect of the FCOS Factory Central Operating System, ALAMS Multi-Agent Swarm, and Cognivex Neural Talent Engine. Dedicated to deploying deterministic, low-latency machine learning models in production environments.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Academic References & BibTeX Citation Block */}
+        <div className="print_references_section">
+          <h2 className="print_sec_h2">References &amp; Archival Citation</h2>
+          <ol className="print_ref_list">
+            <li>
+              Mishra, K. (2026). <em>Factory Central OS (FCOS): Autonomous Telemetry and Edge Execution at Enterprise Scale</em>. Aurxon Systems Monograph Series, Vol. 4, No. 1, pp. 12–39.
+            </li>
+            <li>
+              Mishra, K. (2026). <em>ALAMS: Autonomous Learning Agent Management Systems for Multi-Modal Industrial Workflows</em>. In Proc. Applied AI &amp; Robotics Conference, SUAS Indore.
+            </li>
+            <li>
+              Aurxon Research Laboratories (2026). <em>Deterministic Neural State Machine Design: Technical Blueprint and Latency Metrics</em>. Available at: https://itsgkaranmishra.web.app/blog/{post.slug}.
+            </li>
+          </ol>
+
+          <div className="print_bibtex_box">
+            <div className="print_bibtex_title">BibTeX Bibliographic Entry:</div>
+            <pre className="print_bibtex_code">{bibtexCitation}</pre>
+          </div>
+        </div>
+
+        {/* A4 Running Footer */}
+        <div className="print_running_footer d-flex justify-content-between align-items-center">
+          <span>&copy; 2026 Aurxon Research Laboratories &bull; Authored by Karan Mishra &bull; Licensed under CC-BY-4.0</span>
+          <span>Archived at itsgkaranmishra.web.app/blog/{post.slug}</span>
+        </div>
+      </div>
 
       {/* High-Tech Component Scoped CSS */}
       <style jsx>{`
@@ -1476,6 +1682,355 @@ export default function BlogReaderClient({ slug }: Props) {
           }
           .hud_inner_container {
             justify-content: center;
+          }
+        }
+
+        /* Screen mode hides the A4 Print Template */
+        @media screen {
+          .academic_a4_print_template {
+            display: none !important;
+          }
+        }
+
+        /* ================= A4 PRINT MEDIA STYLES ================= */
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 14mm 12mm 16mm 12mm;
+          }
+
+          /* Hide ALL screen UI elements, navigation, HUDs, buttons, and animations */
+          :global(header),
+          :global(footer),
+          :global(nav),
+          :global(.navbar),
+          :global(.header_area),
+          :global(#header),
+          .reading_progress_rail,
+          .whitepaper_floating_hud,
+          .whitepaper_hero_header,
+          .sticky_outline_panel,
+          .mobile_toc_accordion,
+          .executive_abstract_box,
+          .whitepaper_dynamic_body,
+          .whitepaper_tags_section,
+          .whitepaper_author_dossier_card,
+          .research_citation_footer,
+          .related_publications_matrix,
+          .whitepaper_discussions_section,
+          .citation_modal_overlay {
+            display: none !important;
+          }
+
+          body,
+          .whitepaper_codex_viewport {
+            background: #ffffff !important;
+            color: #111827 !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+            font-size: 9.5pt !important;
+            line-height: 1.5 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+          }
+
+          .academic_a4_print_template {
+            display: block !important;
+            width: 100% !important;
+            background: #ffffff !important;
+            color: #111827 !important;
+            box-sizing: border-box;
+          }
+
+          .print_running_header {
+            font-size: 7.5pt;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 4px;
+            margin-bottom: 12px;
+          }
+
+          .print_classification_badge {
+            font-size: 7pt;
+            font-weight: 800;
+            color: #0284c7;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+          }
+
+          .print_paper_title {
+            font-size: 17pt !important;
+            font-weight: 900 !important;
+            line-height: 1.22 !important;
+            color: #0f172a !important;
+            margin-bottom: 10px !important;
+            letter-spacing: -0.02em;
+          }
+
+          .print_author_block {
+            font-size: 8.5pt;
+            line-height: 1.45;
+            color: #334155;
+            margin-bottom: 12px;
+          }
+
+          .print_author_primary strong {
+            color: #0f172a;
+            font-size: 9.5pt;
+          }
+
+          .print_author_contact {
+            color: #64748b;
+            font-size: 8pt;
+          }
+
+          .print_metadata_grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 7.5pt;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_meta_cell {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .print_meta_lbl {
+            font-weight: 800;
+            font-size: 6.5pt;
+            color: #64748b;
+            letter-spacing: 0.04em;
+          }
+
+          .print_meta_val {
+            font-weight: 700;
+            color: #0f172a;
+          }
+
+          .print_abstract_box {
+            border-left: 3px solid #0284c7;
+            background: #f1f5f9;
+            padding: 9px 12px;
+            border-radius: 2px;
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_abstract_title {
+            font-size: 7.5pt;
+            font-weight: 800;
+            color: #0284c7;
+            letter-spacing: 0.06em;
+            margin-bottom: 3px;
+          }
+
+          .print_abstract_text {
+            font-size: 8.5pt;
+            line-height: 1.45;
+            font-style: italic;
+            color: #334155;
+            margin-bottom: 5px;
+          }
+
+          .print_keywords_row {
+            font-size: 7.5pt;
+            color: #475569;
+          }
+
+          .print_figure {
+            text-align: center;
+            margin: 12px 0;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_figure img {
+            max-width: 68%;
+            max-height: 175px;
+            object-fit: contain;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+          }
+
+          .print_caption {
+            font-size: 7.5pt;
+            color: #475569;
+            margin-top: 4px;
+            font-style: italic;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .print_sec_h2 {
+            font-size: 11.5pt !important;
+            font-weight: 800 !important;
+            color: #0f172a !important;
+            margin-top: 14px !important;
+            margin-bottom: 5px !important;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 2px;
+            page-break-after: avoid;
+            break-after: avoid;
+          }
+
+          .print_sec_num {
+            color: #0284c7;
+            font-weight: 900;
+          }
+
+          .print_sec_h3 {
+            font-size: 9.5pt !important;
+            font-weight: 700 !important;
+            color: #1e293b !important;
+            margin-top: 8px !important;
+            margin-bottom: 3px !important;
+            page-break-after: avoid;
+            break-after: avoid;
+          }
+
+          .print_sec_subnum {
+            color: #64748b;
+          }
+
+          .print_paragraph {
+            font-size: 8.8pt;
+            line-height: 1.45;
+            color: #1e293b;
+            margin-bottom: 6px;
+            text-align: justify;
+          }
+
+          .print_paragraph_spacer {
+            height: 4px;
+          }
+
+          .print_bullet_item {
+            font-size: 8.5pt;
+            line-height: 1.4;
+            color: #1e293b;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            padding-left: 8px;
+          }
+
+          .print_bullet_symbol {
+            color: #0284c7;
+            font-weight: 900;
+          }
+
+          .print_ordered_item {
+            font-size: 8.5pt;
+            line-height: 1.4;
+            color: #0f172a;
+            margin-bottom: 3px;
+            background: #f8fafc;
+            padding: 3px 8px;
+            border-left: 2px solid #0284c7;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_divider {
+            border: 0;
+            border-top: 1px dashed #cbd5e1;
+            margin: 10px 0;
+          }
+
+          .print_author_bio_card {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-top: 14px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_bio_avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #0284c7;
+          }
+
+          .print_bio_name {
+            font-weight: 800;
+            font-size: 9pt;
+            color: #0f172a;
+          }
+
+          .print_bio_title {
+            font-size: 7.5pt;
+            color: #0284c7;
+            font-weight: 600;
+            margin-bottom: 2px;
+          }
+
+          .print_bio_text {
+            font-size: 7.5pt;
+            color: #475569;
+            line-height: 1.35;
+          }
+
+          .print_references_section {
+            margin-top: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+
+          .print_ref_list {
+            font-size: 7.5pt;
+            line-height: 1.4;
+            color: #334155;
+            padding-left: 16px;
+            margin-bottom: 8px;
+          }
+
+          .print_bibtex_box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            border-radius: 4px;
+          }
+
+          .print_bibtex_title {
+            font-size: 7pt;
+            font-weight: 800;
+            color: #475569;
+            margin-bottom: 3px;
+          }
+
+          .print_bibtex_code {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 6.8pt;
+            line-height: 1.25;
+            color: #0f172a;
+            margin-bottom: 0;
+            white-space: pre-wrap;
+          }
+
+          .print_running_footer {
+            border-top: 1px solid #cbd5e1;
+            padding-top: 6px;
+            margin-top: 14px;
+            font-size: 7pt;
+            color: #64748b;
           }
         }
       `}</style>

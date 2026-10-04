@@ -8,6 +8,7 @@ export default function ServicesPage() {
     {
       icon: "fa-brain",
       iconColor: "#CEA17A",
+      image: "/img/vectors/vector-ui-analytics-3d.jpeg",
       title: "Production Machine Learning & Transformers",
       description:
         "Architecting custom fine-tuned NLP pipelines, sentence transformer embeddings (Cognivex), and sub-15ms vector search inference on GPU hardware.",
@@ -17,6 +18,7 @@ export default function ServicesPage() {
     {
       icon: "fa-laptop-code",
       iconColor: "#73C4BF",
+      image: "/img/vectors/vector-scalable-solutions.jpeg",
       title: "Enterprise Web Applications & Edge Systems",
       description:
         "Building distributed, high-concurrency web platforms using Next.js 15, TypeScript, and edge runtimes. Zero layout-shift designs engineered for multi-tenant throughput.",
@@ -26,6 +28,7 @@ export default function ServicesPage() {
     {
       icon: "fa-building",
       iconColor: "#6366f1",
+      image: "/img/vectors/vector-hybrid-apps.jpeg",
       title: "Enterprise SaaS & Educational ERP Engines",
       description:
         "Designing modular institutional platforms (Aurxon ERP Lite) for schools, institutes, and enterprises. Features role-based telemetry, automated fee billing, and real-time records.",
@@ -35,6 +38,7 @@ export default function ServicesPage() {
     {
       icon: "fa-chart-line",
       iconColor: "#10b981",
+      image: "/img/vectors/vector-b2b-growth.jpeg",
       title: "Data Analytics, Telemetry & Forecasting",
       description:
         "Transforming massive high-frequency data streams into predictive mathematical dashboards with Pandas, Plotly dynamic charting, and Apache Arrow batch aggregations.",
@@ -44,6 +48,7 @@ export default function ServicesPage() {
     {
       icon: "fa-robot",
       iconColor: "#f59e0b",
+      image: "/img/vectors/vector-developer.jpeg",
       title: "Autonomous AI Agents & Background Workers",
       description:
         "Orchestrating autonomous LLM pipelines and asynchronous task workers with LangChain, Celery, and Redis event queues. Eliminates manual operational friction with self-healing tasks.",
@@ -53,11 +58,51 @@ export default function ServicesPage() {
     {
       icon: "fa-shield-alt",
       iconColor: "#ec4899",
+      image: "/img/vectors/vector-office-pc.jpeg",
       title: "Real-Time Anomaly Detection & Edge Security",
       description:
         "Developing real-time anomaly classification models to flag fraud, abnormal telemetry, and platform security events with negligible false positives.",
       techStack: ["Scikit-Learn", "Fast Inference", "Kafka Streams", "Security Rules"],
       sla: "Sub-10ms Detection",
+    },
+  ];
+
+  const showcaseVectors = [
+    {
+      img: "/img/vectors/vector-brand-trust.jpeg",
+      title: "Brands Built on Trust",
+      subtitle: "Enterprise Reliability & Verifiable Engineering",
+      tag: "BRAND REPUTATION",
+    },
+    {
+      img: "/img/vectors/vector-worker-creative.jpeg",
+      title: "Craftsmanship & Labor",
+      subtitle: "Uncompromising Dedication to Code Quality",
+      tag: "GLOBAL CRAFT",
+    },
+    {
+      img: "/img/vectors/vector-ui-animation-screens.jpeg",
+      title: "Fluid Micro-Interactions",
+      subtitle: "State-of-the-Art Animated App Screen Interfaces",
+      tag: "REACTIVE UI/UX",
+    },
+    {
+      img: "/img/vectors/vector-freelance-concept.jpeg",
+      title: "Distance Tech Advisory",
+      subtitle: "Remote AI Architecture & Institutional Mentorship",
+      tag: "GLOBAL CONSULTING",
+    },
+    {
+      img: "/img/vectors/vector-anime-avatar.jpeg",
+      title: "Cybernetic Creator Persona",
+      subtitle: "Anime Stylized Digital Identity of Karan Mishra",
+      tag: "CREATIVE CODEX",
+    },
+    {
+      img: "/img/vectors/vector-enterprising-man.jpeg",
+      title: "Autonomous Delivery",
+      subtitle: "Enterprising Sprint Execution & Zero Downtime",
+      tag: "SPRINT MASTERY",
     },
   ];
 
@@ -100,20 +145,31 @@ export default function ServicesPage() {
               <div key={idx} className="col-lg-4 col-md-6 mb-4">
                 <div className="service_elite_card h-100 d-flex flex-column justify-content-between p-4">
                   <div>
-                    <div className="d-flex align-items-center justify-content-between mb-3">
+                    {/* Vector Illustration Header */}
+                    <div className="service_vector_preview_wrap mb-3 position-relative">
+                      <img
+                        src={svc.image}
+                        alt={svc.title}
+                        className="service_vector_thumb"
+                      />
+                      <span className="service_sla_tag font-mono">{svc.sla}</span>
+                    </div>
+
+                    <div className="d-flex align-items-center gap-2 mb-2">
                       <div
-                        className="service_icon_wrapper"
+                        className="service_icon_mini"
                         style={{
-                          background: `${svc.iconColor}18`,
+                          background: `${svc.iconColor}22`,
                           color: svc.iconColor,
                         }}
                       >
                         <i className={`fas ${svc.icon}`}></i>
                       </div>
-                      <span className="service_sla_tag font-mono">{svc.sla}</span>
+                      <h4 className="text-white font-weight-bold mb-0" style={{ fontSize: "1.1rem" }}>
+                        {svc.title}
+                      </h4>
                     </div>
 
-                    <h4 className="text-white font-weight-bold mb-2">{svc.title}</h4>
                     <p className="text-muted small mb-3">{svc.description}</p>
                   </div>
 
@@ -127,6 +183,44 @@ export default function ServicesPage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ================= Illustrated Architecture & Creative Vectors Spotlight ================= */}
+          <div className="mt-5 pt-4">
+            <div className="row justify-content-center mb-4">
+              <div className="col-lg-8 text-center">
+                <span className="text-gold font-mono small font-weight-bold tracking-widest text-uppercase">
+                  VISUAL ARTIFACTS &bull; CREATIVE CODEX
+                </span>
+                <h3 className="text-white font-weight-bold mt-2">Engineering Philosophy &amp; Vector Artwork</h3>
+                <p className="text-muted small">
+                  Artistic vector illustrations and anime personas capturing the intersection of enterprise rigor, client trust, and software craftsmanship.
+                </p>
+              </div>
+            </div>
+
+            <div className="row g-3">
+              {showcaseVectors.map((v, i) => (
+                <div key={i} className="col-lg-4 col-md-6 mb-4">
+                  <div className="vector_showcase_card p-3 rounded h-100 d-flex flex-column justify-content-between">
+                    <div>
+                      <div className="vector_showcase_img_box mb-3 rounded overflow-hidden position-relative">
+                        <img
+                          src={v.img}
+                          alt={v.title}
+                          className="img-fluid vector_showcase_img"
+                        />
+                        <span className="vector_badge_tag font-mono">{v.tag}</span>
+                      </div>
+                      <h5 className="text-white font-weight-bold mb-1" style={{ fontSize: "1rem" }}>
+                        {v.title}
+                      </h5>
+                      <p className="text-muted small mb-0">{v.subtitle}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Executive Consultation Callout Box */}
@@ -152,72 +246,108 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        .text-gold {
-          color: #CEA17A !important;
-        }
-
+      <style jsx>{`
         .service_elite_card {
-          background: rgba(9, 23, 31, 0.75);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border-radius: 20px;
-          border: none !important;
-          outline: none !important;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(14px);
+          -webkit-backdrop-filter: blur(14px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 18px;
+          transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
-
         .service_elite_card:hover {
           transform: translateY(-6px);
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(206, 161, 122, 0.12);
+          border-color: rgba(206, 161, 122, 0.4);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(206, 161, 122, 0.15);
         }
-
-        .service_icon_wrapper {
-          width: 52px;
-          height: 52px;
-          border-radius: 14px;
-          display: flex;
+        .service_vector_preview_wrap {
+          border-radius: 12px;
+          overflow: hidden;
+          height: 160px;
+          background: #060913;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .service_vector_thumb {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.4s ease;
+        }
+        .service_elite_card:hover .service_vector_thumb {
+          transform: scale(1.05);
+        }
+        .service_icon_mini {
+          width: 32px;
+          height: 32px;
+          border-radius: 8px;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.5rem;
+          font-size: 0.9rem;
+          flex-shrink: 0;
         }
-
         .service_sla_tag {
-          font-size: 0.72rem;
-          color: #73C4BF;
-          background: rgba(115, 196, 191, 0.12);
-          padding: 4px 10px;
-          border-radius: 50px;
-        }
-
-        .tech_mini_pill {
-          background: rgba(255, 255, 255, 0.04);
-          color: #cbd5e1;
+          position: absolute;
+          top: 10px;
+          right: 10px;
           font-size: 0.7rem;
+          color: #38bdf8;
+          background: rgba(4, 7, 15, 0.85);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(56, 189, 248, 0.3);
           padding: 3px 8px;
           border-radius: 6px;
         }
-
+        .tech_mini_pill {
+          font-family: monospace;
+          font-size: 0.72rem;
+          color: #94a3b8;
+          background: rgba(255, 255, 255, 0.05);
+          padding: 3px 8px;
+          border-radius: 4px;
+          border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .vector_showcase_card {
+          background: rgba(11, 17, 32, 0.6);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          transition: all 0.3s ease;
+        }
+        .vector_showcase_card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(6, 182, 212, 0.4);
+          box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+        .vector_showcase_img_box {
+          height: 180px;
+          background: #090d16;
+        }
+        .vector_showcase_img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+        .vector_showcase_card:hover .vector_showcase_img {
+          transform: scale(1.04);
+        }
+        .vector_badge_tag {
+          position: absolute;
+          bottom: 8px;
+          left: 8px;
+          font-size: 0.68rem;
+          color: #CEA17A;
+          background: rgba(0, 0, 0, 0.85);
+          border: 1px solid rgba(206, 161, 122, 0.3);
+          padding: 2px 8px;
+          border-radius: 4px;
+        }
         .executive_consultation_box {
-          background: radial-gradient(circle at 50% 0%, rgba(6, 36, 86, 0.5) 0%, rgba(9, 23, 31, 0.85) 100%);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-          border-radius: 24px;
-          box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
-          border: none !important;
-          outline: none !important;
+          background: linear-gradient(135deg, rgba(206, 161, 122, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%);
+          border: 1px solid rgba(206, 161, 122, 0.3);
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
-
-        @media (max-width: 768px) {
-          .service_elite_card {
-            padding: 20px 16px !important;
-          }
-          .executive_consultation_box {
-            padding: 30px 18px !important;
-          }
-        }
-      `}} />
+      `}</style>
     </>
   );
 }

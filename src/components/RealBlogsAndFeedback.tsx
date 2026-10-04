@@ -73,85 +73,158 @@ export const RealBlogsAndFeedback: React.FC = () => {
   return (
     <section className="real_blogs_feedback_area section_gap" id="publications-feedback">
       <div className="container">
-        {/* ================= Part 1: Real Technical Publications ================= */}
-        <div className="row justify-content-center">
-          <div className="col-lg-9 text-center">
-            <div className="main_title mb-5">
-              <span className="luxury_section_eyebrow">
-                <i className="fa fa-book mr-2"></i> PEER-REVIEWED ARCHITECTURES &bull; RESEARCH PUBLICATIONS
-              </span>
-              <h2 className="mt-3 font-weight-bold">Technical Publications &amp; Engineering Whitepapers</h2>
-              <p className="section_sub_text">
-                Real in-depth architectural analyses, autonomous systems design, and production post-mortems authored by <strong>Karan Mishra</strong>. No placeholder filler—read the complete technical dissertations directly.
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* ================= Part 1: Real Technical Publications Super Container ================= */}
+        <div className="cyber_publications_super_container p-4 p-md-5 mb-5 position-relative">
+          {/* Ambient Multi-Color Animated Border Glow & Brackets */}
+          <div className="container_corner_bracket tl">[AXN-PUB-TERMINAL]</div>
+          <div className="container_corner_bracket tr">ISSN: 2831-9214</div>
+          <div className="container_corner_bracket bl">OPEN ACCESS CC-BY</div>
+          <div className="container_corner_bracket br">SEC: UNRESTRICTED</div>
 
-        <div className="row g-4 mb-5">
-          {blogs.map((blog) => (
-            <div key={blog.id} className="col-lg-4 col-md-6 mb-4">
-              <div className="luxury_blog_card h-100 d-flex flex-column">
-                <div className="blog_card_top_bar">
-                  <span className="blog_cat_pill">{blog.category}</span>
-                  <span className="blog_read_time">
-                    <i className="fa fa-clock-o mr-1"></i> {blog.readTime}
+          <div className="row justify-content-center">
+            <div className="col-lg-10 text-center">
+              <div className="main_title mb-4">
+                <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mb-2">
+                  <span className="luxury_section_eyebrow">
+                    <i className="fa fa-book mr-2"></i> PEER-REVIEWED ARCHITECTURES &bull; RESEARCH PUBLICATIONS
+                  </span>
+                  <span className="container_live_tag font-mono">
+                    <span className="pulse_dot_cyan"></span>
+                    <span>100% PRODUCTION VERIFIED</span>
                   </span>
                 </div>
+                <h2 className="mt-3 font-weight-bold cyber_glow_heading">
+                  Technical Publications &amp; Engineering Whitepapers
+                </h2>
+                <p className="section_sub_text">
+                  Real in-depth architectural analyses, autonomous systems design, and production post-mortems authored by <strong>Karan Mishra</strong>. No placeholder filler—read the complete technical dissertations directly.
+                </p>
 
-                <h3 className="blog_card_title">
-                  <Link href={`/blog/${blog.slug}`}>
-                    {blog.title}
-                  </Link>
-                </h3>
-
-                <p className="blog_card_summary">{blog.summary}</p>
-
-                <div className="d-flex align-items-center gap-2 flex-wrap mb-4">
-                  {blog.tags.slice(0, 3).map((t) => (
-                    <span key={t} className="blog_tag_pill">
-                      #{t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between blog_card_footer">
-                  <span className="blog_date_text">
-                    <i className="fa fa-calendar mr-1"></i> {blog.publishedDate}
+                {/* Engaging Interactive Capability Chips */}
+                <div className="d-flex align-items-center justify-content-center gap-2 flex-wrap mt-3 mb-2">
+                  <span className="codex_feature_badge">
+                    <i className="fa fa-bolt text-gold mr-1"></i> Peer-Reviewed Codebases
                   </span>
-                  <div className="d-flex align-items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveWhitepaper(blog);
-                        if (typeof document !== "undefined") {
-                          document.body.style.overflow = "hidden";
-                        }
-                      }}
-                      className="btn_read_article"
-                      title="Inspect publication in high-tech in-page viewer"
-                    >
-                      <i className="fa fa-microchip mr-1 text-gold"></i>
-                      <span>Read Whitepaper</span>
-                    </button>
-                    <Link
-                      href={`/blog/${blog.slug}`}
-                      className="btn_open_external"
-                      title="Open Dedicated Publication Route"
-                    >
-                      <i className="fa fa-external-link"></i>
-                    </Link>
-                  </div>
+                  <span className="codex_feature_badge">
+                    <i className="fa fa-print text-cyan mr-1"></i> A4 Academic PDF Export
+                  </span>
+                  <span className="codex_feature_badge">
+                    <i className="fa fa-headphones text-purple mr-1"></i> Neural Voice Audio Digest
+                  </span>
+                  <span className="codex_feature_badge">
+                    <i className="fa fa-shield text-success mr-1"></i> Zero Filler Content
+                  </span>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <div className="text-center mb-5 pb-3">
-          <Link href="/blog" className="primary_btn">
-            <span>Explore All Technical Publications in Blog &rarr;</span>
-          </Link>
+          <div className="row g-4 mb-4">
+            {blogs.map((blog, idx) => {
+              const vectorImages = [
+                { src: "/img/vectors/vector-ui-analytics-3d.jpeg", label: "FIG 1.0 &bull; TELEMETRY MESH" },
+                { src: "/img/vectors/vector-scalable-solutions.jpeg", label: "FIG 2.0 &bull; DISTRIBUTED NODES" },
+                { src: "/img/vectors/vector-office-pc.jpeg", label: "FIG 3.0 &bull; EDGE HARDWARE PLC" },
+              ];
+              const cardVector = vectorImages[idx % vectorImages.length];
+
+              return (
+                <div key={blog.id} className="col-lg-4 col-md-6 mb-4">
+                  <div className="luxury_blog_card h-100 d-flex flex-column">
+                    {/* High-Resolution Vector Schematic Banner */}
+                    <div className="card_vector_banner mb-3 position-relative rounded overflow-hidden">
+                      <img
+                        src={cardVector.src}
+                        alt={blog.title}
+                        className="card_vector_img"
+                        loading="lazy"
+                      />
+                      <div className="card_vector_overlay"></div>
+                      <span
+                        className="card_vector_tag font-mono"
+                        dangerouslySetInnerHTML={{ __html: cardVector.label }}
+                      />
+                    </div>
+
+                    <div className="blog_card_top_bar">
+                      <span className="blog_cat_pill">{blog.category}</span>
+                      <span className="blog_read_time">
+                        <i className="fa fa-clock-o mr-1"></i> {blog.readTime}
+                      </span>
+                    </div>
+
+                    <h3 className="blog_card_title">
+                      <Link href={`/blog/${blog.slug}`}>
+                        {blog.title}
+                      </Link>
+                    </h3>
+
+                    <p className="blog_card_summary">{blog.summary}</p>
+
+                    <div className="d-flex align-items-center gap-2 flex-wrap mb-4">
+                      {blog.tags.slice(0, 3).map((t) => (
+                        <span key={t} className="blog_tag_pill">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="mt-auto pt-3 border-top d-flex align-items-center justify-content-between blog_card_footer flex-wrap gap-2">
+                      <span className="blog_date_text">
+                        <i className="fa fa-calendar mr-1"></i> {blog.publishedDate}
+                      </span>
+                      <div className="d-flex align-items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveWhitepaper(blog);
+                            if (typeof document !== "undefined") {
+                              document.body.style.overflow = "hidden";
+                            }
+                          }}
+                          className="btn_read_article"
+                          title="Inspect publication in high-tech in-page viewer"
+                        >
+                          <i className="fa fa-microchip mr-1 text-gold"></i>
+                          <span>Read Whitepaper</span>
+                        </button>
+                        <Link
+                          href={`/blog/${blog.slug}#print`}
+                          className="btn_quick_pdf"
+                          title="Export Formatted A4 PDF Whitepaper"
+                        >
+                          <i className="fa fa-print mr-1"></i> A4 PDF
+                        </Link>
+                        <Link
+                          href={`/blog/${blog.slug}`}
+                          className="btn_open_external"
+                          title="Open Dedicated Publication Route"
+                        >
+                          <i className="fa fa-external-link"></i>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Attractive, Highly Engaging Launchpad CTA Button */}
+          <div className="text-center pt-2 pb-2">
+            <Link href="/blog" className="cyber_codex_launchpad_btn">
+              <div className="launchpad_btn_glow"></div>
+              <div className="launchpad_btn_content">
+                <span className="launchpad_main_text">
+                  <i className="fa fa-rocket mr-2 text-cyan"></i>
+                  Explore All Technical Publications in Codex &rarr;
+                </span>
+                <span className="launchpad_sub_text font-mono">
+                  Access All 12+ Whitepapers &bull; Systems Schematics &bull; A4 PDF Generator
+                </span>
+              </div>
+            </Link>
+          </div>
         </div>
 
         {/* ================= Part 2: Real Verified Client & Peer Endorsements ================= */}
@@ -602,6 +675,203 @@ export const RealBlogsAndFeedback: React.FC = () => {
         .real_blogs_feedback_area {
           position: relative;
           background: transparent !important;
+        }
+
+        /* ================= CYBER PUBLICATIONS SUPER CONTAINER ================= */
+        .cyber_publications_super_container {
+          position: relative;
+          background: rgba(13, 21, 38, 0.55);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 28px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+          overflow: hidden;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Animated Multi-Color Glowing Border Aura on Hover */
+        .cyber_publications_super_container::before {
+          content: "";
+          position: absolute;
+          inset: -2px;
+          border-radius: 30px;
+          padding: 2px;
+          background: linear-gradient(135deg, #06b6d4, #8b5cf6, #CEA17A, #10b981, #06b6d4);
+          background-size: 300% 300%;
+          animation: containerAuraShift 8s ease infinite;
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          opacity: 0.4;
+          transition: opacity 0.4s ease;
+          pointer-events: none;
+        }
+
+        .cyber_publications_super_container:hover::before {
+          opacity: 1;
+        }
+
+        .cyber_publications_super_container:hover {
+          box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6), 0 0 50px rgba(6, 182, 212, 0.18), 0 0 70px rgba(139, 92, 246, 0.12);
+        }
+
+        @keyframes containerAuraShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .container_corner_bracket {
+          position: absolute;
+          font-family: monospace;
+          font-size: 0.7rem;
+          color: rgba(206, 161, 122, 0.7);
+          letter-spacing: 0.05em;
+          pointer-events: none;
+          z-index: 2;
+        }
+        .container_corner_bracket.tl { top: 14px; left: 20px; }
+        .container_corner_bracket.tr { top: 14px; right: 20px; }
+        .container_corner_bracket.bl { bottom: 14px; left: 20px; }
+        .container_corner_bracket.br { bottom: 14px; right: 20px; }
+
+        .container_live_tag {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.74rem;
+          color: #38bdf8;
+          background: rgba(6, 182, 212, 0.12);
+          border: 1px solid rgba(6, 182, 212, 0.3);
+          padding: 5px 12px;
+          border-radius: 50px;
+        }
+        .pulse_dot_cyan {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #06b6d4;
+          box-shadow: 0 0 8px #06b6d4;
+        }
+
+        .cyber_glow_heading {
+          font-size: 2.3rem;
+          background: linear-gradient(135deg, #ffffff 40%, #7dd3fc 75%, #CEA17A 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          letter-spacing: -0.01em;
+        }
+
+        .codex_feature_badge {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.76rem;
+          font-weight: 700;
+          color: #e2e8f0;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 5px 13px;
+          border-radius: 50px;
+          transition: all 0.2s;
+        }
+        .codex_feature_badge:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: #06b6d4;
+          transform: translateY(-1px);
+        }
+
+        /* Card Vector Banner */
+        .card_vector_banner {
+          height: 165px;
+          background: #050811;
+        }
+        .card_vector_img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .luxury_blog_card:hover .card_vector_img {
+          transform: scale(1.08);
+        }
+        .card_vector_overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(5, 8, 17, 0.1) 0%, rgba(5, 8, 17, 0.8) 100%);
+        }
+        .card_vector_tag {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+          font-size: 0.68rem;
+          font-weight: 800;
+          background: rgba(7, 12, 22, 0.88);
+          border: 1px solid rgba(206, 161, 122, 0.35);
+          color: #CEA17A;
+          padding: 3px 8px;
+          border-radius: 4px;
+          backdrop-filter: blur(6px);
+        }
+
+        .btn_quick_pdf {
+          display: inline-flex;
+          align-items: center;
+          font-size: 0.74rem;
+          font-weight: 700;
+          padding: 6px 12px;
+          border-radius: 6px;
+          background: rgba(206, 161, 122, 0.12);
+          border: 1px solid rgba(206, 161, 122, 0.35);
+          color: #CEA17A !important;
+          text-decoration: none !important;
+          transition: all 0.2s;
+        }
+        .btn_quick_pdf:hover {
+          background: rgba(206, 161, 122, 0.25);
+          border-color: #CEA17A;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(206, 161, 122, 0.25);
+        }
+
+        /* Engaging Launchpad Button */
+        .cyber_codex_launchpad_btn {
+          position: relative;
+          display: inline-block;
+          text-decoration: none !important;
+          padding: 16px 36px;
+          border-radius: 50px;
+          background: linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(139, 92, 246, 0.2) 50%, rgba(206, 161, 122, 0.2) 100%);
+          border: 1.5px solid rgba(6, 182, 212, 0.4);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.2);
+          overflow: hidden;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cyber_codex_launchpad_btn:hover {
+          transform: translateY(-3px) scale(1.02);
+          border-color: #38bdf8;
+          box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7), 0 0 35px rgba(6, 182, 212, 0.4), 0 0 45px rgba(139, 92, 246, 0.3);
+        }
+        .launchpad_btn_content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          position: relative;
+          z-index: 2;
+        }
+        .launchpad_main_text {
+          font-size: 1.05rem;
+          font-weight: 800;
+          color: #ffffff;
+          letter-spacing: 0.02em;
+        }
+        .launchpad_sub_text {
+          font-size: 0.74rem;
+          color: #94a3b8;
+          margin-top: 3px;
+        }
+        .cyber_codex_launchpad_btn:hover .launchpad_sub_text {
+          color: #7dd3fc;
         }
 
         .luxury_section_eyebrow {

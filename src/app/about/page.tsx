@@ -72,6 +72,103 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ================= Creative Personas & Vector Codex Gallery ================= */}
+      <section className="creative_codex_area py-5" style={{ background: "rgba(6, 10, 20, 0.6)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="container">
+          <div className="row justify-content-center mb-4">
+            <div className="col-lg-8 text-center">
+              <span className="text-gold font-mono small font-weight-bold tracking-widest text-uppercase">
+                CREATIVE PERSONAS &bull; VECTOR CODEX
+              </span>
+              <h3 className="text-white font-weight-bold mt-2">The Many Dimensions of an AI Architect</h3>
+              <p className="text-muted small">
+                From anime-stylized digital identities to focused sprint engineering, these vector artifacts represent the foundational ethos behind Karan Mishra's software.
+              </p>
+            </div>
+          </div>
+
+          <div className="row g-3 justify-content-center">
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(56, 189, 248, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-anime-avatar.jpeg" alt="Cyber Anime Persona" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-info text-cyan font-mono small mb-2">ANIME IDENTITY</span>
+                  <h5 className="text-white font-weight-bold mb-1">Cyber Anime Creator</h5>
+                  <p className="text-muted small mb-0">Stylized cybernetic anime representation of Karan Mishra (@CodeSage4D).</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(206, 161, 122, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-enterprising-man.jpeg" alt="Enterprising Man" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-warning text-gold font-mono small mb-2">SPRINT EXECUTION</span>
+                  <h5 className="text-white font-weight-bold mb-1">Enterprising Architect</h5>
+                  <p className="text-muted small mb-0">High-throughput sprint execution, deadline focus, and mission-critical reliability.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(16, 185, 129, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-developer.jpeg" alt="Distance Developer" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-success text-success font-mono small mb-2">AUTONOMOUS DEV</span>
+                  <h5 className="text-white font-weight-bold mb-1">Distance Engineering</h5>
+                  <p className="text-muted small mb-0">Asynchronous distributed development for international institutions and founders.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(168, 85, 247, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-freelance-concept.jpeg" alt="Applied Education Concept" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-secondary text-muted font-mono small mb-2">RESEARCH &amp; TEACHING</span>
+                  <h5 className="text-white font-weight-bold mb-1">Education &amp; Mentorship</h5>
+                  <p className="text-muted small mb-0">Guiding next-generation AI engineers at SCSIT Symbiosis University (SUAS Indore).</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(244, 63, 94, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-brand-trust.jpeg" alt="Brand Trust" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-danger text-danger font-mono small mb-2">CLIENT TRUST</span>
+                  <h5 className="text-white font-weight-bold mb-1">Reputation &amp; Integrity</h5>
+                  <p className="text-muted small mb-0">People partner with brands they trust. Transparent delivery and verifiable metrics.</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-4 col-md-6 mb-4">
+              <div className="p-3 rounded h-100 d-flex flex-column justify-content-between" style={{ background: "rgba(15, 23, 42, 0.7)", border: "1px solid rgba(234, 179, 8, 0.25)" }}>
+                <div>
+                  <div className="mb-3 rounded overflow-hidden" style={{ height: "200px" }}>
+                    <img src="/img/vectors/vector-worker-creative.jpeg" alt="Worker Dedication" className="w-100 h-100" style={{ objectFit: "cover" }} />
+                  </div>
+                  <span className="badge badge-dark border border-warning text-gold font-mono small mb-2">CRAFTSMANSHIP</span>
+                  <h5 className="text-white font-weight-bold mb-1">Engineering Dedication</h5>
+                  <p className="text-muted small mb-0">Honoring craftsmanship, hard work, and relentless precision across every release.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Brand Logos 1 to 9 & Experience Area */}
       <section className="brand_area section_gap_bottom" id="about-brands">
         <div className="container">
