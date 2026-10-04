@@ -140,7 +140,7 @@ export default function BlogPage() {
 
                       <div className="col-md-9">
                         <div className="blog_post_card">
-                          <Link href={`/single-blog?slug=${blog.slug}`} className="blog_title_link">
+                          <Link href={`/blog/${blog.slug}`} className="blog_title_link">
                             <h3 className="blog_entry_title">{blog.title}</h3>
                           </Link>
                           <p className="blog_summary_text">{blog.summary}</p>
@@ -153,7 +153,7 @@ export default function BlogPage() {
                             ))}
                           </div>
 
-                          <Link href={`/single-blog?slug=${blog.slug}`} className="primary_btn heartbeat_soft">
+                          <Link href={`/blog/${blog.slug}`} className="primary_btn heartbeat_soft">
                             <span>Read Full Technical Article &rarr;</span>
                           </Link>
                         </div>

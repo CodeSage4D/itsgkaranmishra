@@ -29,12 +29,12 @@ export const Footer: React.FC = () => {
   }, []);
 
   const portfolioUrl = "https://itsgkaranmishra.web.app";
-  const shareTitle = "Karan Mishra | Founder, Aurxon • Applied AI Architect & ML Engineer";
-  const formattedCardMessage = `🚀 Explore Karan Mishra's Engineering Portfolio & AI Codex:
-• Founder & Chief AI Architect @ Aurxon
-• Production AI/ML Systems • Cognivex Neural Platforms • Aurxon ERP Lite
-• Applied AI Researcher @ SUAS Indore • 47+ Open-Source Projects
-🌐 Portfolio URL: ${portfolioUrl}
+  const shareTitle = "Karan Mishra (Karann Mishra) | Founder & Chief AI Architect, Aurxon";
+  const formattedCardMessage = `🚀 Explore Karan Mishra's (Karann Mishra • G Karan Mishra) Engineering Portfolio & AI Codex:
+• Founder & Chief AI Architect @ Aurxon (KArann Mishra AURXON)
+• Production AI/ML Systems • FCOS Factory OS • ALAMS Agent Swarms • Aurxon ERP Lite
+• Applied AI Researcher @ SUAS Indore • 47+ Open-Source Projects (@CodeSage4D)
+🌐 Portfolio: ${portfolioUrl}
 📄 Digital Smart Card: ${portfolioUrl}/card
 💼 LinkedIn: https://www.linkedin.com/in/karannmishra136`;
 

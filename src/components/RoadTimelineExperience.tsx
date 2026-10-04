@@ -134,12 +134,24 @@ const milestones: Milestone[] = [
   },
 ];
 
+import { getAllExperiences } from "@/lib/cms-store";
+
 export const RoadTimelineExperience: React.FC = () => {
+  const [experiences, setExperiences] = useState<Milestone[]>(() => getAllExperiences() as any);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [activeNodes, setActiveNodes] = useState<Set<number>>(new Set([0]));
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const rowsRef = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Sync with CMS updates
+  useEffect(() => {
+    const handleCmsUpdate = () => {
+      setExperiences(getAllExperiences() as any);
+    };
+    window.addEventListener("ahs_cms_updated", handleCmsUpdate);
+    return () => window.removeEventListener("ahs_cms_updated", handleCmsUpdate);
+  }, []);
 
   // Dynamic Scroll Line Tracing (NO Permanent Line: draws and moves down on scroll)
   useEffect(() => {
@@ -221,7 +233,7 @@ export const RoadTimelineExperience: React.FC = () => {
           </div>
 
           <div className="milestones_list">
-            {milestones.map((item, index) => {
+            {experiences.map((item, index) => {
               const isEven = index % 2 === 0;
               const isReached = activeNodes.has(index);
               const isExpanded = expandedId === item.id;

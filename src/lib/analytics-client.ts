@@ -1,8 +1,9 @@
-// 10X Advanced Real-Time Analytics, Deep Network Telemetry, Audit Trail & Lead CRM Engine
+// Deep Network Telemetry, Hardware Profiling, Screen Matrix, Geolocation & Click Intelligence Engine
 
 export interface ClientVisitorLog {
   id: string;
   ip: string;
+  ipType?: "IPv4" | "IPv6";
   city: string;
   region: string;
   country: string;
@@ -13,20 +14,31 @@ export interface ClientVisitorLog {
   browser: string;
   browserVersion?: string;
   os: string;
+  screenWidth?: number;
+  screenHeight?: number;
   screenResolution: string;
+  viewportSize?: string;
+  devicePixelRatio?: number;
+  screenOrientation?: string;
+  colorDepth?: number;
+  touchSupport?: boolean;
   timezone: string;
   language: string;
   networkType?: string;
-  downlink?: string; // e.g. "10 Mbps"
-  rtt?: string; // e.g. "45 ms"
-  effectiveType?: string; // e.g. "4g"
+  downlink?: string; // e.g. "10.5 Mbps"
+  downlinkMbps?: number;
+  rtt?: string; // e.g. "35 ms"
+  rttMs?: number;
+  effectiveType?: string; // e.g. "4G"
+  saveData?: boolean;
   cpuCores?: number;
   ramGb?: string;
   referrer: string;
   referrerDomain?: string;
   landingPage: string;
+  lastPage?: string;
   timestamp: string; // ISO
-  formattedTime: string; // e.g. "03 Oct 2026, 13:25:10 IST"
+  formattedTime: string; // e.g. "04 Oct 2026, 20:45:10 IST"
   profileViews: string[];
   clicksCount: number;
 }
@@ -35,6 +47,7 @@ export interface ClientClickLog {
   id: string;
   elementId?: string;
   elementText: string;
+  elementTag?: string;
   targetUrl?: string;
   page: string;
   timestamp: string;
@@ -86,7 +99,7 @@ export interface ClientAuditLog {
   formattedTime: string;
 }
 
-// Storage Keys - v4 ensures zero old mock seeds
+// Storage Keys
 const STORAGE_KEY_VISITORS = "ahs_real_visitors_v4";
 const STORAGE_KEY_CLICKS = "ahs_real_clicks_v4";
 const STORAGE_KEY_LEADS = "ahs_real_leads_v4";
@@ -94,8 +107,16 @@ const STORAGE_KEY_AUDIT = "ahs_real_audit_v4";
 const STORAGE_KEY_SESSION = "ahs_real_session_id_v4";
 
 // Helper: Format readable Indian Standard Time (IST) & UTC
-export function formatISTTime(dateObj?: Date): string {
-  const d = dateObj || new Date();
+export function formatISTTime(dateObj?: Date | string | number): string {
+  let d: Date;
+  if (!dateObj) {
+    d = new Date();
+  } else if (typeof dateObj === "string" || typeof dateObj === "number") {
+    d = new Date(dateObj);
+  } else {
+    d = dateObj;
+  }
+
   try {
     return (
       d.toLocaleString("en-IN", {
@@ -139,6 +160,8 @@ export function getFlagEmoji(countryCode?: string): string {
 export function getDeviceType(): "Mobile" | "Tablet" | "Desktop" {
   if (typeof navigator === "undefined") return "Desktop";
   const ua = navigator.userAgent;
+  const touch = typeof navigator.maxTouchPoints === "number" ? navigator.maxTouchPoints > 0 : false;
+
   if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
     return "Tablet";
   }
@@ -149,6 +172,11 @@ export function getDeviceType(): "Mobile" | "Tablet" | "Desktop" {
   ) {
     return "Mobile";
   }
+  // Detection for iPad on iOS 13+ which sends Macintosh UA
+  if (navigator.platform === "MacIntel" && touch && window.screen.width < 1366) {
+    return "Tablet";
+  }
+
   return "Desktop";
 }
 
@@ -180,7 +208,7 @@ export function getBrowserInfo(): { browser: string; version: string; os: string
   }
 
   let os = "Linux";
-  if (ua.indexOf("Win") > -1) os = "Windows 11/10";
+  if (ua.indexOf("Win") > -1) os = "Windows";
   else if (ua.indexOf("Mac") > -1) os = "macOS";
   else if (ua.indexOf("Android") > -1) os = "Android";
   else if (ua.indexOf("iPhone") > -1 || ua.indexOf("iPad") > -1) os = "iOS";
@@ -214,7 +242,23 @@ export function getReadableReferrer(): { friendly: string; domain: string } {
   return { friendly: domain || "External Site", domain };
 }
 
-// ================= TRACK VISITOR (100% REAL TELEMETRY) =================
+// Helper: Measure real-time round trip latency (RTT)
+export async function measurePingLatency(): Promise<number> {
+  if (typeof window === "undefined") return 30;
+  const start = performance.now();
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 1800);
+    const res = await fetch("/api/analytics/ping", { signal: controller.signal });
+    clearTimeout(timeout);
+    if (res.ok) {
+      return Math.round(performance.now() - start);
+    }
+  } catch {}
+  return 32;
+}
+
+// ================= TRACK VISITOR (DEEP TELEMETRY & NETWORK SPECS) =================
 
 export async function trackVisitor(currentPath: string): Promise<void> {
   if (typeof window === "undefined") return;
@@ -224,7 +268,18 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   const { browser, version: browserVersion, os } = getBrowserInfo();
   const { friendly: referrer, domain: referrerDomain } = getReadableReferrer();
 
-  const screenResolution = `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)`;
+  // Screen & Display Matrix
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const screenResolution = `${screenWidth}x${screenHeight}`;
+  const viewportSize = `${window.innerWidth}x${window.innerHeight}`;
+  const devicePixelRatio = Number((window.devicePixelRatio || 1).toFixed(2));
+  const screenOrientation =
+    window.screen.orientation?.type ||
+    (window.innerWidth > window.innerHeight ? "landscape-primary" : "portrait-primary");
+  const colorDepth = window.screen.colorDepth || 24;
+  const touchSupport = navigator.maxTouchPoints > 0;
+
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
   const language = navigator.language || "en-US";
 
@@ -233,22 +288,49 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   const ramGb = (navigator as any).deviceMemory ? `${(navigator as any).deviceMemory} GB` : undefined;
 
   // Real Network connection telemetry
-  let networkType = "High-Speed";
-  let downlink: string | undefined = undefined;
-  let rtt: string | undefined = undefined;
-  let effectiveType: string | undefined = undefined;
+  let networkType = "Broadband";
+  let downlink = "Fast";
+  let downlinkMbps = 15;
+  let rtt = "30 ms";
+  let rttMs = 30;
+  let effectiveType = "4G";
+  let saveData = false;
 
-  const conn = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+  const conn =
+    (navigator as any).connection ||
+    (navigator as any).mozConnection ||
+    (navigator as any).webkitConnection;
+
   if (conn) {
-    if (conn.downlink) downlink = `${conn.downlink} Mbps`;
-    if (conn.rtt) rtt = `${conn.rtt} ms`;
-    if (conn.effectiveType) effectiveType = conn.effectiveType.toUpperCase();
-    networkType = conn.effectiveType
-      ? `${conn.effectiveType.toUpperCase()} (${conn.type || "Broadband/WiFi"})`
+    if (conn.downlink) {
+      downlinkMbps = Number(conn.downlink);
+      downlink = `${downlinkMbps} Mbps`;
+    }
+    if (conn.rtt) {
+      rttMs = Number(conn.rtt);
+      rtt = `${rttMs} ms`;
+    }
+    if (conn.effectiveType) {
+      effectiveType = conn.effectiveType.toUpperCase();
+    }
+    saveData = Boolean(conn.saveData);
+    networkType = conn.type
+      ? `${conn.type.toUpperCase()}`
+      : conn.effectiveType
+      ? `${conn.effectiveType.toUpperCase()} Network`
       : "Broadband";
   }
 
-  // Retrieve existing visitors
+  // Ping latency refinement
+  try {
+    const measuredPing = await measurePingLatency();
+    if (measuredPing && measuredPing > 0) {
+      rttMs = measuredPing;
+      rtt = `${measuredPing} ms`;
+    }
+  } catch {}
+
+  // Retrieve existing visitors from local cache
   let visitors: ClientVisitorLog[] = [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_VISITORS);
@@ -261,31 +343,36 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   const existing = visitors.find((v) => v.id === sessionId);
 
   if (existing) {
+    existing.lastPage = currentPath;
     if (!existing.profileViews.includes(currentPath)) {
       existing.profileViews.push(currentPath);
-      // Record section/page audit
-      recordAuditEvent({
-        eventType: "PORTFOLIO_OPEN",
-        title: `Page Navigated: ${currentPath}`,
-        details: `Visitor session ${sessionId.substring(0, 8)} opened ${currentPath}`,
-        page: currentPath,
-        ip: existing.ip,
-        location: `${existing.city}, ${existing.country}`,
-        device: existing.device,
-      });
     }
     localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
+
+    // Send pageview update to server API
+    try {
+      fetch("/api/analytics/track", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId,
+          currentPath,
+          pageTitle: document.title,
+        }),
+      }).catch(() => {});
+    } catch {}
+
     return;
   }
 
-  // New session: fetch Real Geo & IP asynchronously
+  // New session: fetch Real Geo & Public IP asynchronously
   let ip = "127.0.0.1";
   let city = "Local / Direct";
   let region = "";
   let country = "India";
   let countryCode = "IN";
   let flagEmoji = "🇮🇳";
-  let org = "";
+  let org = "Direct Broadband";
 
   try {
     const controller = new AbortController();
@@ -302,7 +389,7 @@ export async function trackVisitor(currentPath: string): Promise<void> {
       country = data.country_name || country;
       countryCode = data.country_code || countryCode;
       flagEmoji = getFlagEmoji(countryCode);
-      org = data.org || "";
+      org = data.org || org;
     }
   } catch {
     try {
@@ -320,6 +407,7 @@ export async function trackVisitor(currentPath: string): Promise<void> {
   const newLog: ClientVisitorLog = {
     id: sessionId,
     ip,
+    ipType: ip.includes(":") ? "IPv6" : "IPv4",
     city,
     region,
     country,
@@ -330,33 +418,89 @@ export async function trackVisitor(currentPath: string): Promise<void> {
     browser,
     browserVersion,
     os,
+    screenWidth,
+    screenHeight,
     screenResolution,
+    viewportSize,
+    devicePixelRatio,
+    screenOrientation,
+    colorDepth,
+    touchSupport,
     timezone,
     language,
     networkType,
     downlink,
+    downlinkMbps,
     rtt,
+    rttMs,
     effectiveType,
+    saveData,
     cpuCores,
     ramGb,
     referrer,
     referrerDomain,
     landingPage: currentPath,
+    lastPage: currentPath,
     timestamp: now.toISOString(),
     formattedTime,
     profileViews: [currentPath],
     clicksCount: 0,
   };
 
+  // 1. Sync to local storage for instant offline/static dashboard display
   visitors.unshift(newLog);
-  if (visitors.length > 250) visitors = visitors.slice(0, 250);
+  if (visitors.length > 300) visitors = visitors.slice(0, 300);
   localStorage.setItem(STORAGE_KEY_VISITORS, JSON.stringify(visitors));
 
-  // Record Audit Trail for Portfolio Open
+  // 2. Dispatch to backend SQLite database
+  try {
+    fetch("/api/analytics/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+        ip,
+        city,
+        region,
+        country,
+        countryCode,
+        flagEmoji,
+        org,
+        deviceType: device,
+        browser,
+        browserVersion,
+        os,
+        screenWidth,
+        screenHeight,
+        screenResolution,
+        viewportSize,
+        devicePixelRatio,
+        screenOrientation,
+        colorDepth,
+        touchSupport,
+        networkType,
+        effectiveType,
+        downlinkMbps,
+        rttMs,
+        saveData,
+        cpuCores,
+        ramGb,
+        timezone,
+        language,
+        referrer,
+        referrerDomain,
+        landingPage: currentPath,
+        currentPath,
+        pageTitle: document.title,
+      }),
+    }).catch(() => {});
+  } catch {}
+
+  // 3. Record Audit Trail for Portfolio Open
   recordAuditEvent({
     eventType: "PORTFOLIO_OPEN",
     title: `Portfolio Opened from ${city}, ${country}`,
-    details: `${device} • ${browser} on ${os} • IP: ${ip} • Referrer: ${referrer}`,
+    details: `${device} • ${screenResolution} (${devicePixelRatio}x) • ${browser} on ${os} • IP: ${ip} • Referrer: ${referrer}`,
     page: currentPath,
     ip,
     location: `${city}, ${country}`,
@@ -365,21 +509,30 @@ export async function trackVisitor(currentPath: string): Promise<void> {
 }
 
 // Track a click event
-export function trackClick(elementText: string, targetUrl?: string, elementId?: string): void {
+export function trackClick(
+  elementText: string,
+  targetUrl?: string,
+  elementId?: string,
+  elementTag: string = "BUTTON"
+): void {
   if (typeof window === "undefined") return;
 
   const currentPath = window.location.pathname;
   const now = new Date();
+  const sessionId = getOrCreateSessionId();
+
   const clickLog: ClientClickLog = {
     id: "clk_" + Math.random().toString(36).substring(2, 7) + "_" + Date.now().toString(36),
     elementId,
-    elementText: elementText.substring(0, 70),
+    elementText: (elementText || "Click").substring(0, 80),
+    elementTag,
     targetUrl,
     page: currentPath,
     timestamp: now.toISOString(),
     formattedTime: formatISTTime(now),
   };
 
+  // 1. Sync to local storage
   let clicks: ClientClickLog[] = [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_CLICKS);
@@ -389,10 +542,10 @@ export function trackClick(elementText: string, targetUrl?: string, elementId?: 
   }
 
   clicks.unshift(clickLog);
-  if (clicks.length > 300) clicks = clicks.slice(0, 300);
+  if (clicks.length > 400) clicks = clicks.slice(0, 400);
   localStorage.setItem(STORAGE_KEY_CLICKS, JSON.stringify(clicks));
 
-  const sessionId = getOrCreateSessionId();
+  // Increment visitor session clicks
   try {
     const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
     if (rawV) {
@@ -404,21 +557,52 @@ export function trackClick(elementText: string, targetUrl?: string, elementId?: 
       }
     }
   } catch {}
+
+  // 2. Dispatch to backend API
+  try {
+    fetch("/api/analytics/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+        elementId,
+        elementText,
+        elementTag,
+        targetUrl,
+        pagePath: currentPath,
+      }),
+    }).catch(() => {});
+  } catch {}
 }
 
-// ================= AUDIT TRAIL ENGINE (WHERE & WHEN PORTFOLIO OPENED/CHANGED) =================
+// ================= AUDIT TRAIL ENGINE =================
 
 export function recordAuditEvent(
-  event: Omit<ClientAuditLog, "id" | "timestamp" | "formattedTime">
+  eventOrType: any,
+  title?: string,
+  page?: string,
+  details?: string
 ): ClientAuditLog {
   const now = new Date();
   const formattedTime = formatISTTime(now);
 
+  let event: Partial<ClientAuditLog>;
+  if (typeof eventOrType === "string") {
+    event = {
+      eventType: eventOrType as any,
+      title: title || eventOrType,
+      details: details || "",
+      page: page || "/",
+    };
+  } else {
+    event = eventOrType || {};
+  }
+
   const newLog: ClientAuditLog = {
     id: "audit_" + Math.random().toString(36).substring(2, 8) + "_" + Date.now().toString(36),
-    eventType: event.eventType,
-    title: event.title,
-    details: event.details,
+    eventType: (event.eventType as any) || "SYSTEM",
+    title: event.title || "Audit Event",
+    details: event.details || "",
     page: event.page || "/",
     ip: event.ip,
     location: event.location,
@@ -443,6 +627,10 @@ export function recordAuditEvent(
   return newLog;
 }
 
+export function recordClientClick(data: { elementText: string; pagePath?: string; targetUrl?: string }): void {
+  trackClick(data.elementText, data.pagePath || "/", undefined, data.targetUrl);
+}
+
 export function getStoredAuditLogs(): ClientAuditLog[] {
   if (typeof window === "undefined") return [];
   try {
@@ -452,130 +640,103 @@ export function getStoredAuditLogs(): ClientAuditLog[] {
   return [];
 }
 
-// Track Portfolio Change (Projects or Section Updated)
-export function recordPortfolioChange(title: string, action: string, details?: string): void {
-  recordAuditEvent({
-    eventType: "PORTFOLIO_CHANGE",
-    title: `Portfolio Changed: ${action} - "${title}"`,
-    details: details || `Portfolio project or section modified by administrator at ${formatISTTime()}`,
-    page: "/portfolio",
-    device: "Admin Console",
-  });
-}
+// ================= LEADS CRM ENGINE =================
 
-// Track Blog Change
-export function recordBlogChange(title: string, action: string): void {
-  recordAuditEvent({
-    eventType: "BLOG_UPDATE",
-    title: `Blog Post ${action}: "${title}"`,
-    details: `Article content, metadata, or tags updated via admin dashboard at ${formatISTTime()}`,
-    page: "/blog",
-    device: "Admin Console",
-  });
-}
-
-// ================= REAL LEADS CRM (CRUD) =================
-
-export function recordLead(lead: {
-  name: string;
-  email: string;
-  phone?: string;
-  company?: string;
-  budget?: string;
-  subject: string;
-  message: string;
-  source?: string;
-}): ClientLead {
+export function recordLead(leadData: Omit<ClientLead, "id" | "timestamp" | "formattedTime" | "status">): ClientLead {
   const now = new Date();
   const formattedTime = formatISTTime(now);
 
-  let visitors: ClientVisitorLog[] = [];
-  if (typeof window !== "undefined") {
-    try {
-      const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
-      if (rawV) visitors = JSON.parse(rawV);
-    } catch {}
-  }
-
-  const sessionId = getOrCreateSessionId();
-  const currentVisitor = visitors.find((v) => v.id === sessionId);
-
   const newLead: ClientLead = {
-    id: "lead_" + Math.random().toString(36).substring(2, 7) + "_" + Date.now().toString(36),
-    name: lead.name,
-    email: lead.email,
-    phone: lead.phone,
-    company: lead.company,
-    budget: lead.budget,
-    subject: lead.subject,
-    message: lead.message,
-    source: lead.source || (currentVisitor ? currentVisitor.referrer : "Portfolio Contact Form"),
-    ip: currentVisitor?.ip || "Unknown",
-    city: currentVisitor?.city || "",
-    country: currentVisitor?.country || "",
+    id: "lead_" + Math.random().toString(36).substring(2, 8) + "_" + Date.now().toString(36),
+    ...leadData,
+    status: "New",
     timestamp: now.toISOString(),
     formattedTime,
-    status: "New",
-    priority: "High",
-    adminNotes: "",
   };
 
-  if (typeof window !== "undefined") {
-    let leads: ClientLead[] = [];
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY_LEADS);
-      if (raw) leads = JSON.parse(raw);
-    } catch {
-      leads = [];
-    }
+  if (typeof window === "undefined") return newLead;
 
+  try {
+    let leads: ClientLead[] = [];
+    const raw = localStorage.getItem(STORAGE_KEY_LEADS);
+    if (raw) leads = JSON.parse(raw);
     leads.unshift(newLead);
     localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
 
-    // Also record in audit log
     recordAuditEvent({
       eventType: "LEAD_CAPTURED",
-      title: `New Lead Received from ${lead.name}`,
-      details: `${lead.subject} • ${lead.email} • Source: ${newLead.source}`,
+      title: `New Direct Inquiry: ${newLead.name}`,
+      details: `${newLead.email} • Subject: ${newLead.subject}`,
       page: "/contact",
       ip: newLead.ip,
-      location: `${newLead.city}, ${newLead.country}`,
+      location: newLead.city && newLead.country ? `${newLead.city}, ${newLead.country}` : "Direct Contact",
     });
-  }
+  } catch {}
 
   return newLead;
 }
 
-export function updateLeadDetails(
-  leadId: string,
-  updates: Partial<Pick<ClientLead, "status" | "priority" | "adminNotes" | "name" | "email" | "phone" | "company" | "subject" | "message">>
-): void {
-  if (typeof window === "undefined") return;
+export function getStoredLeads(): ClientLead[] {
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY_LEADS);
-    if (!raw) return;
-    const leads: ClientLead[] = JSON.parse(raw);
-    const target = leads.find((l) => l.id === leadId);
-    if (target) {
-      Object.assign(target, updates);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+export function updateLeadDetails(id: string, updates: Partial<ClientLead>): ClientLead | null {
+  if (typeof window === "undefined") return null;
+  try {
+    let leads: ClientLead[] = getStoredLeads();
+    const idx = leads.findIndex((l) => l.id === id);
+    if (idx !== -1) {
+      leads[idx] = { ...leads[idx], ...updates };
       localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
+      return leads[idx];
     }
   } catch {}
+  return null;
 }
 
-export function deleteLead(leadId: string): void {
-  if (typeof window === "undefined") return;
+export function deleteLead(id: string): boolean {
+  if (typeof window === "undefined") return false;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY_LEADS);
-    if (!raw) return;
-    let leads: ClientLead[] = JSON.parse(raw);
-    leads = leads.filter((l) => l.id !== leadId);
+    let leads = getStoredLeads().filter((l) => l.id !== id);
     localStorage.setItem(STORAGE_KEY_LEADS, JSON.stringify(leads));
+    return true;
   } catch {}
+  return false;
 }
 
-// ================= DASHBOARD DATA RETRIEVAL (100% REAL - ZERO FAKE SEEDS) =================
+export function recordBlogChange(title: string, action: string, details?: string): void {
+  recordAuditEvent({
+    eventType: "BLOG_UPDATE",
+    title: `Blog ${action}: ${title}`,
+    details: details || `Blog post "${title}" was ${action.toLowerCase()} in CMS`,
+    page: "/blog",
+  });
+}
 
+export function recordPortfolioChange(title: string, action: string, details?: string): void {
+  recordAuditEvent({
+    eventType: "PROJECT_UPDATE",
+    title: `Project ${action}: ${title}`,
+    details: details || `Portfolio project "${title}" was ${action.toLowerCase()} in CMS`,
+    page: "/portfolio",
+  });
+}
+
+// Clear all analytics logs
+export function clearAnalyticsLogs(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(STORAGE_KEY_VISITORS);
+  localStorage.removeItem(STORAGE_KEY_CLICKS);
+  localStorage.removeItem(STORAGE_KEY_AUDIT);
+  fetch("/api/analytics/purge", { method: "POST" }).catch(() => {});
+}
+
+// Get all stored analytics data
 export function getStoredAnalyticsData(): {
   visitors: ClientVisitorLog[];
   clicks: ClientClickLog[];
@@ -585,57 +746,30 @@ export function getStoredAnalyticsData(): {
   if (typeof window === "undefined") {
     return { visitors: [], clicks: [], leads: [], auditLogs: [] };
   }
-
   let visitors: ClientVisitorLog[] = [];
   let clicks: ClientClickLog[] = [];
   let leads: ClientLead[] = [];
   let auditLogs: ClientAuditLog[] = [];
 
   try {
-    const rawV = localStorage.getItem(STORAGE_KEY_VISITORS);
-    if (rawV) visitors = JSON.parse(rawV);
+    const vRaw = localStorage.getItem(STORAGE_KEY_VISITORS);
+    if (vRaw) visitors = JSON.parse(vRaw);
   } catch {}
 
   try {
-    const rawC = localStorage.getItem(STORAGE_KEY_CLICKS);
-    if (rawC) clicks = JSON.parse(rawC);
+    const cRaw = localStorage.getItem(STORAGE_KEY_CLICKS);
+    if (cRaw) clicks = JSON.parse(cRaw);
   } catch {}
 
   try {
-    const rawL = localStorage.getItem(STORAGE_KEY_LEADS);
-    if (rawL) leads = JSON.parse(rawL);
+    const lRaw = localStorage.getItem(STORAGE_KEY_LEADS);
+    if (lRaw) leads = JSON.parse(lRaw);
   } catch {}
 
   try {
-    const rawA = localStorage.getItem(STORAGE_KEY_AUDIT);
-    if (rawA) auditLogs = JSON.parse(rawA);
+    const aRaw = localStorage.getItem(STORAGE_KEY_AUDIT);
+    if (aRaw) auditLogs = JSON.parse(aRaw);
   } catch {}
 
-  // Absolutely NO fake seed generation here! Real visitors only.
   return { visitors, clicks, leads, auditLogs };
-}
-
-// Purge all analytics & reset with fresh real session
-export function clearAnalyticsLogs(): void {
-  if (typeof window === "undefined") return;
-
-  // Clear new real keys
-  localStorage.removeItem(STORAGE_KEY_VISITORS);
-  localStorage.removeItem(STORAGE_KEY_CLICKS);
-  localStorage.removeItem(STORAGE_KEY_LEADS);
-  localStorage.removeItem(STORAGE_KEY_AUDIT);
-
-  // Clear any legacy mock keys from prior versions
-  localStorage.removeItem("ahs_analytics_visitors_v3");
-  localStorage.removeItem("ahs_analytics_clicks_v3");
-  localStorage.removeItem("ahs_analytics_leads_v3");
-  localStorage.removeItem("ahs_analytics_session_id_v3");
-
-  // Record clean audit entry
-  recordAuditEvent({
-    eventType: "SYSTEM_PURGE",
-    title: "Analytics Cache Purged by Administrator",
-    details: "All historical and mock visitor data wiped. Telemetry reset to real-time live mode.",
-    page: "/dashboard",
-  });
 }

@@ -10,23 +10,33 @@ import { AutoDownloadFirstVisit } from "@/components/AutoDownloadFirstVisit";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://itsgkaranmishra.web.app"),
-  title: "Karan Mishra | Founder, Aurxon • Applied AI Architect & Machine Learning Engineer",
+  title: "Karan Mishra (Karann Mishra) | Founder & Chief AI Architect, Aurxon • G Karan Mishra",
   description:
-    "Official portfolio and engineering codex of Karan Mishra (@CodeSage4D) — Founder & Chief AI Architect at Aurxon, Applied AI Researcher at SUAS Indore. Architecting production machine learning systems, Cognivex, Aurxon ERP Lite, and high-performance neural platforms.",
+    "Official portfolio and engineering codex of Karan Mishra (Karann Mishra, G Karan Mishra • @CodeSage4D) — Founder & Chief AI Architect at Aurxon, Applied AI Trainer at SUAS Indore. Architect of FCOS, ALAMS, and 47+ open-source codebases.",
   keywords: [
-    "Karan Mishra",
     "Karann Mishra",
-    "Karan Mishra Aurxon",
+    "Karan Mishra",
     "Aurxon",
+    "KArann Mishra AURXON",
+    "Karan Mishra Aurxon",
+    "Karann Mishra Aurxon",
+    "G Karan Mishra",
+    "G Karan Msihra",
+    "GKaranMishra",
+    "itsgkaranmishra",
+    "Founder Aurxon",
+    "Aurxon Founder",
     "CodeSage4D",
     "Karan Mishra Indore",
-    "Founder Aurxon",
+    "Karann Mishra Indore",
     "SUAS Indore Karan Mishra",
     "Symbiosis University of Applied Sciences Indore",
     "Applied AI Architect",
     "Trainer Applied AI Symbiosis",
     "Cognivex",
     "Aurxon ERP Lite",
+    "FCOS Aurxon",
+    "ALAMS Aurxon",
     "HemoAI",
     "Machine Learning Engineer Indore",
     "karannmishra136",
@@ -56,17 +66,17 @@ export const metadata: Metadata = {
     apple: "/img/logo/aurxon-logo-official.png",
   },
   openGraph: {
-    title: "Karan Mishra | Founder, Aurxon • Applied AI Architect",
+    title: "Karan Mishra (Karann Mishra) | Founder, Aurxon • Applied AI Architect",
     description:
-      "Explore production AI/ML architectures, Cognivex neural systems, Aurxon ERP Lite, 47+ GitHub repositories, and applied artificial intelligence research.",
+      "Official portfolio of Karan Mishra (G Karan Mishra / Karann Mishra) — Founder & Chief AI Architect at Aurxon. Discover neural architectures, FCOS factory operating systems, ALAMS multi-agent swarms, and 47+ open-source GitHub repositories.",
     url: "https://itsgkaranmishra.web.app",
-    siteName: "Karan Mishra • Founder at Aurxon",
+    siteName: "Karan Mishra (Karann Mishra) • Founder at Aurxon",
     images: [
       {
-        url: "/img/banner/home-right.png",
-        width: 1200,
-        height: 630,
-        alt: "Karan Mishra - Founder & Chief AI Architect at Aurxon",
+        url: "/img/founder/karan-mishra-founder.jpg",
+        width: 1135,
+        height: 1388,
+        alt: "Karan Mishra (Karann Mishra) - Founder & Chief AI Architect at Aurxon",
       },
     ],
     locale: "en_US",
@@ -74,10 +84,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Karan Mishra | Founder, Aurxon • Applied AI Architect",
-    description: "Founder & Chief AI Architect at Aurxon. Architecting production machine learning platforms and high-velocity systems.",
-    images: ["/img/banner/home-right.png"],
+    title: "Karan Mishra (Karann Mishra) | Founder, Aurxon • G Karan Mishra",
+    description: "Founder & Chief AI Architect at Aurxon (@CodeSage4D). Architecting production machine learning systems, FCOS, and ALAMS.",
+    images: ["/img/founder/karan-mishra-founder.jpg"],
     creator: "@karannmishra136",
+  },
+  verification: {
+    google: "FR-Ie2tWKzGnBNEMu3JDJH2I42pFzTtm5vqPLQKKGts",
   },
 };
 
@@ -88,7 +101,18 @@ const jsonLdData = {
       "@type": "Person",
       "@id": "https://itsgkaranmishra.web.app/#person",
       "name": "Karan Mishra",
-      "alternateName": ["Karann Mishra", "CodeSage4D"],
+      "alternateName": [
+        "Karann Mishra",
+        "G Karan Mishra",
+        "G Karan Msihra",
+        "GKaranMishra",
+        "itsgkaranmishra",
+        "CodeSage4D",
+        "Karan Mishra Aurxon",
+        "Karann Mishra Aurxon",
+        "KArann Mishra AURXON"
+      ],
+      "description": "Karan Mishra (also known as Karann Mishra, G Karan Mishra, and @CodeSage4D) is the Founder & Chief AI Architect at Aurxon and Applied AI Trainer at SCSIT Symbiosis University of Applied Sciences (SUAS Indore).",
       "jobTitle": "Founder & Chief AI Architect",
       "worksFor": {
         "@type": "Organization",
@@ -109,7 +133,7 @@ const jsonLdData = {
         "name": "Symbiosis University of Applied Sciences (SUAS Indore)"
       },
       "url": "https://itsgkaranmishra.web.app",
-      "image": "https://itsgkaranmishra.web.app/img/banner/home-right.png",
+      "image": "https://itsgkaranmishra.web.app/img/founder/karan-mishra-founder.jpg",
       "sameAs": [
         "https://github.com/CodeSage4D",
         "https://linkedin.com/in/karannmishra136",
@@ -134,7 +158,8 @@ const jsonLdData = {
       "@type": "WebSite",
       "@id": "https://itsgkaranmishra.web.app/#website",
       "url": "https://itsgkaranmishra.web.app",
-      "name": "Karan Mishra Portfolio & Codex",
+      "name": "Karan Mishra (Karann Mishra) Portfolio & Codex • Aurxon",
+      "alternateName": ["Aurxon Founder Portfolio", "G Karan Mishra Portfolio", "CodeSage4D"],
       "publisher": {
         "@id": "https://itsgkaranmishra.web.app/#person"
       }
@@ -150,6 +175,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta name="google-site-verification" content="FR-Ie2tWKzGnBNEMu3JDJH2I42pFzTtm5vqPLQKKGts" />
         <link rel="icon" href="/img/logo/favicon-16x16.png" type="image/png" />
         <link rel="stylesheet" href="/css/bootstrap.css" />
         <link rel="stylesheet" href="/vendors/linericon/style.css" />

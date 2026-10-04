@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { getAllProjects, PortfolioProject } from "@/lib/cms-store";
 
 export interface Project {
   id: string;
@@ -300,9 +301,57 @@ export const ModernProjectsSection: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    fetchGitHubRepos();
+  const mapCmsToProject = (p: PortfolioProject): Project => {
+    let cat: Project["category"] = "web";
+    let catLabel = "Full-Stack Web";
+    if (p.category === "AI/ML") {
+      cat = "ai-ml";
+      catLabel = "AI & Machine Learning";
+    } else if (p.category === "Enterprise") {
+      cat = "saas";
+      catLabel = "Enterprise SaaS & ERP";
+    } else if (p.category === "Mobile") {
+      cat = "analytics";
+      catLabel = "Mobile & Systems";
+    }
+
+    return {
+      id: p.id,
+      title: p.title,
+      category: cat,
+      categoryLabel: catLabel,
+      description: p.description,
+      technologies: p.tags && p.tags.length > 0 ? p.tags : ["Next.js", "TypeScript", "AI"],
+      githubUrl: p.githubUrl || "https://github.com/CodeSage4D",
+      liveUrl: p.liveUrl || undefined,
+      iconClass: p.category === "AI/ML" ? "fa-brain" : p.category === "Enterprise" ? "fa-building" : "fa-laptop-code",
+      accentColor: p.category === "AI/ML" ? "#6366f1" : p.category === "Enterprise" ? "#06b6d4" : "#10b981",
+      featured: p.featured,
+      stars: 12,
+      forks: 4,
+      cliCommand: `git clone ${p.githubUrl || "https://github.com/CodeSage4D"}.git`,
+      runDemoCommand: "npm install && npm run dev",
+      isRealtime: true,
+    };
+  };
+
+  const loadProjects = useCallback(() => {
+    const cmsProjects = getAllProjects();
+    if (cmsProjects && cmsProjects.length > 0) {
+      const mapped = cmsProjects.map(mapCmsToProject);
+      setProjects(mapped);
+    } else {
+      setProjects(baseCuratedProjects);
+    }
   }, []);
+
+  useEffect(() => {
+    loadProjects();
+    const handleUpdate = () => loadProjects();
+    window.addEventListener("ahs_cms_updated", handleUpdate);
+    fetchGitHubRepos();
+    return () => window.removeEventListener("ahs_cms_updated", handleUpdate);
+  }, [loadProjects]);
 
   const [isAutoAdjustActive, setIsAutoAdjustActive] = useState<boolean>(true);
 

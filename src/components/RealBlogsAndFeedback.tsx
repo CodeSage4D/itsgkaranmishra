@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { INITIAL_BLOGS, getAllFeedbacks, submitUserFeedback, UserFeedback, BlogPost } from "@/lib/cms-store";
+import { INITIAL_BLOGS, getAllBlogs, getAllFeedbacks, submitUserFeedback, UserFeedback, BlogPost } from "@/lib/cms-store";
 
 export const RealBlogsAndFeedback: React.FC = () => {
-  const [blogs, setBlogs] = useState<BlogPost[]>(INITIAL_BLOGS.slice(0, 3));
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [feedbacks, setFeedbacks] = useState<UserFeedback[]>([]);
   const [showFeedbackModal, setShowFeedbackModal] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -20,9 +20,18 @@ export const RealBlogsAndFeedback: React.FC = () => {
     message: "",
   });
 
-  useEffect(() => {
+  const loadData = () => {
+    const allBlogs = getAllBlogs();
+    setBlogs(allBlogs.slice(0, 3));
     const list = getAllFeedbacks();
     setFeedbacks(list.filter((f) => f.status === "Approved"));
+  };
+
+  useEffect(() => {
+    loadData();
+    const handleUpdate = () => loadData();
+    window.addEventListener("ahs_cms_updated", handleUpdate);
+    return () => window.removeEventListener("ahs_cms_updated", handleUpdate);
   }, []);
 
   const handleFeedbackSubmit = (e: React.FormEvent) => {
@@ -83,7 +92,7 @@ export const RealBlogsAndFeedback: React.FC = () => {
                 </div>
 
                 <h3 className="blog_card_title">
-                  <Link href={`/single-blog?slug=${blog.slug}`}>
+                  <Link href={`/blog/${blog.slug}`}>
                     {blog.title}
                   </Link>
                 </h3>
@@ -102,7 +111,7 @@ export const RealBlogsAndFeedback: React.FC = () => {
                   <span className="blog_date_text">
                     <i className="fa fa-calendar mr-1"></i> {blog.publishedDate}
                   </span>
-                  <Link href={`/single-blog?slug=${blog.slug}`} className="btn_read_article">
+                  <Link href={`/blog/${blog.slug}`} className="btn_read_article">
                     <span>Read Whitepaper</span>
                     <i className="fa fa-arrow-right ml-1"></i>
                   </Link>

@@ -29,7 +29,7 @@ export default function AboutPage() {
             <div className="col-lg-5 mb-4 mb-lg-0">
               <div className="about_img_wrapper position-relative text-center">
                 <div className="about_glow_halo"></div>
-                <img className="img-fluid rounded-lg shadow-lg position-relative" src="/img/about-us.png" alt="Karan Mishra - Founder Aurxon" />
+                <img className="img-fluid rounded-lg shadow-lg position-relative" src="/img/founder/karan-mishra-founder.jpg" alt="Karan Mishra (Karann Mishra, G Karan Mishra) - Founder & Chief AI Architect, Aurxon" />
                 <div className="founder_badge_overlay">
                   <span className="founder_pulse_dot"></span>
                   <span>Founder &bull; Aurxon</span>
@@ -42,9 +42,9 @@ export default function AboutPage() {
                 <span className="text-uppercase text-gold font-mono small tracking-widest font-weight-bold">
                   Executive Dossier &bull; Architectural Vision
                 </span>
-                <h2 className="mt-2 font-weight-bold">Karan Mishra</h2>
+                <h2 className="mt-2 font-weight-bold">Karan Mishra (Karann Mishra)</h2>
                 <p className="lead text-gold font-weight-500 mb-3">
-                  Founder &amp; Chief AI Architect at Aurxon &bull; Applied AI Researcher at SUAS Indore
+                  Founder &amp; Chief AI Architect at Aurxon (KArann Mishra AURXON) &bull; Applied AI Researcher at SUAS Indore &bull; G Karan Mishra (@CodeSage4D)
                 </p>
                 <p>
                   I architect production-grade artificial intelligence systems, high-velocity full-stack software, and institutional digital engines. Based in Smart City Indore, India, my engineering focus bridges deep mathematical transformer research with scalable zero-downtime distributed systems.

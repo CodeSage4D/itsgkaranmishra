@@ -105,6 +105,10 @@ export default function Home() {
 
                   <h3 className="text-uppercase hero_greeting">Hello, I Am</h3>
                   <h1 className="text-uppercase hero_name">Karan Mishra</h1>
+                  <div className="hero_alias_subtitle mb-2">
+                    <span className="badge badge-dark border border-secondary text-gold px-2 py-1 small font-mono mr-2">Karann Mishra</span>
+                    <span className="text-muted small font-mono">G Karan Mishra &bull; Founder @ Aurxon &bull; @CodeSage4D</span>
+                  </div>
                   
                   {/* Dynamic Changing Words Rotating Banner */}
                   <div className="dynamic_role_cycler_box">
@@ -206,8 +210,8 @@ export default function Home() {
                 <div className="about_card_glass_backdrop"></div>
                 <img
                   className="img-fluid about_primary_portrait"
-                  src="/img/about-us.png"
-                  alt="Karan Mishra - Founder Dossier"
+                  src="/img/founder/karan-mishra-founder.jpg"
+                  alt="Karan Mishra (Karann Mishra, G Karan Mishra) - Founder & Chief AI Architect at Aurxon"
                 />
                 <div className="about_classified_badge">
                   <span className="radar_ping"></span>
@@ -235,7 +239,7 @@ export default function Home() {
                 </p>
 
                 <p className="about_story_body">
-                  Operating at the intersection of production machine learning, neural model benchmarking, and distributed software systems, I founded <strong>Aurxon</strong> to build technological infrastructure that transforms complex enterprises into agile, intelligent engines.
+                  Operating at the intersection of production machine learning, neural model benchmarking, and distributed software systems, I founded <strong>Aurxon</strong> to build technological infrastructure that transforms complex enterprises into agile, intelligent engines. Known in the developer and AI community as <strong>Karann Mishra</strong> (G Karan Mishra • @CodeSage4D), my mission is to deliver deterministic, high-throughput autonomous systems.
                 </p>
 
                 {/* Interactive Dossier Toggle */}
