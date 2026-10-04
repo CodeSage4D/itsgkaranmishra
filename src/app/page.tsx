@@ -23,36 +23,6 @@ export default function Home() {
   const [pinnedServiceDrawer, setPinnedServiceDrawer] = useState<string | null>(null);
   const [serviceSearchQuery, setServiceSearchQuery] = useState<string>("");
 
-  // Interactive Hero Visual Mode (Anime & Vector Artwork)
-  const [heroGraphicMode, setHeroGraphicMode] = useState<"anime" | "analytics" | "enterprising" | "screens" | "classic">("anime");
-  const heroGraphics = {
-    anime: {
-      src: "/img/vectors/vector-anime-avatar.jpeg",
-      label: "Cyber Anime Creator Persona",
-      badge: "⚡ Anime Creator Persona",
-    },
-    analytics: {
-      src: "/img/vectors/vector-ui-analytics-3d.jpeg",
-      label: "3D AI Analytics Dashboard",
-      badge: "📊 3D Telemetry Architecture",
-    },
-    enterprising: {
-      src: "/img/vectors/vector-enterprising-man.jpeg",
-      label: "Enterprising Systems Engineer",
-      badge: "💻 Sprint Execution & Systems",
-    },
-    screens: {
-      src: "/img/vectors/vector-ui-animation-screens.jpeg",
-      label: "Reactive Animated Screens",
-      badge: "📱 Reactive UI/UX Interfaces",
-    },
-    classic: {
-      src: "/img/banner/home-right.png",
-      label: "Aurxon Neural Core",
-      badge: "🌐 Aurxon Digital Grid",
-    },
-  };
-
   // Region, Date and Live Clock Auto-Detection
   const [liveClock, setLiveClock] = useState<string>("");
   const [liveDate, setLiveDate] = useState<string>("");
@@ -152,7 +122,7 @@ export default function Home() {
                     Architecting production-grade enterprise AI platforms, autonomous neural systems, and institutional software. Leading <strong>Aurxon</strong> with 47+ open-source GitHub repositories and cutting-edge applied AI research.
                   </p>
 
-                  <div className="d-flex align-items-center flex-wrap banner_btn_row">
+                  <div className="d-flex align-items-center flex-wrap banner_btn_row gap-3">
                     <a
                       className="primary_btn hero_consult_btn"
                       href="#direct-contact-section"
@@ -162,7 +132,7 @@ export default function Home() {
                       }}
                     >
                       <i className="fa fa-handshake-o mr-2"></i>
-                      <span>Initiate Executive Consultation</span>
+                      <span>Initiate Consultation</span>
                     </a>
                     <a
                       className="primary_btn tr-bg hero_cv_btn"
@@ -173,37 +143,41 @@ export default function Home() {
                       <i className="fa fa-file-pdf-o mr-2"></i>
                       <span>Get CV</span>
                     </a>
-                    <a
-                      className="primary_btn tr-bg hero_aurxon_btn"
-                      href="https://aurxon.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="Visit Official Aurxon Platform"
-                    >
-                      <i className="fa fa-external-link mr-2"></i>
-                      <span>Aurxon.com &rarr;</span>
-                    </a>
-                    <Link
-                      className="primary_btn tr-bg hero_card_btn"
-                      href="/card"
-                      title="9:16 Portrait Smart Business Card"
-                    >
-                      <i className="fa fa-id-card-o mr-2"></i>
-                      <span>Smart Card</span>
-                    </Link>
-                    <button
-                      type="button"
-                      className="primary_btn tr-bg hero_share_btn"
-                      onClick={() => {
-                        if (typeof window !== "undefined") {
-                          window.dispatchEvent(new CustomEvent("open-portfolio-share"));
-                        }
-                      }}
-                      title="Share Portfolio URL with Auto-Generated Message"
-                    >
-                      <i className="fa fa-share-alt mr-2"></i>
-                      <span>Share</span>
-                    </button>
+
+                    {/* Concise Action Strip: WhatsApp, Smart Card & Share */}
+                    <div className="hero_concise_action_strip d-flex align-items-center gap-2">
+                      <a
+                        href="https://wa.me/917804895074?text=Hello%20Karan%20Mishra,%20I%20am%20interested%20in%20an%20AI%20collaboration"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hero_action_pill whatsapp_pill"
+                        title="Direct Chat on WhatsApp (+91 7804895074)"
+                      >
+                        <i className="fa fa-whatsapp text-success"></i>
+                        <span>WhatsApp</span>
+                      </a>
+                      <Link
+                        href="/card"
+                        className="hero_action_pill"
+                        title="9:16 Portrait Smart Business Card"
+                      >
+                        <i className="fa fa-id-card-o text-cyan"></i>
+                        <span>Card</span>
+                      </Link>
+                      <button
+                        type="button"
+                        className="hero_action_pill share_pill"
+                        onClick={() => {
+                          if (typeof window !== "undefined") {
+                            window.dispatchEvent(new CustomEvent("open-portfolio-share"));
+                          }
+                        }}
+                        title="Open Executive Share Dossier & QR"
+                      >
+                        <i className="fa fa-share-alt text-gold"></i>
+                        <span>Share</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -211,64 +185,12 @@ export default function Home() {
               <div className="col-lg-5">
                 <div className="home_right_img_wrapper text-center">
                   <div className="hero_img_aurora_glow"></div>
-                  
-                  {/* Interactive Graphic Container */}
-                  <div className="hero_main_graphic_frame position-relative">
-                    <img
-                      className="img-fluid hero_main_graphic rounded"
-                      src={heroGraphics[heroGraphicMode].src}
-                      alt={heroGraphics[heroGraphicMode].label}
-                      style={{ maxHeight: "420px", objectFit: "cover", boxShadow: "0 15px 45px rgba(0,0,0,0.6)" }}
-                    />
-                    <div className="hero_mode_floating_tag font-mono">
-                      <span>{heroGraphics[heroGraphicMode].badge}</span>
-                    </div>
-                  </div>
-
-                  {/* Interactive Visual Switcher Controls */}
-                  <div className="hero_visual_switcher_pills mt-3 d-flex justify-content-center gap-1 flex-wrap">
-                    <button
-                      type="button"
-                      className={`visual_pill_btn ${heroGraphicMode === "anime" ? "active" : ""}`}
-                      onClick={() => setHeroGraphicMode("anime")}
-                      title="View Karan Mishra's Cyber Anime Persona"
-                    >
-                      ⚡ Anime
-                    </button>
-                    <button
-                      type="button"
-                      className={`visual_pill_btn ${heroGraphicMode === "analytics" ? "active" : ""}`}
-                      onClick={() => setHeroGraphicMode("analytics")}
-                      title="View 3D AI Analytics Dashboard"
-                    >
-                      📊 3D UI
-                    </button>
-                    <button
-                      type="button"
-                      className={`visual_pill_btn ${heroGraphicMode === "enterprising" ? "active" : ""}`}
-                      onClick={() => setHeroGraphicMode("enterprising")}
-                      title="View Enterprising Software Engineer"
-                    >
-                      💻 Architect
-                    </button>
-                    <button
-                      type="button"
-                      className={`visual_pill_btn ${heroGraphicMode === "screens" ? "active" : ""}`}
-                      onClick={() => setHeroGraphicMode("screens")}
-                      title="View Animated UI Screens"
-                    >
-                      📱 Screens
-                    </button>
-                    <button
-                      type="button"
-                      className={`visual_pill_btn ${heroGraphicMode === "classic" ? "active" : ""}`}
-                      onClick={() => setHeroGraphicMode("classic")}
-                      title="View Core Architecture Graphic"
-                    >
-                      🌐 Core
-                    </button>
-                  </div>
-
+                  {/* Restored Classic Coding Vector Graphic */}
+                  <img
+                    className="img-fluid hero_main_graphic"
+                    src="/img/banner/home-right.png"
+                    alt="Karan Mishra - Founder Aurxon"
+                  />
                   <div className="hero_floating_badge heartbeat_soft">
                     <img src="/img/logo/aurxon-logo-official.png" alt="Aurxon" className="badge_logo_mini" />
                     <div className="text-left ml-2">
@@ -300,14 +222,9 @@ export default function Home() {
                   <span className="radar_ping"></span>
                   <span>DOSSIER STATUS: LEVEL 4 CLEARED</span>
                 </div>
-                {/* Dual Anime & Vector Persona Badges */}
-                <div className="vector_accent_bubble vector_anime_chip" title="Karan Mishra - Cyber Anime Creator Persona">
-                  <img src="/img/vectors/vector-anime-avatar.jpeg" alt="Cyber Anime Persona" className="vector_img_mini" />
-                  <span className="vector_bubble_label font-mono">Anime Persona</span>
-                </div>
-                <div className="vector_accent_bubble vector_engineer_chip" title="Enterprising Systems Engineer">
+                {/* Secondary Vector Artwork */}
+                <div className="vector_accent_bubble">
                   <img src="/img/vectors/vector-enterprising-man.jpeg" alt="Enterprise Engineering" className="vector_img_mini" />
-                  <span className="vector_bubble_label font-mono">Systems Architect</span>
                 </div>
               </div>
             </div>
@@ -858,39 +775,21 @@ export default function Home() {
 
           {/* Vector Feature Spotlights */}
           <div className="row mt-4 align-items-center justify-content-center">
-            <div className="col-lg-3 col-md-6 mb-3">
+            <div className="col-lg-6 col-md-6 mb-3">
               <div className="vector_spotlight_card d-flex align-items-center gap-3">
                 <img src="/img/vectors/vector-scalable-solutions.jpeg" alt="Scalable Solutions" className="spotlight_vector_thumb" />
                 <div>
-                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Scalable Enterprise</h5>
-                  <p className="small text-muted mb-0">High-throughput microservices &amp; zero downtime.</p>
+                  <h5 className="mb-1 font-weight-bold">Scalable Enterprise Engineering</h5>
+                  <p className="small text-muted mb-0">Production deployments built for high transaction volume and zero downtime.</p>
                 </div>
               </div>
             </div>
-            <div className="col-lg-3 col-md-6 mb-3">
+            <div className="col-lg-6 col-md-6 mb-3">
               <div className="vector_spotlight_card d-flex align-items-center gap-3">
                 <img src="/img/vectors/vector-hybrid-apps.jpeg" alt="Hybrid App Systems" className="spotlight_vector_thumb" />
                 <div>
-                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Hybrid Mobile &amp; Edge</h5>
-                  <p className="small text-muted mb-0">Native sensor hooks &amp; low-latency edge AI.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 mb-3">
-              <div className="vector_spotlight_card d-flex align-items-center gap-3">
-                <img src="/img/vectors/vector-brand-trust.jpeg" alt="Brand Trust" className="spotlight_vector_thumb" />
-                <div>
-                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Enterprise Trust</h5>
-                  <p className="small text-muted mb-0">Verifiable architecture &amp; long-term contracts.</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 mb-3">
-              <div className="vector_spotlight_card d-flex align-items-center gap-3">
-                <img src="/img/vectors/vector-worker-creative.jpeg" alt="Engineering Craftsmanship" className="spotlight_vector_thumb" />
-                <div>
-                  <h5 className="mb-1 font-weight-bold" style={{ fontSize: "0.95rem" }}>Craftsmanship</h5>
-                  <p className="small text-muted mb-0">Obsessive attention to code &amp; system quality.</p>
+                  <h5 className="mb-1 font-weight-bold">Cross-Platform &amp; Edge Integration</h5>
+                  <p className="small text-muted mb-0">Native sensor plugins and low-latency mobile inference runtimes.</p>
                 </div>
               </div>
             </div>
@@ -1098,6 +997,50 @@ export default function Home() {
 
         .dark .banner_bio_text {
           color: #94a3b8;
+        }
+
+        /* Hero Concise Action Strip */
+        .hero_concise_action_strip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+
+        .hero_action_pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 9px 18px;
+          border-radius: 50px;
+          background: rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          color: #94a3b8;
+          font-size: 0.84rem;
+          font-weight: 700;
+          text-decoration: none !important;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero_action_pill:hover {
+          background: rgba(255, 255, 255, 0.12);
+          color: #ffffff;
+          border-color: #38bdf8;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero_action_pill.whatsapp_pill:hover {
+          border-color: #25d366;
+          color: #25d366;
+          box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+        }
+
+        .hero_action_pill.share_pill:hover {
+          border-color: #CEA17A;
+          color: #CEA17A;
+          box-shadow: 0 4px 15px rgba(206, 161, 122, 0.25);
         }
 
         /* Hero Right Graphic & Floating Glass Badge */

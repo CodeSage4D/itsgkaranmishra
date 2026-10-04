@@ -256,8 +256,8 @@ export const Header: React.FC = () => {
             <a href="mailto:karannmishra136@gmail.com" title="Direct Email">
               <i className="fa fa-envelope"></i>
             </a>
-            <a href="tel:+917804895074">
-              <i className="fa fa-whatsapp"></i>
+            <a href="https://wa.me/917804895074?text=Hello%20Karan%20Mishra,%20I%20would%20like%20to%20connect%20with%20you" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp (+91 7804895074)">
+              <i className="fa fa-whatsapp text-success"></i>
             </a>
           </div>
         </div>

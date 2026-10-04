@@ -21,6 +21,7 @@ export const Footer: React.FC = () => {
 
   const [showShareModal, setShowShareModal] = useState<boolean>(false);
   const [shareCopied, setShareCopied] = useState<string | null>(null);
+  const [shareAvatarMode, setShareAvatarMode] = useState<"photo" | "anime">("photo");
 
   useEffect(() => {
     const handleOpenShare = () => setShowShareModal(true);
@@ -29,14 +30,18 @@ export const Footer: React.FC = () => {
   }, []);
 
   const portfolioUrl = "https://itsgkaranmishra.web.app";
-  const shareTitle = "Karan Mishra (Karann Mishra) | Founder & Chief AI Architect, Aurxon";
-  const formattedCardMessage = `🚀 Explore Karan Mishra's (Karann Mishra • G Karan Mishra) Engineering Portfolio & AI Codex:
-• Founder & Chief AI Architect @ Aurxon (KArann Mishra AURXON)
-• Production AI/ML Systems • FCOS Factory OS • ALAMS Agent Swarms • Aurxon ERP Lite
-• Applied AI Researcher @ SUAS Indore • 47+ Open-Source Projects (@CodeSage4D)
-🌐 Portfolio: ${portfolioUrl}
-📄 Digital Smart Card: ${portfolioUrl}/card
-💼 LinkedIn: https://www.linkedin.com/in/karannmishra136`;
+  const shareTitle = "Karan Mishra | Founder & Chief AI Architect, Aurxon";
+  const formattedCardMessage = `⚡ EXECUTIVE DOSSIER // KARAN MISHRA
+Founder & Chief AI Architect @ Aurxon | Applied AI Researcher (SUAS Indore)
+─────────────────────────────────────────────
+🌐 Official Portfolio: ${portfolioUrl}
+🪪 Smart Card & Contact: ${portfolioUrl}/card
+📦 47+ Open-Source AI Systems: https://github.com/CodeSage4D
+💬 Direct WhatsApp: https://wa.me/917804895074
+💼 Executive LinkedIn: https://www.linkedin.com/in/karannmishra136
+📧 Direct Email: karannmishra136@gmail.com
+─────────────────────────────────────────────
+[TELEMETRY: AXN-DOC-2026 // Production Verified Architect]`;
 
   const scrollToTop = () => {
     if (typeof window !== "undefined") {
@@ -160,6 +165,16 @@ export const Footer: React.FC = () => {
                   className="footer_social_btn"
                 >
                   <i className="fa fa-behance"></i>
+                </a>
+                <a
+                  href="https://wa.me/917804895074?text=Hello%20Karan%20Mishra,%20I%20am%20reaching%20out%20via%20your%20portfolio"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Direct WhatsApp Chat"
+                  title="Direct WhatsApp (+91 7804895074)"
+                  className="footer_social_btn footer_whatsapp_btn"
+                >
+                  <i className="fa fa-whatsapp" style={{ color: "#25d366" }}></i>
                 </a>
                 <button
                   type="button"
@@ -382,121 +397,186 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Interactive Share Card Modal */}
+        {/* ================= REDESIGNED EXECUTIVE SHARE & SCANNER QR MODAL ================= */}
         {showShareModal && (
           <div className="share_modal_overlay" onClick={() => setShowShareModal(false)}>
-            <div className="share_modal_card" onClick={(e) => e.stopPropagation()}>
-              <div className="share_modal_header">
+            <div className="share_modal_card executive_share_dossier_modal" onClick={(e) => e.stopPropagation()}>
+              {/* Modal Top Header with Founder Portrait & Status */}
+              <div className="share_modal_header d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-3">
+                  <div className="share_avatar_ring position-relative">
+                    <img
+                      src={
+                        shareAvatarMode === "photo"
+                          ? "/img/founder/karan_mishra_founder.jpg"
+                          : "/img/vectors/vector-anime-avatar.jpeg"
+                      }
+                      alt="Karan Mishra"
+                      className="share_founder_avatar"
+                    />
+                    <span className="share_avatar_pulse"></span>
+                  </div>
+                  <div>
+                    <div className="d-flex align-items-center gap-2">
+                      <h3 className="share_title mb-0">Karan Mishra</h3>
+                      <span className="text-gold font-mono small">(@CodeSage4D)</span>
+                    </div>
+                    <p className="share_sub mb-0">Founder &bull; AURXON &bull; Applied AI Architect</p>
+                  </div>
+                </div>
+
                 <div className="d-flex align-items-center gap-2">
-                  <div className="share_badge_icon">📤</div>
-                  <div>
-                    <h3 className="share_title">Share Karan Mishra's Profile</h3>
-                    <p className="share_sub">Send digital card, architecture links, &amp; executive bio</p>
+                  <div className="share_avatar_toggle_dock d-none d-sm-flex">
+                    <button
+                      type="button"
+                      className={`share_mode_pill ${shareAvatarMode === "photo" ? "active" : ""}`}
+                      onClick={() => setShareAvatarMode("photo")}
+                      title="Show Official Portrait"
+                    >
+                      📷 Photo
+                    </button>
+                    <button
+                      type="button"
+                      className={`share_mode_pill ${shareAvatarMode === "anime" ? "active" : ""}`}
+                      onClick={() => setShareAvatarMode("anime")}
+                      title="Show Cyber Anime Persona"
+                    >
+                      ⚡ Anime
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setShowShareModal(false)}
+                    className="share_modal_close ml-2"
+                    aria-label="Close"
+                  >
+                    &times;
+                  </button>
+                </div>
+              </div>
+
+              {/* Main Content Body: Scanner QR Code + Executive Telemetry Dossier */}
+              <div className="share_modal_body mt-4">
+                <div className="row g-4 align-items-stretch">
+                  {/* Left Column: Interactive Scanner QR Code */}
+                  <div className="col-md-5 text-center d-flex flex-column justify-content-between">
+                    <div className="scanner_qr_frame p-3 rounded position-relative">
+                      <div className="qr_scanner_laser_line"></div>
+                      <img
+                        src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=https%3A%2F%2Fitsgkaranmishra.web.app"
+                        alt="Karan Mishra Portfolio Scanner QR Code"
+                        className="scanner_qr_img img-fluid rounded"
+                        loading="lazy"
+                      />
+                      <div className="scanner_qr_tag font-mono mt-2">
+                        <i className="fa fa-qrcode mr-1 text-gold"></i>
+                        <span>SCANNER QR CODE</span>
+                      </div>
+                    </div>
+                    <div className="qr_scan_instruction mt-2">
+                      <span className="small text-muted font-mono">
+                        <i className="fa fa-camera mr-1 text-cyan"></i>
+                        Scan with phone camera to launch live digital dossier &amp; card
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Telemetric Executive Briefing Text */}
+                  <div className="col-md-7 d-flex flex-column justify-content-between">
+                    <div>
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <span className="telemetry_chip font-mono">
+                          <span className="pulse_dot_green"></span>
+                          <span>STATUS: PRODUCTION VERIFIED</span>
+                        </span>
+                        <span className="small text-muted font-mono">AXN-DOC-2026</span>
+                      </div>
+
+                      <div className="executive_brief_terminal_box p-3 rounded mb-3">
+                        <pre className="executive_brief_text mb-0 font-mono">
+                          {formattedCardMessage}
+                        </pre>
+                      </div>
+                    </div>
+
+                    {/* Instant 1-Click Copy Buttons */}
+                    <div className="d-flex gap-2 flex-wrap mb-3">
+                      <button
+                        type="button"
+                        onClick={handleCopyCardMessage}
+                        className={`share_action_btn flex-fill ${shareCopied === "card" ? "copied" : ""}`}
+                        title="Copy complete executive dossier message to clipboard"
+                      >
+                        <i className="fa fa-copy mr-2"></i>
+                        <span>{shareCopied === "card" ? "✓ Executive Brief Copied!" : "Copy Executive Brief"}</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCopyLink}
+                        className={`share_action_btn tr-bg flex-fill ${shareCopied === "link" ? "copied" : ""}`}
+                        title="Copy direct website link"
+                      >
+                        <i className="fa fa-link mr-2"></i>
+                        <span>{shareCopied === "link" ? "✓ Link Copied!" : "Copy Direct Link"}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <button
-                  onClick={() => setShowShareModal(false)}
-                  className="share_modal_close"
-                  aria-label="Close"
-                >
-                  &times;
-                </button>
-              </div>
 
-              {/* Digital Card Preview Snippet */}
-              <div className="share_preview_card">
-                <div className="d-flex align-items-center gap-3 mb-2">
-                  <img
-                    src="/img/png/logo-no-background.png"
-                    alt="Karan Mishra"
-                    className="share_preview_avatar"
-                  />
-                  <div>
-                    <h4 className="share_preview_name">Karan Mishra</h4>
-                    <p className="share_preview_role">Founder &bull; AURXON &bull; Applied AI Architect</p>
+                {/* Direct 1-Click Channel Dispatch (WhatsApp, LinkedIn, Twitter, Email, Device) */}
+                <div className="share_direct_channels_bar mt-3 pt-3 border-top border-secondary">
+                  <div className="small font-mono text-muted mb-2">
+                    DIRECT 1-CLICK PLATFORM DISPATCH:
+                  </div>
+                  <div className="share_channels_grid">
+                    <a
+                      href={`https://api.whatsapp.com/send?text=${encodeURIComponent(formattedCardMessage)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="share_channel_btn channel_whatsapp"
+                      title="Direct Share on WhatsApp"
+                    >
+                      <i className="fa fa-whatsapp"></i>
+                      <span>WhatsApp</span>
+                    </a>
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(portfolioUrl)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="share_channel_btn channel_linkedin"
+                      title="Share to LinkedIn Network"
+                    >
+                      <i className="fa fa-linkedin"></i>
+                      <span>LinkedIn</span>
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(formattedCardMessage)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="share_channel_btn channel_twitter"
+                      title="Share on X / Twitter"
+                    >
+                      <i className="fa fa-twitter"></i>
+                      <span>X / Twitter</span>
+                    </a>
+                    <a
+                      href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(formattedCardMessage)}`}
+                      className="share_channel_btn channel_email"
+                      title="Send Executive Email"
+                    >
+                      <i className="fa fa-envelope"></i>
+                      <span>Email</span>
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleNativeShare}
+                      className="share_channel_btn channel_native"
+                      title="Native Smartphone Share Sheet"
+                    >
+                      <i className="fa fa-mobile"></i>
+                      <span>Device Share</span>
+                    </button>
                   </div>
                 </div>
-                <div className="share_preview_text">
-                  &ldquo;Building production AI/ML architectures, Cognivex neural systems, and enterprise intelligence platforms.&rdquo;
-                </div>
-                <div className="share_preview_url">
-                  🔗 https://itsgkaranmishra.web.app
-                </div>
-              </div>
-
-              {/* Quick 1-Click Platform Share Channels */}
-              <div className="share_channels_grid">
-                <a
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(formattedCardMessage)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share_channel_btn channel_whatsapp"
-                >
-                  <i className="fa fa-whatsapp"></i>
-                  <span>WhatsApp</span>
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(portfolioUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share_channel_btn channel_linkedin"
-                >
-                  <i className="fa fa-linkedin"></i>
-                  <span>LinkedIn</span>
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(formattedCardMessage)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share_channel_btn channel_twitter"
-                >
-                  <i className="fa fa-twitter"></i>
-                  <span>X / Twitter</span>
-                </a>
-                <a
-                  href={`https://t.me/share/url?url=${encodeURIComponent(portfolioUrl)}&text=${encodeURIComponent(formattedCardMessage)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="share_channel_btn channel_telegram"
-                >
-                  <i className="fa fa-telegram"></i>
-                  <span>Telegram</span>
-                </a>
-                <a
-                  href={`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(formattedCardMessage)}`}
-                  className="share_channel_btn channel_email"
-                >
-                  <i className="fa fa-envelope"></i>
-                  <span>Email</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={handleNativeShare}
-                  className="share_channel_btn channel_native"
-                >
-                  <i className="fa fa-mobile"></i>
-                  <span>Device Share</span>
-                </button>
-              </div>
-
-              {/* Copy Links & Message Section */}
-              <div className="share_copy_actions">
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  className={`share_copy_btn ${shareCopied === "link" ? "copied" : ""}`}
-                >
-                  <i className="fa fa-link mr-2"></i>
-                  <span>{shareCopied === "link" ? "✓ Link Copied to Clipboard!" : "Copy Portfolio Link"}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCopyCardMessage}
-                  className={`share_copy_btn btn_copy_msg ${shareCopied === "card" ? "copied" : ""}`}
-                >
-                  <i className="fa fa-copy mr-2"></i>
-                  <span>{shareCopied === "card" ? "✓ Formatted Card Copied!" : "Copy Formatted Card Text"}</span>
-                </button>
               </div>
             </div>
           </div>
@@ -1001,14 +1081,14 @@ export const Footer: React.FC = () => {
           padding: 16px;
         }
 
-        .share_modal_card {
+        .share_modal_card.executive_share_dossier_modal {
           width: 100%;
-          max-width: 520px;
-          background: #0d131f;
-          border: 1px solid rgba(99, 102, 241, 0.35);
-          border-radius: 20px;
-          padding: 26px;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(99, 102, 241, 0.15);
+          max-width: 720px;
+          background: #090e18;
+          border: 1px solid rgba(6, 182, 212, 0.4);
+          border-radius: 24px;
+          padding: 26px 28px;
+          box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(6, 182, 212, 0.2);
           animation: sharePop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -1017,35 +1097,68 @@ export const Footer: React.FC = () => {
           100% { transform: scale(1); opacity: 1; }
         }
 
-        .share_modal_header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          margin-bottom: 20px;
+        .share_avatar_ring {
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          padding: 2px;
+          background: linear-gradient(135deg, #06b6d4 0%, #CEA17A 100%);
         }
 
-        .share_badge_icon {
-          width: 40px;
-          height: 40px;
-          border-radius: 12px;
-          background: rgba(99, 102, 241, 0.2);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.25rem;
+        .share_founder_avatar {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        .share_avatar_pulse {
+          position: absolute;
+          bottom: 2px;
+          right: 2px;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          background: #10b981;
+          border: 2px solid #090e18;
+          box-shadow: 0 0 8px #10b981;
         }
 
         .share_title {
-          font-size: 1.12rem;
+          font-size: 1.25rem;
           font-weight: 800;
           color: #ffffff;
           margin: 0;
         }
 
         .share_sub {
-          font-size: 0.78rem;
+          font-size: 0.8rem;
           color: #94a3b8;
           margin: 2px 0 0 0;
+        }
+
+        .share_avatar_toggle_dock {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 50px;
+          padding: 2px;
+        }
+
+        .share_mode_pill {
+          background: transparent;
+          border: none;
+          color: #94a3b8;
+          font-size: 0.72rem;
+          font-weight: 700;
+          padding: 4px 10px;
+          border-radius: 50px;
+          cursor: pointer;
+          transition: all 0.15s;
+        }
+
+        .share_mode_pill.active {
+          background: #0284c7;
+          color: #ffffff;
         }
 
         .share_modal_close {
@@ -1062,64 +1175,137 @@ export const Footer: React.FC = () => {
           color: #ffffff;
         }
 
-        .share_preview_card {
-          background: rgba(15, 23, 42, 0.85);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 16px;
-          margin-bottom: 20px;
+        /* Scanner QR Code Box */
+        .scanner_qr_frame {
+          background: #ffffff;
+          border: 2px solid rgba(6, 182, 212, 0.5);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(6, 182, 212, 0.25);
+          position: relative;
+          overflow: hidden;
         }
 
-        .share_preview_avatar {
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          border: 2px solid #6366f1;
-          background: #1e1b4b;
+        .qr_scanner_laser_line {
+          position: absolute;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #06b6d4, #10b981, transparent);
+          box-shadow: 0 0 10px #06b6d4, 0 0 20px #10b981;
+          animation: laserScanSweep 2.5s infinite linear;
+          pointer-events: none;
+          z-index: 2;
         }
 
-        .share_preview_name {
-          font-size: 1.05rem;
+        @keyframes laserScanSweep {
+          0% { top: 0%; opacity: 0.8; }
+          50% { top: 96%; opacity: 1; }
+          100% { top: 0%; opacity: 0.8; }
+        }
+
+        .scanner_qr_img {
+          width: 100%;
+          max-width: 190px;
+          height: auto;
+          margin: 0 auto;
+          display: block;
+        }
+
+        .scanner_qr_tag {
+          font-size: 0.72rem;
           font-weight: 800;
-          color: #ffffff;
-          margin: 0;
+          color: #0f172a;
+          letter-spacing: 0.05em;
         }
 
-        .share_preview_role {
-          font-size: 0.75rem;
-          color: #818cf8;
-          margin: 0;
-        }
-
-        .share_preview_text {
-          font-size: 0.82rem;
-          color: #cbd5e1;
-          font-style: italic;
-          line-height: 1.45;
-          margin-bottom: 8px;
-        }
-
-        .share_preview_url {
-          font-size: 0.76rem;
+        /* Executive Briefing Terminal */
+        .telemetry_chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.72rem;
+          font-weight: 800;
           color: #38bdf8;
-          font-family: monospace;
+          background: rgba(6, 182, 212, 0.12);
+          border: 1px solid rgba(6, 182, 212, 0.3);
+          padding: 3px 10px;
+          border-radius: 50px;
+        }
+
+        .pulse_dot_green {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: #10b981;
+          box-shadow: 0 0 6px #10b981;
+        }
+
+        .executive_brief_terminal_box {
+          background: #04070e;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          max-height: 195px;
+          overflow-y: auto;
+          scrollbar-width: thin;
+        }
+
+        .executive_brief_text {
+          color: #a5f3fc;
+          font-size: 0.76rem;
+          line-height: 1.45;
+          white-space: pre-wrap;
+        }
+
+        .share_action_btn {
+          padding: 9px 16px;
+          border-radius: 10px;
+          font-size: 0.82rem;
+          font-weight: 700;
+          border: 1px solid #06b6d4;
+          background: linear-gradient(135deg, #0284c7 0%, #06b6d4 100%);
+          color: #ffffff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+        }
+
+        .share_action_btn.tr-bg {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.15);
+          color: #cbd5e1;
+        }
+
+        .share_action_btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+        }
+
+        .share_action_btn.copied {
+          background: #10b981 !important;
+          border-color: #10b981 !important;
+          color: #ffffff !important;
         }
 
         .share_channels_grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 10px;
-          margin-bottom: 18px;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 8px;
+        }
+
+        @media (max-width: 575px) {
+          .share_channels_grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
         }
 
         .share_channel_btn {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          padding: 10px 12px;
-          border-radius: 10px;
-          font-size: 0.8rem;
+          gap: 6px;
+          padding: 8px 10px;
+          border-radius: 8px;
+          font-size: 0.78rem;
           font-weight: 700;
           text-decoration: none !important;
           color: #ffffff;
@@ -1137,52 +1323,11 @@ export const Footer: React.FC = () => {
         .channel_twitter { background: rgba(29, 155, 240, 0.18); color: #38bdf8; border-color: rgba(29, 155, 240, 0.35); }
         .channel_twitter:hover { background: #1d9bf0; color: #ffffff; }
 
-        .channel_telegram { background: rgba(0, 136, 204, 0.18); color: #38bdf8; border-color: rgba(0, 136, 204, 0.35); }
-        .channel_telegram:hover { background: #0088cc; color: #ffffff; }
-
         .channel_email { background: rgba(245, 158, 11, 0.18); color: #fbbf24; border-color: rgba(245, 158, 11, 0.35); }
         .channel_email:hover { background: #f59e0b; color: #ffffff; }
 
         .channel_native { background: rgba(168, 85, 247, 0.18); color: #c084fc; border-color: rgba(168, 85, 247, 0.35); }
         .channel_native:hover { background: #a855f7; color: #ffffff; }
-
-        .share_copy_actions {
-          display: flex;
-          gap: 10px;
-          flex-direction: column;
-        }
-
-        .share_copy_btn {
-          width: 100%;
-          padding: 10px 16px;
-          border-radius: 10px;
-          font-size: 0.84rem;
-          font-weight: 700;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          background: rgba(30, 41, 59, 0.6);
-          color: #f1f5f9;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-        }
-
-        .share_copy_btn:hover {
-          background: rgba(99, 102, 241, 0.25);
-          border-color: #6366f1;
-        }
-
-        .share_copy_btn.copied {
-          background: rgba(16, 185, 129, 0.25);
-          border-color: #10b981;
-          color: #34d399;
-        }
-
-        .btn_copy_msg {
-          background: linear-gradient(135deg, rgba(79, 70, 229, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
-          border-color: rgba(99, 102, 241, 0.4);
-        }
 
         @media (max-width: 767px) {
           .footer_bottom_row {
